@@ -1,0 +1,131 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import DemoRenderer from '../../components/DemoRenderer.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import { demoRegistry, type DemoEntry } from '../../data/demoRegistry';
+
+export function getStaticPaths() {
+	return demoRegistry.map((demo) => ({
+		params: { demo: demo.slug },
+		props: { demo },
+	}));
+}
+
+interface Props {
+	demo: DemoEntry;
+}
+
+const { demo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`${demo.title} | ${SITE_TITLE}`} description={demo.description} />
+		<style>
+			main {
+				margin: 0;
+				max-width: 100%;
+				padding: 0;
+				width: 100%;
+			}
+
+			.demo-header {
+				background: var(--surface);
+				border-bottom: 1px solid var(--border);
+			}
+
+			.demo-header-inner {
+				align-items: center;
+				display: flex;
+				gap: 1rem;
+				justify-content: space-between;
+				margin: 0 auto;
+				min-height: 86px;
+				padding: 1rem 0;
+				width: min(1120px, calc(100% - 32px));
+			}
+
+			.demo-title p,
+			.demo-title h1 {
+				margin: 0;
+			}
+
+			.demo-title p {
+				color: var(--accent);
+				font-size: 0.8rem;
+				font-weight: 800;
+			}
+
+			.demo-title h1 {
+				color: var(--text-bright);
+				font-size: 1.45rem;
+				line-height: 1.3;
+				margin-top: 0.3rem;
+			}
+
+			.demo-links {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.6rem;
+				justify-content: flex-end;
+			}
+
+			.demo-links a {
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				color: var(--muted);
+				font-size: 0.86rem;
+				font-weight: 800;
+				line-height: 1;
+				padding: 0.65rem 0.85rem;
+				text-decoration: none;
+			}
+
+			.demo-links a:hover {
+				border-color: var(--accent);
+				color: var(--accent);
+			}
+
+			.demo-stage {
+				background: var(--bg);
+				min-height: calc(100vh - 86px);
+			}
+
+			@media (max-width: 720px) {
+				.demo-header-inner {
+					align-items: flex-start;
+					flex-direction: column;
+				}
+
+				.demo-links {
+					justify-content: flex-start;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="demo-header">
+				<div class="demo-header-inner">
+					<div class="demo-title">
+						<p>{demo.category}</p>
+						<h1>{demo.title}</h1>
+					</div>
+					<nav class="demo-links" aria-label="演示导航">
+						<a href="/demos/">全部演示</a>
+						{demo.articleSlug && <a href={`/blog/${demo.articleSlug}/`}>返回文章</a>}
+						<a href={`/demos/${demo.slug}/source/`}>查看源码</a>
+					</nav>
+				</div>
+			</section>
+			<section class="demo-stage" aria-label={`${demo.title} 演示`}>
+				<DemoRenderer demo={demo} />
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

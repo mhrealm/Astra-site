@@ -1,0 +1,238 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { demoRegistry } from '../../data/demoRegistry';
+
+const categoryOrder = [
+	'性能优化',
+	'JavaScript 实战',
+	'Vue 基础',
+	'交互组件',
+	'动画动效',
+	'Canvas 实验',
+	'CSS 布局与效果',
+	'经典复刻',
+];
+
+const categoryMap = new Map<string, (typeof demoRegistry)[number][]>();
+
+for (const demo of demoRegistry) {
+	const group = categoryMap.get(demo.category) ?? [];
+	group.push(demo);
+	categoryMap.set(demo.category, group);
+}
+
+const groups = [...categoryMap.entries()]
+	.map(([category, items]) => ({
+		category,
+		items: items.sort((a, b) => a.title.localeCompare(b.title, 'zh-CN')),
+	}))
+	.sort((a, b) => {
+		const aIndex = categoryOrder.indexOf(a.category);
+		const bIndex = categoryOrder.indexOf(b.category);
+		return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex);
+	});
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`演示 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: min(1120px, calc(100% - 32px));
+			}
+
+			.demo-hero {
+				margin: 0 auto 2rem;
+				max-width: 720px;
+				text-align: center;
+			}
+
+			.demo-hero p,
+			.demo-hero h1 {
+				margin: 0;
+			}
+
+			.demo-hero p {
+				color: var(--accent);
+				font-size: 0.84rem;
+				font-weight: 800;
+			}
+
+			.demo-hero h1 {
+				font-size: 2.3rem;
+				line-height: 1.2;
+				margin-top: 0.55rem;
+			}
+
+			.demo-groups {
+				display: grid;
+				gap: 1.25rem;
+			}
+
+			.demo-group {
+				scroll-margin-top: 5.5rem;
+			}
+
+			.group-heading {
+				align-items: baseline;
+				display: flex;
+				gap: 0.55rem;
+				margin: 0 0 0.65rem;
+			}
+
+			.group-heading h2 {
+				font-size: 1.1rem;
+				margin: 0;
+			}
+
+			.group-heading span {
+				color: var(--muted-soft);
+				font-size: 0.82rem;
+				font-weight: 700;
+			}
+
+			.demo-list {
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				box-shadow: var(--box-shadow);
+				overflow: hidden;
+			}
+
+			.demo-item {
+				display: grid;
+				gap: 0.9rem;
+				grid-template-columns: minmax(0, 1fr) auto;
+				padding: 1rem 1.1rem;
+			}
+
+			.demo-item + .demo-item {
+				border-top: 1px solid var(--border);
+			}
+
+			.demo-copy h3,
+			.demo-copy p {
+				margin: 0;
+			}
+
+			.demo-copy h3 {
+				color: var(--text-bright);
+				font-size: 1rem;
+				line-height: 1.4;
+			}
+
+			.demo-copy p {
+				color: var(--muted);
+				font-size: 0.88rem;
+				line-height: 1.7;
+				margin-top: 0.35rem;
+			}
+
+			.demo-actions {
+				align-items: center;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.55rem;
+				justify-content: flex-end;
+			}
+
+			.demo-actions a,
+			.demo-actions span {
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				font-size: 0.82rem;
+				font-weight: 800;
+				line-height: 1;
+				padding: 0.58rem 0.72rem;
+				text-decoration: none;
+			}
+
+			.demo-actions a {
+				color: var(--muted);
+			}
+
+			.demo-actions a.primary {
+				background: var(--accent);
+				border-color: var(--accent);
+				color: #fff;
+			}
+
+			.demo-actions a:hover {
+				border-color: var(--accent);
+				color: var(--accent);
+			}
+
+			.demo-actions a.primary:hover {
+				background: var(--accent-strong);
+				border-color: var(--accent-strong);
+				color: #fff;
+			}
+
+			.demo-actions span {
+				color: var(--muted-soft);
+			}
+
+			@media (max-width: 720px) {
+				main {
+					width: min(100% - 24px, 1120px);
+				}
+
+				.demo-item {
+					grid-template-columns: 1fr;
+				}
+
+				.demo-actions {
+					justify-content: flex-start;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="demo-hero">
+				<p>Demos</p>
+				<h1>Vue 示例预览</h1>
+			</section>
+
+			<div class="demo-groups">
+				{
+					groups.map((group) => (
+						<section class="demo-group" aria-labelledby={`${group.category}-title`}>
+							<div class="group-heading">
+								<h2 id={`${group.category}-title`}>{group.category}</h2>
+								<span>{group.items.length} 个</span>
+							</div>
+							<div class="demo-list">
+								{group.items.map((demo) => (
+									<article class="demo-item">
+										<div class="demo-copy">
+											<h3>{demo.title}</h3>
+											<p>{demo.description}</p>
+										</div>
+										<div class="demo-actions">
+											<a class="primary" href={`/demos/${demo.slug}/`}>
+												预览
+											</a>
+											<a href={`/demos/${demo.slug}/source/`}>源码</a>
+											{demo.articleSlug ? (
+												<a href={`/blog/${demo.articleSlug}/`}>文章</a>
+											) : (
+												<span>待补文章</span>
+											)}
+										</div>
+									</article>
+								))}
+							</div>
+						</section>
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

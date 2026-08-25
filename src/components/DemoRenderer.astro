@@ -1,0 +1,12 @@
+---
+import type { DemoEntry } from '../data/demoRegistry';
+import DemoMount from './DemoMount.vue';
+
+interface Props {
+	demo: DemoEntry;
+}
+
+const { demo } = Astro.props;
+---
+
+<DemoMount demoKey={demo.component} client:only="vue" />

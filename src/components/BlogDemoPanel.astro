@@ -1,0 +1,118 @@
+---
+import type { DemoEntry } from '../data/demoRegistry';
+import DemoRenderer from './DemoRenderer.astro';
+
+interface Props {
+	demo?: DemoEntry;
+}
+
+const { demo } = Astro.props;
+---
+
+{
+	demo && (
+		<section class="blog-demo-panel" aria-label="文章演示">
+			<div class="demo-copy">
+				<p>{demo.category}</p>
+				<h2>{demo.title}</h2>
+				<span>{demo.description}</span>
+			</div>
+			<div class="demo-actions">
+				<a class="primary" href={`/demos/${demo.slug}/`}>
+					预览效果
+				</a>
+				<a href={`/demos/${demo.slug}/source/`}>查看源码</a>
+			</div>
+			{demo.inline && (
+				<div class="inline-preview">
+					<DemoRenderer demo={demo} />
+				</div>
+			)}
+			{!demo.inline && <p class="demo-note">这个示例放在独立预览页中运行。</p>}
+		</section>
+	)
+}
+
+<style>
+	.blog-demo-panel {
+		border: 1px solid rgba(30, 128, 255, 0.18);
+		border-radius: 6px;
+		background: linear-gradient(180deg, rgba(30, 128, 255, 0.07), rgba(255, 255, 255, 0));
+		margin: 0 0 2rem;
+		padding: 1.2rem;
+	}
+
+	.demo-copy p,
+	.demo-copy h2,
+	.demo-copy span,
+	.demo-note {
+		margin: 0;
+	}
+
+	.demo-copy p {
+		color: var(--accent);
+		font-size: 0.78rem;
+		font-weight: 800;
+	}
+
+	.demo-copy h2 {
+		color: var(--text-bright);
+		font-size: 1.15rem;
+		line-height: 1.35;
+		margin-top: 0.35rem;
+	}
+
+	.demo-copy span,
+	.demo-note {
+		color: var(--muted);
+		display: block;
+		font-size: 0.9rem;
+		line-height: 1.7;
+		margin-top: 0.45rem;
+	}
+
+	.demo-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		margin-top: 1rem;
+	}
+
+	.demo-actions a {
+		align-items: center;
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		color: var(--muted);
+		display: inline-flex;
+		font-size: 0.88rem;
+		font-weight: 800;
+		line-height: 1;
+		padding: 0.65rem 0.86rem;
+		text-decoration: none;
+	}
+
+	.demo-actions a.primary {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: #fff;
+	}
+
+	.demo-actions a:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+
+	.demo-actions a.primary:hover {
+		background: var(--accent-strong);
+		border-color: var(--accent-strong);
+		color: #fff;
+	}
+
+	.inline-preview {
+		overflow: hidden;
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		background: var(--surface);
+		margin-top: 1.2rem;
+	}
+</style>

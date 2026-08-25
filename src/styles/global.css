@@ -1,39 +1,56 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
-
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
+	--accent: #1e80ff;
+	--accent-strong: #1171ee;
+	--accent-soft: rgba(30, 128, 255, 10%);
+	--bg: #f2f3f5;
+	--bg-soft: #f7f8fa;
+	--surface: #ffffff;
+	--surface-raised: #f7f8fa;
+	--border: #e4e6eb;
+	--border-soft: rgba(228, 230, 235, 86%);
+	--text: #252933;
+	--text-bright: #1d2129;
+	--muted: #515767;
+	--muted-soft: #8a919f;
+	--green: #00b453;
+	--cyan: #14c9c9;
+	--amber: #ff7d00;
+	--pink: #f53f3f;
+	--black: 29, 33, 41;
+	--gray: 81, 87, 103;
+	--gray-light: 228, 230, 235;
+	--gray-dark: 29, 33, 41;
+	--gray-gradient: rgba(247, 248, 250, 92%), rgba(255, 255, 255, 0%);
 	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+		0 2px 12px rgba(29, 33, 41, 4%), 0 1px 2px rgba(29, 33, 41, 4%);
+}
+* {
+	box-sizing: border-box;
+}
+html {
+	scroll-behavior: smooth;
+	background-color: #f2f3f5;
 }
 body {
-	font-family: var(--font-atkinson);
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
+	background-color: #f2f3f5;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
+	color: var(--text);
+	font-family:
+		Inter, var(--font-atkinson), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+		"Segoe UI", sans-serif;
+	font-size: 16px;
+	line-height: 1.65;
+	min-height: 100vh;
 }
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
+	background-color: var(--bg);
+	width: min(1120px, calc(100% - 32px));
 	margin: auto;
-	padding: 3em 1em;
+	padding: 48px 0 72px;
 }
 h1,
 h2,
@@ -42,23 +59,24 @@ h4,
 h5,
 h6 {
 	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
+	color: var(--text-bright);
 	line-height: 1.2;
+	letter-spacing: 0;
 }
 h1 {
-	font-size: 3.052em;
+	font-size: 3.25rem;
 }
 h2 {
-	font-size: 2.441em;
+	font-size: 2.25rem;
 }
 h3 {
-	font-size: 1.953em;
+	font-size: 1.35rem;
 }
 h4 {
-	font-size: 1.563em;
+	font-size: 1.1rem;
 }
 h5 {
-	font-size: 1.25em;
+	font-size: 1rem;
 }
 strong,
 b {
@@ -66,15 +84,17 @@ b {
 }
 a {
 	color: var(--accent);
+	text-decoration-color: rgba(30, 128, 255, 34%);
+	text-underline-offset: 0.18em;
 }
 a:hover {
-	color: var(--accent);
+	color: var(--accent-strong);
 }
 p {
-	margin-bottom: 1em;
+	margin: 0 0 1em;
 }
 .prose p {
-	margin-bottom: 2em;
+	margin-bottom: 1.4em;
 }
 textarea {
 	width: 100%;
@@ -89,16 +109,20 @@ table {
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: 8px;
 }
 code {
 	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+	background-color: rgba(30, 128, 255, 8%);
+	border: 1px solid var(--border-soft);
+	border-radius: 4px;
+	color: var(--text-bright);
 }
 pre {
 	padding: 1.5em;
 	border-radius: 8px;
+	background: #0f172a;
+	border: 1px solid #1e293b;
+	overflow-x: auto;
 }
 pre > code {
 	all: unset;
@@ -107,18 +131,30 @@ blockquote {
 	border-left: 4px solid var(--accent);
 	padding: 0 0 0 20px;
 	margin: 0;
-	font-size: 1.333em;
+	color: var(--text);
+	font-size: 1.08em;
 }
 hr {
 	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+	border-top: 1px solid var(--border);
+}
+::selection {
+	background: rgba(30, 128, 255, 20%);
+	color: var(--text-bright);
 }
 @media (max-width: 720px) {
 	body {
-		font-size: 18px;
+		font-size: 15px;
 	}
 	main {
-		padding: 1em;
+		width: min(100% - 28px, 1120px);
+		padding: 32px 0 56px;
+	}
+	h1 {
+		font-size: 2.25rem;
+	}
+	h2 {
+		font-size: 1.8rem;
 	}
 }
 

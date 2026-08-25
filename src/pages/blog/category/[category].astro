@@ -1,0 +1,168 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import BlogCategoryNav from '../../../components/BlogCategoryNav.astro';
+import BlogPostRow from '../../../components/BlogPostRow.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import { SITE_TITLE } from '../../../consts';
+
+type BlogEntry = Awaited<ReturnType<typeof getCollection<'blog'>>>[number];
+
+const categoryOrder = [
+	'performance',
+	'javascript',
+	'vue',
+	'interaction',
+	'animation',
+	'canvas',
+	'css-effects',
+	'classic-replica',
+	'uncategorized',
+];
+
+function getCategorySummaries(posts: BlogEntry[]) {
+	const categoryMap = new Map<string, { name: string; slug: string; count: number }>();
+
+	for (const post of posts) {
+		const slug = post.data.categorySlug ?? 'uncategorized';
+		const current = categoryMap.get(slug);
+		if (current) {
+			current.count += 1;
+		} else {
+			categoryMap.set(slug, {
+				name: post.data.category ?? '未分类',
+				slug,
+				count: 1,
+			});
+		}
+	}
+
+	return [...categoryMap.values()].sort((a, b) => {
+		const aIndex = categoryOrder.indexOf(a.slug);
+		const bIndex = categoryOrder.indexOf(b.slug);
+		return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex);
+	});
+}
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const staticCategoryOrder = [
+		'performance',
+		'javascript',
+		'vue',
+		'interaction',
+		'animation',
+		'canvas',
+		'css-effects',
+		'classic-replica',
+		'uncategorized',
+	];
+	const categoryMap = new Map<string, { name: string; slug: string; count: number }>();
+
+	for (const post of posts) {
+		const slug = post.data.categorySlug ?? 'uncategorized';
+		const current = categoryMap.get(slug);
+		if (current) {
+			current.count += 1;
+		} else {
+			categoryMap.set(slug, {
+				name: post.data.category ?? '未分类',
+				slug,
+				count: 1,
+			});
+		}
+	}
+
+	const categories = [...categoryMap.values()].sort((a, b) => {
+		const aIndex = staticCategoryOrder.indexOf(a.slug);
+		const bIndex = staticCategoryOrder.indexOf(b.slug);
+		return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex);
+	});
+
+	return categories.map((category) => ({
+		params: { category: category.slug },
+	}));
+}
+
+const allPosts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const categories = getCategorySummaries(allPosts);
+const activeSlug = Astro.params.category ?? 'uncategorized';
+const activeCategory = categories.find((category) => category.slug === activeSlug);
+const posts = allPosts.filter((post) => post.data.categorySlug === activeSlug);
+const categoryName = activeCategory?.name ?? '未分类';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`${categoryName} | ${SITE_TITLE}`} description={`「${categoryName}」分类下的文章。`} />
+		<style>
+			main {
+				width: min(1120px, calc(100% - 32px));
+			}
+			.category-hero {
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				box-shadow: var(--box-shadow);
+				margin-bottom: 1rem;
+				padding: 1.5rem;
+			}
+			.back-link {
+				color: var(--accent);
+				display: inline-flex;
+				font-size: 0.86rem;
+				font-weight: 700;
+				margin-bottom: 0.8rem;
+				text-decoration: none;
+			}
+			.back-link:hover {
+				color: var(--accent-strong);
+			}
+			h1 {
+				font-size: 1.8rem;
+				margin-bottom: 0.55rem;
+			}
+			.category-hero p {
+				color: var(--muted);
+				margin: 0;
+			}
+			.post-list {
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				box-shadow: var(--box-shadow);
+				overflow: hidden;
+			}
+			@media (max-width: 640px) {
+				main {
+					width: min(100% - 24px, 1120px);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="category-hero">
+				<a class="back-link" href="/blog/">返回全部文章</a>
+				<h1>{categoryName}</h1>
+				<p>共 {posts.length} 篇文章，当前只展示这个分类下的内容。</p>
+			</section>
+
+			<BlogCategoryNav categories={categories} total={allPosts.length} active={activeSlug} />
+
+			<div class="post-list">
+				{
+					posts.map((post) => (
+						<BlogPostRow post={post} />
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
