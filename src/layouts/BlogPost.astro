@@ -9,9 +9,10 @@ import Header from '../components/Header.astro'
 import { SITE_TITLE } from '../consts'
 import type { DemoEntry } from '../data/demos'
 
-type Props = CollectionEntry<'blog'>['data'] & {
-  demo?: DemoEntry
-}
+type Props = Partial<CollectionEntry<'blog'>['data']> &
+  Pick<CollectionEntry<'blog'>['data'], 'title' | 'description' | 'pubDate'> & {
+    demo?: DemoEntry
+  }
 
 const {
   title,

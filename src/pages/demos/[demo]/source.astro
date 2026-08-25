@@ -2,6 +2,8 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { getCollection } from 'astro:content'
+import { format } from 'prettier'
+import { codeToHtml } from 'shiki'
 import BaseHead from '../../../components/BaseHead.astro'
 import Footer from '../../../components/Footer.astro'
 import Header from '../../../components/Header.astro'
@@ -33,20 +35,69 @@ const languageByExtension: Record<string, string> = {
   '.less': 'less',
 }
 
-const files = demo.sourceFiles.map((filePath) => {
-  const absolutePath = path.resolve(sourceRoot, filePath)
+const parserByExtension: Record<string, string> = {
+  '.vue': 'vue',
+  '.tsx': 'typescript',
+  '.jsx': 'babel',
+  '.ts': 'typescript',
+  '.js': 'babel',
+  '.mjs': 'babel',
+  '.md': 'markdown',
+  '.css': 'css',
+  '.less': 'less',
+}
 
-  if (!absolutePath.startsWith(sourceRoot + path.sep) && absolutePath !== sourceRoot) {
-    throw new Error(`Unexpected source path: ${filePath}`)
+async function formatSource(content: string, extension: string) {
+  const parser = parserByExtension[extension]
+
+  if (!parser) {
+    return content.trimEnd()
   }
 
-  return {
-    path: filePath,
-    absolutePath,
-    language: languageByExtension[path.extname(filePath)] ?? 'text',
-    content: readFileSync(absolutePath, 'utf-8'),
+  try {
+    return (
+      await format(content, {
+        parser,
+        printWidth: 100,
+        semi: false,
+        singleQuote: true,
+        trailingComma: 'all',
+      })
+    ).trimEnd()
+  } catch {
+    return content.trimEnd()
   }
-})
+}
+
+function normalizeHighlightedCode(html: string) {
+  return html.replaceAll('</span>\n<span class="line">', '</span><span class="line">')
+}
+
+const files = await Promise.all(
+  demo.sourceFiles.map(async (filePath) => {
+    const extension = path.extname(filePath)
+    const absolutePath = path.resolve(sourceRoot, filePath)
+
+    if (!absolutePath.startsWith(sourceRoot + path.sep) && absolutePath !== sourceRoot) {
+      throw new Error(`Unexpected source path: ${filePath}`)
+    }
+
+    const language = languageByExtension[extension] ?? 'text'
+    const content = await formatSource(readFileSync(absolutePath, 'utf-8'), extension)
+
+    return {
+      path: filePath,
+      absolutePath,
+      language,
+      html: normalizeHighlightedCode(
+        await codeToHtml(content, {
+          lang: language,
+          theme: 'github-dark',
+        }),
+      ),
+    }
+  }),
+)
 ---
 
 <!doctype html>
@@ -54,145 +105,514 @@ const files = demo.sourceFiles.map((filePath) => {
   <head>
     <BaseHead title={`${demo.title} 源码 | ${SITE_TITLE}`} description={demo.description} />
     <style>
-      main {
-        width: min(1120px, calc(100% - 32px));
+      :global(html),
+      :global(body.source-page) {
+        height: 100%;
+        overflow: hidden;
       }
 
-      .source-hero {
+      :global(body.source-page) {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        min-height: 100vh;
+      }
+
+      :global(body.source-page > header) {
+        position: relative;
+        top: auto;
+        z-index: 50;
+      }
+
+      :global(body.source-page > footer) {
+        position: relative;
+        z-index: 40;
+      }
+
+      main {
+        display: flex;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        padding: 16px 0;
+        width: min(1180px, calc(100% - 32px));
+      }
+
+      .source-panel {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 8px;
         background: var(--surface);
+        box-shadow: 0 8px 24px rgba(29, 33, 41, 0.05);
+      }
+
+      .source-viewer {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        background: #fff;
+      }
+
+      .source-switcher {
+        display: grid;
+        align-items: center;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 0.55rem;
+        border-bottom: 1px solid var(--border);
+        background:
+          linear-gradient(180deg, #ffffff 0%, #fafbfc 100%),
+          linear-gradient(90deg, rgba(30, 128, 255, 0.08), transparent 36%);
+        padding: 0.65rem 0.75rem;
+      }
+
+      .file-tabs {
+        display: flex;
+        min-width: 0;
+        gap: 0.45rem;
+        overflow-x: auto;
+        padding: 0.1rem;
+        scrollbar-width: none;
+      }
+
+      .file-tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .file-tab {
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+        gap: 0.5rem;
+        max-width: 280px;
         border: 1px solid var(--border);
         border-radius: 6px;
-        box-shadow: var(--box-shadow);
-        margin-bottom: 1rem;
-        padding: 1.35rem;
+        background: #fff;
+        color: var(--muted);
+        cursor: pointer;
+        font: inherit;
+        line-height: 1;
+        padding: 0.5rem 0.68rem;
+        transition:
+          border-color 180ms ease,
+          color 180ms ease,
+          background-color 180ms ease,
+          box-shadow 180ms ease;
       }
 
-      .source-hero p,
-      .source-hero h1 {
-        margin: 0;
-      }
-
-      .source-hero p {
+      .file-tab:hover {
+        border-color: rgba(30, 128, 255, 0.34);
         color: var(--accent);
+      }
+
+      .file-tab.is-active {
+        border-color: rgba(30, 128, 255, 0.3);
+        background: var(--accent-soft);
+        box-shadow: 0 6px 16px rgba(30, 128, 255, 0.08);
+        color: var(--accent);
+      }
+
+      .file-tab strong {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        color: inherit;
         font-size: 0.82rem;
         font-weight: 800;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
-      .source-hero h1 {
-        font-size: 1.7rem;
-        line-height: 1.3;
-        margin-top: 0.4rem;
+      .source-count {
+        color: var(--muted-soft);
+        font-size: 0.74rem;
+        font-weight: 800;
+        text-transform: uppercase;
       }
 
-      .source-links {
+      .file-icon {
+        position: relative;
+        flex: 0 0 auto;
+        width: 1.18rem;
+        height: 1.18rem;
+        border: 1px solid currentColor;
+        border-radius: 4px;
+        opacity: 0.72;
+      }
+
+      .file-icon::before,
+      .file-icon::after {
+        position: absolute;
+        content: '';
+      }
+
+      .file-icon::before {
+        top: 0.32rem;
+        left: 0.28rem;
+        width: 0.52rem;
+        height: 1.5px;
+        background: currentColor;
+        box-shadow: 0 0.22rem 0 currentColor;
+      }
+
+      .file-icon::after {
+        top: -1px;
+        right: -1px;
+        width: 0.34rem;
+        height: 0.34rem;
+        border-bottom: 1px solid currentColor;
+        border-left: 1px solid currentColor;
+        border-radius: 0 3px 0 2px;
+        background: #fff;
+      }
+
+      .file-tab.is-active .file-icon::after {
+        background: var(--accent-soft);
+      }
+
+      .source-count {
+        justify-self: end;
+        white-space: nowrap;
+      }
+
+      .source-actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.65rem;
-        margin-top: 1rem;
+        gap: 0.5rem;
+        justify-content: flex-end;
       }
 
-      .source-links a {
+      .copy-code-button,
+      .source-action-link {
+        align-items: center;
         border: 1px solid var(--border);
         border-radius: 6px;
+        background: #fff;
         color: var(--muted);
-        font-size: 0.86rem;
+        cursor: pointer;
+        display: inline-flex;
+        gap: 0.4rem;
+        font: inherit;
+        font-size: 0.76rem;
         font-weight: 800;
         line-height: 1;
-        padding: 0.65rem 0.85rem;
+        min-height: 2rem;
+        padding: 0.38rem 0.58rem;
         text-decoration: none;
+        transition:
+          border-color 180ms ease,
+          color 180ms ease,
+          background-color 180ms ease;
       }
 
-      .source-links a:hover {
+      .copy-code-button:hover,
+      .source-action-link:hover {
         border-color: var(--accent);
         color: var(--accent);
       }
 
-      .file-stack {
-        display: grid;
-        gap: 1rem;
+      .copy-code-button.is-copied {
+        border-color: rgba(30, 128, 255, 0.2);
+        background: var(--accent-soft);
+        color: var(--accent);
       }
 
-      .source-file {
-        overflow: hidden;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        background: var(--surface);
-        box-shadow: var(--box-shadow);
+      .source-action-link.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
       }
 
-      .file-name {
-        align-items: center;
-        display: flex;
-        gap: 0.8rem;
-        justify-content: space-between;
-        border-bottom: 1px solid var(--border);
-        color: var(--text-bright);
-        font-size: 0.9rem;
-        font-weight: 800;
-        padding: 0.85rem 1rem;
+      .source-action-link.primary:hover {
+        background: var(--accent-strong);
+        border-color: var(--accent-strong);
+        color: #fff;
       }
 
-      .file-name span {
-        color: var(--muted-soft);
-        font-size: 0.76rem;
-        font-weight: 700;
+      .copy-icon {
+        position: relative;
+        width: 0.85rem;
+        height: 0.85rem;
       }
 
-      pre {
+      .copy-icon::before,
+      .copy-icon::after {
+        position: absolute;
+        content: '';
+        width: 0.52rem;
+        height: 0.62rem;
+        border: 1.5px solid currentColor;
+        border-radius: 2px;
+      }
+
+      .copy-icon::before {
+        top: 0.16rem;
+        left: 0.08rem;
+        opacity: 0.42;
+      }
+
+      .copy-icon::after {
+        top: 0;
+        right: 0.06rem;
+        background: #fff;
+      }
+
+      .copy-code-button.is-copied .copy-icon::after {
+        background: var(--accent-soft);
+      }
+
+      .source-code-viewport {
+        flex: 1 1 auto;
+        min-height: 0;
         overflow: auto;
+        background: #0f172a;
+      }
+
+      .source-code-panel,
+      .source-code {
+        min-height: 100%;
+      }
+
+      .source-code-panel[hidden] {
+        display: none;
+      }
+
+      .source-code :global(pre.shiki) {
+        overflow: visible;
         margin: 0;
-        max-height: 720px;
-        background: #111827;
+        min-height: 100%;
+        max-height: none;
+        background: #0f172a !important;
         color: #f8fafc;
         font-size: 0.84rem;
-        line-height: 1.7;
-        padding: 1rem;
+        line-height: 1.42;
+        padding: 0.72rem 0;
+        white-space: normal;
       }
 
-      code {
+      .source-code :global(code) {
+        counter-reset: source-line;
+        display: block;
         font-family: 'Fira Code', 'JetBrains Mono', Consolas, 'Liberation Mono', monospace;
+        min-width: max-content;
       }
 
-      @media (max-width: 640px) {
+      .source-code :global(.line) {
+        box-sizing: border-box;
+        display: block;
+        min-height: 1.42em;
+        padding: 0 1.2rem 0 0;
+        white-space: pre;
+      }
+
+      .source-code :global(.line:hover) {
+        background: rgba(148, 163, 184, 0.08);
+      }
+
+      .source-code :global(.line::before) {
+        counter-increment: source-line;
+        content: counter(source-line);
+        display: inline-block;
+        margin-right: 0.95rem;
+        padding-right: 0.8rem;
+        width: 3.35rem;
+        border-right: 1px solid rgba(148, 163, 184, 0.16);
+        color: #64748b;
+        text-align: right;
+        user-select: none;
+      }
+
+      @media (max-width: 720px) {
         main {
+          padding: 12px 0;
           width: min(100% - 24px, 1120px);
         }
 
-        .source-hero h1 {
-          font-size: 1.35rem;
+        .source-switcher {
+          grid-template-columns: minmax(0, 1fr) auto;
+        }
+
+        .source-actions {
+          grid-column: 1 / -1;
+          justify-self: stretch;
+          justify-content: flex-start;
+        }
+
+        .copy-code-button,
+        .source-action-link {
+          justify-content: center;
         }
       }
     </style>
   </head>
-  <body>
+  <body class="source-page">
     <Header />
     <main>
-      <section class="source-hero">
-        <p>{demo.category}</p>
-        <h1>{demo.title} 源码</h1>
-        <div class="source-links">
-          <a href="/demos/">全部演示</a>
-          {demo.articleSlug && <a href={`/blog/${demo.articleSlug}/`}>返回文章</a>}
-          <a href={`/demos/${demo.slug}/`}>预览效果</a>
+      <section class="source-panel">
+        <div class="source-viewer" data-source-viewer>
+          <div class="source-switcher">
+            <div class="file-tabs" role="tablist" aria-label="源码文件">
+              {
+                files.map((file, index) => (
+                  <button
+                    class={`file-tab${index === 0 ? ' is-active' : ''}`}
+                    type="button"
+                    id={`source-tab-${index}`}
+                    role="tab"
+                    aria-selected={index === 0 ? 'true' : 'false'}
+                    aria-controls={`source-panel-${index}`}
+                    tabindex={index === 0 ? 0 : -1}
+                    data-source-tab
+                  >
+                    <span class="file-icon" aria-hidden="true" />
+                    <strong>{file.path}</strong>
+                  </button>
+                ))
+              }
+            </div>
+            <span class="source-count" data-source-counter>1 / {files.length}</span>
+            <div class="source-actions">
+              <button class="copy-code-button" type="button" data-copy-button>
+                <span class="copy-icon" aria-hidden="true"></span>
+                <span data-copy-label>复制当前文件</span>
+              </button>
+              <a class="source-action-link primary" href={`/demos/${demo.slug}/`}>预览效果</a>
+              {
+                demo.articleSlug && (
+                  <a class="source-action-link" href={`/blog/${demo.articleSlug}/`}>
+                    返回文章
+                  </a>
+                )
+              }
+            </div>
+          </div>
+
+          <div class="source-code-viewport">
+            {
+              files.map((file, index) => (
+                <section
+                  class={`source-code-panel${index === 0 ? ' is-active' : ''}`}
+                  id={`source-panel-${index}`}
+                  role="tabpanel"
+                  aria-labelledby={`source-tab-${index}`}
+                  data-source-panel
+                  hidden={index !== 0}
+                >
+                  <div class="source-code" set:html={file.html} />
+                </section>
+              ))
+            }
+          </div>
         </div>
       </section>
-
-      <div class="file-stack">
-        {
-          files.map((file) => (
-            <section class="source-file">
-              <div class="file-name">
-                <strong>{file.path}</strong>
-                <span>{file.language}</span>
-              </div>
-              <pre>
-                <code class={`language-${file.language}`}>{file.content}</code>
-              </pre>
-            </section>
-          ))
-        }
-      </div>
     </main>
     <Footer />
+
+    <script>
+      const writeToClipboard = async (text: string) => {
+        if (!navigator.clipboard?.writeText) {
+          throw new Error('Clipboard API is unavailable')
+        }
+
+        await navigator.clipboard.writeText(text)
+      }
+
+      const setCopyState = (button: Element, label: string, isCopied = false) => {
+        const labelNode = button.querySelector('[data-copy-label]')
+        if (labelNode) {
+          labelNode.textContent = label
+        } else {
+          button.textContent = label
+        }
+        button.classList.toggle('is-copied', isCopied)
+      }
+
+      document.querySelectorAll<HTMLElement>('[data-source-viewer]').forEach((viewer) => {
+        const tabs = [...viewer.querySelectorAll<HTMLButtonElement>('[data-source-tab]')]
+        const panels = [...viewer.querySelectorAll<HTMLElement>('[data-source-panel]')]
+        const counter = viewer.querySelector<HTMLElement>('[data-source-counter]')
+        const copyButton = viewer.querySelector<HTMLButtonElement>('[data-copy-button]')
+        let activeIndex = 0
+
+        const activateFile = (index: number, shouldFocus = false) => {
+          if (!tabs.length || !panels.length) {
+            return
+          }
+
+          const nextIndex = (index + tabs.length) % tabs.length
+          activeIndex = nextIndex
+
+          tabs.forEach((tab, tabIndex) => {
+            const isActive = tabIndex === nextIndex
+            tab.classList.toggle('is-active', isActive)
+            tab.setAttribute('aria-selected', String(isActive))
+            tab.tabIndex = isActive ? 0 : -1
+          })
+
+          panels.forEach((panel, panelIndex) => {
+            const isActive = panelIndex === nextIndex
+            panel.classList.toggle('is-active', isActive)
+            panel.hidden = !isActive
+          })
+
+          if (counter) {
+            counter.textContent = `${nextIndex + 1} / ${tabs.length}`
+          }
+
+          tabs[nextIndex]?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+
+          if (shouldFocus) {
+            tabs[nextIndex]?.focus()
+          }
+        }
+
+        tabs.forEach((tab, index) => {
+          tab.addEventListener('click', () => activateFile(index))
+          tab.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+              event.preventDefault()
+              activateFile(activeIndex - 1, true)
+            }
+
+            if (event.key === 'ArrowRight') {
+              event.preventDefault()
+              activateFile(activeIndex + 1, true)
+            }
+
+            if (event.key === 'Home') {
+              event.preventDefault()
+              activateFile(0, true)
+            }
+
+            if (event.key === 'End') {
+              event.preventDefault()
+              activateFile(tabs.length - 1, true)
+            }
+          })
+        })
+
+        copyButton?.addEventListener('click', async () => {
+          const activePanel = panels[activeIndex]
+          const lines = activePanel?.querySelectorAll('.source-code .line') ?? []
+          const code = [...lines].map((line) => line.textContent ?? '').join('\n')
+
+          try {
+            await writeToClipboard(code)
+            setCopyState(copyButton, '已复制', true)
+          } catch {
+            setCopyState(copyButton, '复制失败')
+          }
+
+          window.setTimeout(() => {
+            setCopyState(copyButton, '复制当前文件')
+          }, 1600)
+        })
+
+        activateFile(activeIndex)
+      })
+    </script>
   </body>
 </html>
