@@ -38,6 +38,22 @@ src/views/animation/car-showcase/models/chevrolet-corvette-c8.glb
 
 不过它的动画片段名字比较泛，比如 `Object_239Action`，不能单纯靠动画名字判断“这是左门还是右门”。所以交互版会读取动画目标节点，再沿着父级节点往上找，根据 `Left Door`、`Frunk`、`Trunk` 这些祖先名字完成归类。
 
+## 页面高度
+
+交互版运行在博客的 demo 预览页里，外层已经有站点 Header、demo Header 和 Footer，所以组件根节点不要再写 `min-height: 100vh`。
+
+这里让汽车页面继承中间舞台的高度，并由组件内部隐藏溢出：
+
+```less
+.interactive-car-page {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+```
+
+同时 demo 页面只对汽车基础版和交互版关闭中间舞台滚动，其他需要滚动查看内容的案例不受影响。
+
 ## 交互版增加了什么？
 
 交互版主要预留和实现这些功能：

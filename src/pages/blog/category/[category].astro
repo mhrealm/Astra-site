@@ -36,7 +36,7 @@ const categoryName = activeCategory?.name ?? '未分类'
       description={`「${categoryName}」分类下的文章。`}
     />
     <style>
-      main {
+      .site-main {
         width: min(1120px, calc(100% - 32px));
       }
       .post-list {
@@ -47,7 +47,7 @@ const categoryName = activeCategory?.name ?? '未分类'
         overflow: hidden;
       }
       @media (max-width: 640px) {
-        main {
+        .site-main {
           width: min(100% - 24px, 1120px);
         }
       }
@@ -55,7 +55,7 @@ const categoryName = activeCategory?.name ?? '未分类'
   </head>
   <body>
     <Header />
-    <main>
+    <main class="site-main">
       <BlogListingHero />
 
       <BlogCategoryNav categories={categories} total={allPosts.length} active={activeSlug} />

@@ -32,10 +32,11 @@ const {
   <head>
     <BaseHead title={`${title} | ${SITE_TITLE}`} description={description} />
     <style>
-      main {
+      .post-main {
+        background-color: var(--bg);
         max-width: 100%;
         margin: 0;
-        padding-top: 24px;
+        padding: 24px 0 72px;
         width: 100%;
       }
       article {
@@ -121,8 +122,8 @@ const {
         margin-top: 2rem;
       }
       @media (max-width: 640px) {
-        main {
-          padding-top: 16px;
+        .post-main {
+          padding: 16px 0 56px;
         }
         .prose {
           max-width: 100%;
@@ -137,7 +138,7 @@ const {
 
   <body>
     <Header />
-    <main>
+    <main class="post-main">
       <article>
         <div class="hero-image">
           {heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}

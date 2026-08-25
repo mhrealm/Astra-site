@@ -19,6 +19,11 @@ interface Props {
 }
 
 const { demo } = Astro.props
+const noStageScrollDemoSlugs = new Set([
+  'animation-car-showcase-basic',
+  'animation-car-showcase-interactive',
+])
+const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
 ---
 
 <!doctype html>
@@ -26,7 +31,7 @@ const { demo } = Astro.props
   <head>
     <BaseHead title={`${demo.title} | ${SITE_TITLE}`} description={demo.description} />
     <style>
-      main {
+      .demo-main {
         display: flex;
         flex: 1;
         flex-direction: column;
@@ -63,27 +68,18 @@ const { demo } = Astro.props
         gap: 1rem;
         justify-content: space-between;
         margin: 0 auto;
-        min-height: 86px;
         padding: 1rem 0;
         width: min(1120px, calc(100% - 32px));
       }
 
-      .demo-title p,
       .demo-title h1 {
         margin: 0;
       }
 
-      .demo-title p {
-        color: var(--accent);
-        font-size: 0.8rem;
-        font-weight: 800;
-      }
-
       .demo-title h1 {
         color: var(--text-bright);
-        font-size: 1.45rem;
+        font-size: 1.25rem;
         line-height: 1.3;
-        margin-top: 0.3rem;
       }
 
       .demo-links {
@@ -117,6 +113,16 @@ const { demo } = Astro.props
         overscroll-behavior: contain;
       }
 
+      .demo-stage :global(astro-island) {
+        display: block;
+        height: 100%;
+        min-height: 0;
+      }
+
+      .demo-stage--locked {
+        overflow: hidden;
+      }
+
       @media (max-width: 720px) {
         .demo-header-inner {
           align-items: flex-start;
@@ -131,11 +137,10 @@ const { demo } = Astro.props
   </head>
   <body>
     <Header />
-    <main>
+    <main class="demo-main">
       <section class="demo-header">
         <div class="demo-header-inner">
           <div class="demo-title">
-            <p>{demo.category}</p>
             <h1>{demo.title}</h1>
           </div>
           <nav class="demo-links" aria-label="演示导航">
@@ -145,7 +150,10 @@ const { demo } = Astro.props
           </nav>
         </div>
       </section>
-      <section class="demo-stage" aria-label={`${demo.title} 演示`}>
+      <section
+        class:list={['demo-stage', { 'demo-stage--locked': shouldLockStageScroll }]}
+        aria-label={`${demo.title} 演示`}
+      >
         <DemoRenderer demo={demo} />
       </section>
     </main>

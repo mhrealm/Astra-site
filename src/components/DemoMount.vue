@@ -34,6 +34,8 @@ onMounted(async () => {
 
 <style scoped>
 .demo-mount {
+  height: 100%;
+  min-height: 0;
   min-width: 0;
 }
 

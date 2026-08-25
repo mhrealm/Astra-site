@@ -999,7 +999,8 @@ onBeforeUnmount(disposeScene)
 <style scoped lang="less">
 .interactive-car-page {
   position: relative;
-  min-height: 100vh;
+  height: 100%;
+  min-height: 0;
   overflow: hidden;
   background: #080b10;
   color: #f8fafc;
@@ -1019,8 +1020,8 @@ onBeforeUnmount(disposeScene)
 .hero-copy {
   position: relative;
   z-index: 1;
-  width: min(560px, 100%);
-  padding: 44px 0 0 44px;
+  width: min(460px, 100%);
+  padding: 32px 0 0 32px;
   pointer-events: none;
 }
 
@@ -1031,7 +1032,7 @@ onBeforeUnmount(disposeScene)
 
 .hero-copy p {
   color: #fecaca;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -1039,7 +1040,7 @@ onBeforeUnmount(disposeScene)
 
 .hero-copy h1 {
   margin-top: 8px;
-  font-size: 56px;
+  font-size: 42px;
   font-weight: 800;
   line-height: 1;
 }
@@ -1047,12 +1048,12 @@ onBeforeUnmount(disposeScene)
 .hero-copy dl {
   display: flex;
   flex-wrap: wrap;
-  gap: 22px;
-  margin: 22px 0 0;
+  gap: 16px;
+  margin: 16px 0 0;
 }
 
 .hero-copy div {
-  min-width: 94px;
+  min-width: 78px;
 }
 
 .hero-copy dt {
@@ -1062,41 +1063,41 @@ onBeforeUnmount(disposeScene)
 
 .hero-copy dd {
   margin: 6px 0 0;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
 }
 
 .model-note {
   display: inline-block;
-  margin-top: 18px;
+  margin-top: 12px;
   color: #fca5a5;
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .control-panel {
   position: absolute;
-  right: 28px;
-  bottom: 28px;
+  right: 20px;
+  bottom: 20px;
   z-index: 2;
   box-sizing: border-box;
-  width: min(288px, calc(100% - 32px));
-  padding: 14px;
+  width: min(252px, calc(100% - 24px));
+  padding: 12px;
   border: 1px solid rgb(255 255 255 / 14%);
   border-radius: 8px;
   background: rgb(8 11 16 / 78%);
-  box-shadow: 0 18px 50px rgb(0 0 0 / 34%);
+  box-shadow: 0 14px 36px rgb(0 0 0 / 30%);
   backdrop-filter: blur(14px);
 }
 
 .control-group + .control-group {
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 .control-group h2 {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   color: #cbd5e1;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -1105,7 +1106,7 @@ onBeforeUnmount(disposeScene)
 .control-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7px;
 }
 
 .control-button {
@@ -1113,14 +1114,14 @@ onBeforeUnmount(disposeScene)
   align-items: center;
   justify-content: space-between;
   gap: 5px;
-  min-height: 38px;
-  padding: 0 8px;
+  min-height: 34px;
+  padding: 0 7px;
   border: 1px solid rgb(255 255 255 / 14%);
   border-radius: 7px;
   background: rgb(255 255 255 / 7%);
   color: #e5e7eb;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
@@ -1130,7 +1131,7 @@ onBeforeUnmount(disposeScene)
 
 .control-button span {
   color: #94a3b8;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .control-button:hover,
@@ -1150,12 +1151,12 @@ onBeforeUnmount(disposeScene)
 
 .swatch-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .paint-swatch {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   border: 2px solid rgb(255 255 255 / 48%);
   border-radius: 50%;
   cursor: pointer;
@@ -1175,28 +1176,45 @@ onBeforeUnmount(disposeScene)
 @media (max-width: 820px) {
   .hero-copy {
     width: 100%;
-    padding: 28px 16px 0;
+    padding: 20px 12px 0;
   }
 
   .hero-copy h1 {
-    font-size: 40px;
+    font-size: 32px;
   }
 
   .hero-copy dl {
-    gap: 14px;
-    margin-top: 18px;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .hero-copy dd {
+    font-size: 14px;
   }
 
   .control-panel {
-    right: 16px;
-    bottom: 16px;
-    left: 16px;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
     width: auto;
-    padding: 14px;
+    padding: 10px;
+  }
+
+  .control-group + .control-group {
+    margin-top: 8px;
   }
 
   .control-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .control-button {
+    min-height: 32px;
+  }
+
+  .paint-swatch {
+    width: 24px;
+    height: 24px;
   }
 }
 </style>

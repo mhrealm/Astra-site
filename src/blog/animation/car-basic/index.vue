@@ -516,7 +516,8 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 <style scoped lang="less">
 .car-showcase-page {
   position: relative;
-  min-height: 100vh;
+  height: 100%;
+  min-height: 0;
   overflow: hidden;
   background: #090d12;
   color: #f8fafc;
@@ -536,8 +537,8 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 .showcase-copy {
   position: relative;
   z-index: 1;
-  width: min(560px, 100%);
-  padding: 48px 0 0 48px;
+  width: min(460px, 100%);
+  padding: 34px 0 0 34px;
   pointer-events: none;
 }
 
@@ -548,7 +549,7 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 
 .showcase-copy p {
   color: #fecaca;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -556,7 +557,7 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 
 .showcase-copy h1 {
   margin-top: 8px;
-  font-size: 58px;
+  font-size: 44px;
   font-weight: 800;
   line-height: 1;
 }
@@ -564,12 +565,12 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 .showcase-copy dl {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
-  margin: 24px 0 0;
+  gap: 16px;
+  margin: 16px 0 0;
 }
 
 .showcase-copy div {
-  min-width: 86px;
+  min-width: 74px;
 }
 
 .showcase-copy dt {
@@ -579,30 +580,30 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 
 .showcase-copy dd {
   margin: 6px 0 0;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
 }
 
 .model-note {
   display: inline-block;
-  margin-top: 18px;
+  margin-top: 12px;
   color: #fca5a5;
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .paint-panel {
   position: absolute;
-  right: 40px;
-  bottom: 34px;
+  right: 28px;
+  bottom: 24px;
   z-index: 2;
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 
 .paint-swatch {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   border: 2px solid rgb(255 255 255 / 56%);
   border-radius: 50%;
   cursor: pointer;
@@ -627,26 +628,31 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 @media (max-width: 720px) {
   .showcase-copy {
     width: 100%;
-    padding: 28px 16px 0;
+    padding: 20px 12px 0;
   }
 
   .showcase-copy h1 {
-    font-size: 40px;
+    font-size: 32px;
   }
 
   .showcase-copy dl {
-    gap: 14px;
-    margin-top: 18px;
+    gap: 10px;
+    margin-top: 12px;
   }
 
   .showcase-copy dd {
-    font-size: 17px;
+    font-size: 14px;
   }
 
   .paint-panel {
     right: 50%;
-    bottom: 22px;
+    bottom: 16px;
     transform: translateX(50%);
+  }
+
+  .paint-swatch {
+    width: 28px;
+    height: 28px;
   }
 }
 </style>

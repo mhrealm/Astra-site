@@ -37,7 +37,7 @@ const groups = [...categoryMap.values()]
   <head>
     <BaseHead title={`演示 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
     <style>
-      main {
+      .site-main {
         width: min(1120px, calc(100% - 32px));
       }
 
@@ -172,7 +172,7 @@ const groups = [...categoryMap.values()]
       }
 
       @media (max-width: 720px) {
-        main {
+        .site-main {
           width: min(100% - 24px, 1120px);
         }
 
@@ -188,7 +188,7 @@ const groups = [...categoryMap.values()]
   </head>
   <body>
     <Header />
-    <main>
+    <main class="site-main">
       <section class="demo-hero">
         <p>Demos</p>
         <h1>示例预览</h1>

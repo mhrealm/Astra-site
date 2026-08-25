@@ -128,7 +128,7 @@ const files = await Promise.all(
         z-index: 40;
       }
 
-      main {
+      .source-main {
         display: flex;
         height: 100%;
         min-height: 0;
@@ -426,7 +426,7 @@ const files = await Promise.all(
       }
 
       @media (max-width: 720px) {
-        main {
+        .source-main {
           padding: 12px 0;
           width: min(100% - 24px, 1120px);
         }
@@ -450,7 +450,7 @@ const files = await Promise.all(
   </head>
   <body class="source-page">
     <Header />
-    <main>
+    <main class="source-main">
       <section class="source-panel">
         <div class="source-viewer" data-source-viewer>
           <div class="source-switcher">

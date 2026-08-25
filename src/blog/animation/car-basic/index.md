@@ -46,6 +46,22 @@ DOM 结构非常简单：
 
 `showcase-canvas` 只负责挂载 Three.js 生成的 canvas。车型标题、参数、按钮还是用普通 DOM 写。这样代码更清晰，布局也更好控制。
 
+## 页面高度
+
+当前案例运行在博客的 demo 预览页里，外层已经有站点 Header、demo Header 和 Footer，所以组件根节点不要再写 `min-height: 100vh`。
+
+这里让汽车页面继承中间舞台的高度，并由组件内部隐藏溢出：
+
+```less
+.car-showcase-page {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+```
+
+这样基础版和交互版都能占满 demo 舞台，同时不会把外层页面撑出额外滚动条。
+
 ## 模型路径
 
 代码里用了一个模型地址：
