@@ -1,0 +1,145 @@
+---
+interface CategoryTabItem {
+  label: string
+  count?: number
+  href?: string
+  value?: string
+  active?: boolean
+  id?: string
+  controls?: string
+}
+
+interface Props {
+  items: CategoryTabItem[]
+  ariaLabel: string
+  mode?: 'link' | 'button'
+}
+
+const { items, ariaLabel, mode = 'link' } = Astro.props
+const isButtonMode = mode === 'button'
+---
+
+<nav class="category-tabs" aria-label={ariaLabel} role={isButtonMode ? 'tablist' : undefined}>
+  {
+    items.map((item) =>
+      isButtonMode ? (
+        <button
+          id={item.id}
+          type="button"
+          class:list={['category-tab', { 'is-active': item.active }]}
+          role="tab"
+          aria-selected={item.active ? 'true' : 'false'}
+          aria-controls={item.controls}
+          tabindex={item.active ? 0 : -1}
+          data-category-tab={item.value}
+        >
+          <span>{item.label}</span>
+          {typeof item.count === 'number' && <small>{item.count}</small>}
+        </button>
+      ) : (
+        <a href={item.href ?? '#'} class:list={['category-tab', { 'is-active': item.active }]}>
+          <span>{item.label}</span>
+          {typeof item.count === 'number' && <small>{item.count}</small>}
+        </a>
+      ),
+    )
+  }
+</nav>
+
+<style>
+  .category-tabs {
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: var(--box-shadow);
+    display: flex;
+    gap: 0.15rem;
+    margin: 0 0 1.25rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 0.75rem;
+    scrollbar-width: none;
+    white-space: nowrap;
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-tab {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    cursor: pointer;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    gap: 0.35rem;
+    line-height: 1;
+    min-height: 3rem;
+    padding: 0 0.85rem;
+    position: relative;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .category-tab::after {
+    background: var(--accent);
+    border-radius: 999px 999px 0 0;
+    bottom: 0;
+    content: '';
+    height: 2px;
+    left: 0.85rem;
+    opacity: 0;
+    position: absolute;
+    right: 0.85rem;
+    transform: scaleX(0.4);
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  .category-tab:hover,
+  .category-tab.is-active {
+    color: var(--accent);
+  }
+
+  .category-tab.is-active::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  small {
+    color: var(--muted-soft);
+    font-size: 0.72rem;
+    font-weight: 700;
+    transition: color 180ms ease;
+  }
+
+  .category-tab:hover small,
+  .category-tab.is-active small {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .category-tabs {
+      margin-bottom: 1rem;
+      padding: 0 0.45rem;
+    }
+
+    .category-tab {
+      min-height: 2.8rem;
+      padding: 0 0.7rem;
+    }
+
+    .category-tab::after {
+      left: 0.7rem;
+      right: 0.7rem;
+    }
+  }
+</style>

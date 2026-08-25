@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 import BaseHead from '../../components/BaseHead.astro'
+import CategoryTabs from '../../components/CategoryTabs.astro'
 import Footer from '../../components/Footer.astro'
 import Header from '../../components/Header.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts'
@@ -30,6 +31,32 @@ const groups = [...categoryMap.values()]
     items: group.items.sort((a, b) => a.title.localeCompare(b.title, 'zh-CN')),
   }))
   .sort((a, b) => compareCategorySlug(a.categorySlug, b.categorySlug))
+
+const allDemos = [...demos].sort(
+  (a, b) =>
+    compareCategorySlug(a.categorySlug, b.categorySlug) || a.title.localeCompare(b.title, 'zh-CN'),
+)
+
+const tabs = [
+  {
+    label: '全部',
+    count: allDemos.length,
+    value: 'all',
+    id: 'demo-tab-all',
+    controls: 'demo-panel-all',
+    active: true,
+    items: allDemos,
+  },
+  ...groups.map((group) => ({
+    label: group.category,
+    count: group.items.length,
+    value: group.categorySlug,
+    id: `demo-tab-${group.categorySlug}`,
+    controls: `demo-panel-${group.categorySlug}`,
+    active: false,
+    items: group.items,
+  })),
+]
 ---
 
 <!doctype html>
@@ -42,7 +69,7 @@ const groups = [...categoryMap.values()]
       }
 
       .demo-hero {
-        margin: 0 auto 2rem;
+        margin: 0 auto 1.5rem;
         max-width: 720px;
         text-align: center;
       }
@@ -63,31 +90,12 @@ const groups = [...categoryMap.values()]
         line-height: 1.2;
         margin-top: 0.55rem;
       }
-      .demo-groups {
-        display: grid;
-        gap: 1.25rem;
+      .demo-tabs-area {
+        margin: 0 auto;
       }
 
-      .demo-group {
-        scroll-margin-top: 5.5rem;
-      }
-
-      .group-heading {
-        align-items: baseline;
-        display: flex;
-        gap: 0.55rem;
-        margin: 0 0 0.65rem;
-      }
-
-      .group-heading h2 {
-        font-size: 1.1rem;
-        margin: 0;
-      }
-
-      .group-heading span {
-        color: var(--muted-soft);
-        font-size: 0.82rem;
-        font-weight: 700;
+      .demo-panel[hidden] {
+        display: none;
       }
 
       .demo-list {
@@ -194,16 +202,21 @@ const groups = [...categoryMap.values()]
         <h1>示例预览</h1>
       </section>
 
-      <div class="demo-groups">
+      <section class="demo-tabs-area" data-demo-tabs>
+        <CategoryTabs items={tabs} ariaLabel="演示分类" mode="button" />
+
         {
-          groups.map((group) => (
-            <section class="demo-group" aria-labelledby={`${group.category}-title`}>
-              <div class="group-heading">
-                <h2 id={`${group.category}-title`}>{group.category}</h2>
-                <span>{group.items.length} 个</span>
-              </div>
+          tabs.map((tab, index) => (
+            <section
+              id={tab.controls}
+              class="demo-panel"
+              role="tabpanel"
+              aria-labelledby={tab.id}
+              data-demo-panel={tab.value}
+              hidden={index !== 0}
+            >
               <div class="demo-list">
-                {group.items.map((demo) => (
+                {tab.items.map((demo) => (
                   <article class="demo-item">
                     <div class="demo-copy">
                       <h3>{demo.title}</h3>
@@ -226,8 +239,58 @@ const groups = [...categoryMap.values()]
             </section>
           ))
         }
-      </div>
+      </section>
     </main>
     <Footer />
+
+    <script>
+      document.querySelectorAll<HTMLElement>('[data-demo-tabs]').forEach((root) => {
+        const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-category-tab]')]
+        const panels = [...root.querySelectorAll<HTMLElement>('[data-demo-panel]')]
+
+        const activateTab = (value: string, shouldFocus = false) => {
+          tabs.forEach((tab) => {
+            const isActive = tab.dataset.categoryTab === value
+            tab.classList.toggle('is-active', isActive)
+            tab.setAttribute('aria-selected', isActive ? 'true' : 'false')
+            tab.tabIndex = isActive ? 0 : -1
+
+            if (isActive && shouldFocus) {
+              tab.focus()
+            }
+          })
+
+          panels.forEach((panel) => {
+            panel.hidden = panel.dataset.demoPanel !== value
+          })
+        }
+
+        tabs.forEach((tab, index) => {
+          tab.addEventListener('click', () => {
+            const value = tab.dataset.categoryTab
+
+            if (value) {
+              activateTab(value)
+            }
+          })
+
+          tab.addEventListener('keydown', (event) => {
+            if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
+              return
+            }
+
+            event.preventDefault()
+
+            const direction = event.key === 'ArrowRight' ? 1 : -1
+            const nextIndex = (index + direction + tabs.length) % tabs.length
+            const nextValue = tabs[nextIndex]?.dataset.categoryTab
+
+            if (nextValue) {
+              activateTab(nextValue, true)
+            }
+          })
+        })
+      })
+    </script>
   </body>
 </html>
