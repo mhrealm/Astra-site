@@ -108,9 +108,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .skeleton-page {
-  min-height: 100vh;
   padding: 32px;
-  background: #f6f8fb;
   color: #172033;
 }
 

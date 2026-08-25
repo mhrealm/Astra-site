@@ -96,7 +96,6 @@ onBeforeUnmount(() => {
 .ellipsis-page {
   min-height: 100vh;
   padding: 24px;
-  background-color: #f5f5f5;
   color: #1f2937;
 }
 

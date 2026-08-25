@@ -12,7 +12,6 @@
   display: grid;
   min-height: 100vh;
   place-items: center;
-  background: #f4f6f8;
   color: #111827;
 }
 

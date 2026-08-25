@@ -129,7 +129,6 @@ onBeforeUnmount(() => {
 .canvas-page {
   min-height: 100vh;
   padding: 24px;
-  background-color: #f4f6f8;
   color: #1f2937;
 }
 

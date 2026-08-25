@@ -15,7 +15,6 @@ import NormalList from './NormalList.vue'
 <style lang="less" scoped>
 .list-page {
   padding: 32px;
-  background: #f4f7fb;
   color: #172033;
 }
 

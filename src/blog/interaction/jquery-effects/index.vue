@@ -115,7 +115,6 @@ onBeforeUnmount(() => {
   min-height: 100vh;
   padding: 32px;
   color: #2d3436;
-  background: #f8faf7;
 }
 
 .demo-section {

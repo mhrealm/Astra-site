@@ -107,7 +107,6 @@ const handleMouseLeave = (event: MouseEvent) => {
   align-items: center;
   justify-content: center;
   padding: 32px;
-  background: #f6f7f2;
 }
 
 .hover-highlight-nav {

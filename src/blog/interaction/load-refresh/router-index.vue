@@ -28,7 +28,6 @@ const list = [
 .load-refresh-page {
   min-height: 100vh;
   padding: 24px;
-  background: #f4f6f8;
   color: #111827;
 }
 

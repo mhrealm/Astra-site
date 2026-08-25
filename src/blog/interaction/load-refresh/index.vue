@@ -46,7 +46,6 @@ const activeComponent = computed(
 .load-refresh-showcase {
   min-height: 100%;
   padding: 28px 20px 44px;
-  background: #f2f3f5;
   color: #252933;
 }
 

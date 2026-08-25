@@ -59,7 +59,6 @@ onBeforeUnmount(() => {
 .gsap-basics-page {
   min-height: 300vh;
   padding: 48px;
-  background: #f3f6ef;
 }
 
 .stage {

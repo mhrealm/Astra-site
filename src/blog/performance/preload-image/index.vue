@@ -87,7 +87,6 @@ onBeforeUnmount(() => {
 .preload-page {
   min-height: 100vh;
   padding: 32px;
-  background: #f5f7fb;
   color: #172033;
 }
 

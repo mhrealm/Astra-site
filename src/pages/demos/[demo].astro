@@ -27,10 +27,19 @@ const { demo } = Astro.props
     <BaseHead title={`${demo.title} | ${SITE_TITLE}`} description={demo.description} />
     <style>
       main {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
         margin: 0;
         max-width: 100%;
         padding: 0;
         width: 100%;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100dvh;
       }
 
       .demo-header {
@@ -92,7 +101,8 @@ const { demo } = Astro.props
 
       .demo-stage {
         background: var(--bg);
-        min-height: calc(100vh - 86px);
+        flex: 1;
+        min-height: 240px;
       }
 
       @media (max-width: 720px) {
