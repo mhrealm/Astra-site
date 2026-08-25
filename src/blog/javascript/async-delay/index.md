@@ -7,6 +7,8 @@ categorySlug: 'javascript'
 tags: ['异步']
 difficulty: 2
 source: 'vue-practice/src/views/javascript/async-delay/index.md'
+demoSlug: 'javascript-async-delay'
+demoInline: true
 ---
 
 ## 先区分两个概念

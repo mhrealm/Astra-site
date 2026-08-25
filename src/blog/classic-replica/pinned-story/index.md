@@ -7,6 +7,7 @@ categorySlug: 'classic-replica'
 tags: ['GSAP']
 difficulty: 5
 source: 'vue-practice/src/views/classic-replica/pinned-story/index.md'
+demoSlug: 'classic-replica-pinned-story'
 ---
 
 ## 准备工作

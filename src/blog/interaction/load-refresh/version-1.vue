@@ -218,14 +218,3 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "上拉加载下拉刷新",
-    "category": "交互组件",
-    "tag": "列表加载",
-    "difficulty": 3
-  }
-}
-</route>

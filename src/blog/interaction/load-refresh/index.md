@@ -7,6 +7,16 @@ categorySlug: 'interaction'
 tags: ['列表加载']
 difficulty: 2
 source: 'vue-practice/src/views/interaction/load-refresh/index.md'
+demoSlug: 'interaction-load-refresh'
+demoVariants:
+  - slug: 'load-refresh-v1'
+    title: '上拉加载下拉刷新'
+    description: '移动端列表的下拉刷新和上拉加载组合版本。'
+    component: 'version-1.vue'
+  - slug: 'load-refresh-v2'
+    title: '上拉加载'
+    description: '聚焦触底加载更多数据的移动端列表版本。'
+    component: 'version-2.vue'
 ---
 
 ## 上拉加载

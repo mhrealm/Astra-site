@@ -1200,14 +1200,3 @@ onBeforeUnmount(disposeScene)
   }
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "3D 汽车交互展示",
-    "category": "动画动效",
-    "tag": "Three.js",
-    "difficulty": 5
-  }
-}
-</route>

@@ -7,6 +7,7 @@ categorySlug: 'animation'
 tags: ['Three.js', '动效']
 difficulty: 4
 source: 'vue-practice/src/views/animation/car-showcase/basic.md'
+demoSlug: 'animation-car-showcase-basic'
 ---
 
 ## 前言

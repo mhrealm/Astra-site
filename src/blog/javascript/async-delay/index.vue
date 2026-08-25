@@ -137,14 +137,3 @@ pre {
   }
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "异步调用与延迟执行",
-    "category": "JavaScript 实战",
-    "tag": "异步",
-    "difficulty": 2
-  }
-}
-</route>

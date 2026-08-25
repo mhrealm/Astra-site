@@ -191,14 +191,3 @@ const handleMouseLeave = (event: MouseEvent) => {
   }
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "Hover 高亮导航",
-    "category": "交互组件",
-    "tag": "导航",
-    "difficulty": 3
-  }
-}
-</route>

@@ -7,6 +7,7 @@ categorySlug: 'canvas'
 tags: ['Canvas']
 difficulty: 4
 source: 'vue-practice/src/views/canvas/canvas-sequence/index.md'
+demoSlug: 'canvas-canvas-sequence'
 ---
 
 ## 前言

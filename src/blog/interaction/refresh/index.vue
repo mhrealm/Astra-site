@@ -98,14 +98,3 @@ onMounted(loadPage)
   text-align: center;
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "滚动加载",
-    "category": "交互组件",
-    "tag": "列表加载",
-    "difficulty": 2
-  }
-}
-</route>

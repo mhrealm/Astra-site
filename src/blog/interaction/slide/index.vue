@@ -178,14 +178,3 @@ const resetSwipeState = () => {
   background-color: #ff3742;
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "滑动交互",
-    "category": "交互组件",
-    "tag": "滑动",
-    "difficulty": 3
-  }
-}
-</route>

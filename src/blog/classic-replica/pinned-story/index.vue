@@ -431,14 +431,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "Pinned 滚动叙事楼层",
-    "category": "经典复刻",
-    "tag": "GSAP",
-    "difficulty": 5
-  }
-}
-</route>

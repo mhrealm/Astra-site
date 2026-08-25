@@ -1,5 +1,5 @@
 ---
-import type { DemoEntry } from '../data/demoRegistry'
+import type { DemoEntry } from '../data/demos'
 import DemoMount from './DemoMount.vue'
 
 interface Props {
@@ -9,4 +9,4 @@ interface Props {
 const { demo } = Astro.props
 ---
 
-<DemoMount demoKey={demo.component} client:only="vue" />
+<DemoMount componentPath={demo.componentPath} client:only="vue" />

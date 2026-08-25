@@ -19,6 +19,24 @@ const blog = defineCollection({
       tags: z.array(z.string()).default([]),
       difficulty: z.number().min(1).max(5).optional(),
       source: z.string().optional(),
+      demoSlug: z.string().optional(),
+      demoInline: z.boolean().default(false),
+      demoComponent: z.string().default('index.vue'),
+      demoSourceFiles: z.array(z.string()).optional(),
+      demoTitle: z.string().optional(),
+      demoDescription: z.string().optional(),
+      demoVariants: z
+        .array(
+          z.object({
+            slug: z.string().optional(),
+            title: z.string().optional(),
+            description: z.string().optional(),
+            component: z.string().default('index.vue'),
+            inline: z.boolean().default(false),
+            sourceFiles: z.array(z.string()).optional(),
+          }),
+        )
+        .default([]),
     }),
 })
 

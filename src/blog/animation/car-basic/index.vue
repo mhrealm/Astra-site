@@ -650,14 +650,3 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
   }
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "3D 汽车展示基础版",
-    "category": "动画动效",
-    "tag": "Three.js",
-    "difficulty": 4
-  }
-}
-</route>

@@ -264,14 +264,3 @@ onMounted(() => {
   }
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "楼层转场动画",
-    "category": "动画动效",
-    "tag": "GSAP",
-    "difficulty": 4
-  }
-}
-</route>

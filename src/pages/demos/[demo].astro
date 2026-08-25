@@ -1,13 +1,14 @@
 ---
+import { getCollection } from 'astro:content'
 import BaseHead from '../../components/BaseHead.astro'
 import DemoRenderer from '../../components/DemoRenderer.astro'
 import Footer from '../../components/Footer.astro'
 import Header from '../../components/Header.astro'
 import { SITE_TITLE } from '../../consts'
-import { demoRegistry, type DemoEntry } from '../../data/demoRegistry'
+import { getDemosFromPosts, type DemoEntry } from '../../data/demos'
 
-export function getStaticPaths() {
-  return demoRegistry.map((demo) => ({
+export async function getStaticPaths() {
+  return getDemosFromPosts(await getCollection('blog')).map((demo) => ({
     params: { demo: demo.slug },
     props: { demo },
   }))

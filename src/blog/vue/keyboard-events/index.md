@@ -7,6 +7,8 @@ categorySlug: 'vue'
 tags: ['基础交互', 'Vue']
 difficulty: 1
 source: 'vue-practice/src/views/vue/keyboard-events/index.md'
+demoSlug: 'vue-keyboard-events'
+demoInline: true
 ---
 
 在 vue 中监听键盘事件可以使用 v-on 配合键盘事件修饰符实现，常见的键盘事件如 keydown，keyup 等。

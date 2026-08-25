@@ -16,14 +16,3 @@ import Version2 from './version-2.vue'
   overflow: hidden;
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "网易音乐七夕活动复刻",
-    "category": "经典复刻",
-    "tag": "qa-session",
-    "difficulty": 4
-  }
-}
-</route>

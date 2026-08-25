@@ -7,6 +7,8 @@ categorySlug: 'interaction'
 tags: ['导航']
 difficulty: 3
 source: 'vue-practice/src/views/interaction/hover-navbar/index.md'
+demoSlug: 'interaction-hover-navbar'
+demoInline: true
 ---
 
 ## 前言

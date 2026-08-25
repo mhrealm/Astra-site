@@ -7,6 +7,8 @@ categorySlug: 'interaction'
 tags: ['鼠标交互']
 difficulty: 3
 source: 'vue-practice/src/views/interaction/tilt-card/index.md'
+demoSlug: 'interaction-tilt-card'
+demoInline: true
 ---
 
 ## 前言：

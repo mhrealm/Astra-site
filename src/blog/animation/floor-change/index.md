@@ -7,6 +7,7 @@ categorySlug: 'animation'
 tags: ['GSAP', '动效']
 difficulty: 4
 source: 'vue-practice/src/views/animation/floor-change/index.md'
+demoSlug: 'animation-floor-change'
 ---
 
 ## 前言

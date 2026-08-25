@@ -7,6 +7,7 @@ categorySlug: 'classic-replica'
 tags: ['动效']
 difficulty: 5
 source: 'vue-practice/src/views/classic-replica/earth-section/index.md'
+demoSlug: 'classic-replica-earth-section'
 ---
 
 ## 前言

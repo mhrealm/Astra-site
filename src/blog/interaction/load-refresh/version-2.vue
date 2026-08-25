@@ -137,14 +137,3 @@ onBeforeUnmount(() => {
   color: #999;
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "上拉加载",
-    "category": "交互组件",
-    "tag": "列表加载",
-    "difficulty": 2
-  }
-}
-</route>

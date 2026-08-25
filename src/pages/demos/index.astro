@@ -1,9 +1,10 @@
 ---
+import { getCollection } from 'astro:content'
 import BaseHead from '../../components/BaseHead.astro'
 import Footer from '../../components/Footer.astro'
 import Header from '../../components/Header.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts'
-import { demoRegistry } from '../../data/demoRegistry'
+import { getDemosFromPosts, type DemoEntry } from '../../data/demos'
 
 const categoryOrder = [
   '性能优化',
@@ -16,9 +17,10 @@ const categoryOrder = [
   '经典复刻',
 ]
 
-const categoryMap = new Map<string, (typeof demoRegistry)[number][]>()
+const demos = getDemosFromPosts(await getCollection('blog'))
+const categoryMap = new Map<string, DemoEntry[]>()
 
-for (const demo of demoRegistry) {
+for (const demo of demos) {
   const group = categoryMap.get(demo.category) ?? []
   group.push(demo)
   categoryMap.set(demo.category, group)

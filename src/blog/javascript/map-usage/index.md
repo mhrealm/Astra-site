@@ -7,6 +7,8 @@ categorySlug: 'javascript'
 tags: ['Map']
 difficulty: 3
 source: 'vue-practice/src/views/javascript/map-usage/index.md'
+demoSlug: 'javascript-map-usage'
+demoInline: true
 ---
 
 很多前端同学知道 `Map`，但真正写业务时却很少用。

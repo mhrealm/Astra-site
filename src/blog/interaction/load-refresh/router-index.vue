@@ -66,14 +66,3 @@ const list = [
   color: #42b883;
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "加载与刷新",
-    "category": "交互组件",
-    "tag": "列表加载",
-    "difficulty": 2
-  }
-}
-</route>

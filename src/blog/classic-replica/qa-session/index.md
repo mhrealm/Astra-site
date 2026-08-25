@@ -7,6 +7,7 @@ categorySlug: 'classic-replica'
 tags: ['qa-session']
 difficulty: 4
 source: 'vue-practice/src/views/classic-replica/qa-session/index.md'
+demoSlug: 'classic-replica-qa-session'
 ---
 
 ## 前言

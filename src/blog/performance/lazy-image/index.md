@@ -7,6 +7,9 @@ categorySlug: 'performance'
 tags: ['Lazy Load']
 difficulty: 3
 source: 'vue-practice/src/views/performance/lazy-image/react-version.md'
+demoSlug: 'performance-lazy-image-react-version'
+demoTitle: '图片懒加载 Vue 演示'
+demoDescription: '配合 React 版文章，提供一份 Vue 版图片懒加载运行效果。'
 ---
 
 ## 前言

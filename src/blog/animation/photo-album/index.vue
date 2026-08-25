@@ -56,14 +56,3 @@ const list = [
   color: #42b883;
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "title": "相册动画",
-    "category": "动画动效",
-    "tag": "3D",
-    "difficulty": 3
-  }
-}
-</route>
