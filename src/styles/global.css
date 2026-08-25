@@ -30,12 +30,17 @@
 html {
 	scroll-behavior: smooth;
 	background-color: #f2f3f5;
+	max-width: 100%;
+	overflow-x: hidden;
+	width: 100%;
 }
 body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
 	background-color: #f2f3f5;
+	max-width: 100%;
+	overflow-x: hidden;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	color: var(--text);
@@ -48,6 +53,7 @@ body {
 }
 main {
 	background-color: var(--bg);
+	max-width: 100%;
 	width: min(1120px, calc(100% - 32px));
 	margin: auto;
 	padding: 48px 0 72px;

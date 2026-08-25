@@ -239,6 +239,7 @@ const projects = [
 
 <style>
 	.home-page {
+		--home-inline: max(16px, calc((100% - 1120px) / 2));
 		background-color: #f2f3f5;
 		max-width: 100%;
 		padding-top: 0;
@@ -246,14 +247,15 @@ const projects = [
 	}
 	.hero-section {
 		align-items: center;
-		border-bottom: 1px solid var(--border);
+		background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+		border-bottom: 1px solid #dfe3eb;
 		display: grid;
 		gap: 5rem;
 		grid-template-columns: minmax(0, 1fr) 320px;
-		margin: 0 auto;
+		margin: 0;
 		min-height: 680px;
-		padding: 72px 0 88px;
-		width: min(1120px, calc(100% - 32px));
+		padding: 72px var(--home-inline) 88px;
+		width: 100%;
 	}
 	.eyebrow {
 		color: var(--accent);
@@ -384,11 +386,19 @@ const projects = [
 		width: 18rem;
 	}
 	.section-block {
-		border-bottom: 1px solid var(--border);
-		margin: 0 auto;
-		padding: 88px 0;
+		background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+		border-bottom: 1px solid #e4e6eb;
+		margin: 0;
+		padding: 88px var(--home-inline);
+		position: relative;
 		scroll-margin-top: 6rem;
-		width: min(1120px, calc(100% - 32px));
+		width: 100%;
+	}
+	.section-block:nth-of-type(3) {
+		background: linear-gradient(180deg, #f7f8fa 0%, #ffffff 100%);
+	}
+	.section-block:nth-of-type(4) {
+		background: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
 	}
 	.section-heading {
 		margin: 0 auto 3rem;
@@ -598,7 +608,7 @@ const projects = [
 			gap: 3rem;
 			grid-template-columns: 1fr;
 			min-height: 0;
-			padding: 56px 0 72px;
+			padding: 56px var(--home-inline) 72px;
 			text-align: center;
 		}
 		.hero-copy {
@@ -626,9 +636,12 @@ const projects = [
 		}
 	}
 	@media (max-width: 640px) {
+		.home-page {
+			--home-inline: 14px;
+		}
 		.hero-section,
 		.section-block {
-			padding: 52px 0;
+			padding: 52px var(--home-inline);
 		}
 		.hero-copy h1 {
 			font-size: 2.25rem;

@@ -97,13 +97,16 @@ import HeaderLink from './HeaderLink.astro';
 		height: 4.25rem;
 		margin: 0 auto;
 		max-width: 1120px;
+		min-width: 0;
 		padding: 0 1rem;
+		width: 100%;
 	}
 	.internal-links {
 		align-items: center;
 		display: flex;
 		gap: 0.25rem;
 		margin-left: auto;
+		min-width: 0;
 	}
 	.social-links,
 	.social-links a {
@@ -146,8 +149,9 @@ import HeaderLink from './HeaderLink.astro';
 			display: none;
 		}
 		.internal-links {
-			gap: 0;
-			overflow-x: auto;
+			flex-wrap: wrap;
+			gap: 0.15rem;
+			overflow: visible;
 			padding: 0.2rem 0;
 		}
 		.social-links {
