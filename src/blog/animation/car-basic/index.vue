@@ -1,16 +1,10 @@
 <template>
   <main class="car-showcase-page">
     <!-- Three.js 生成的 canvas 会挂到这个容器里，Vue 只负责提供一个稳定的 DOM 挂载点。 -->
-    <div
-      ref="sceneHostRef"
-      class="showcase-canvas"
-    ></div>
+    <div ref="sceneHostRef" class="showcase-canvas"></div>
 
     <!-- 普通页面文案继续交给 DOM/CSS 处理，3D 场景只负责车和展台。 -->
-    <section
-      class="showcase-copy"
-      aria-label="产品信息"
-    >
+    <section class="showcase-copy" aria-label="产品信息">
       <p>{{ modelKicker }}</p>
       <h1>Chevrolet Corvette C8</h1>
 
@@ -29,19 +23,13 @@
         </div>
       </dl>
 
-      <span
-        v-if="modelNote"
-        class="model-note"
-      >
+      <span v-if="modelNote" class="model-note">
         {{ modelNote }}
       </span>
     </section>
 
     <!-- 基础版只保留车漆切换，让初学者先看懂“加载模型 + 替换材质”这条主线。 -->
-    <section
-      class="paint-panel"
-      aria-label="车漆颜色"
-    >
+    <section class="paint-panel" aria-label="车漆颜色">
       <button
         v-for="paint in paintOptions"
         :key="paint.name"
@@ -87,10 +75,50 @@ const modelKicker = 'Animated Sports Car Showcase' // 页面左上角的小标�
 
 const paintOptions: PaintOption[] = [
   // 车漆配置列表，色值和 PBR 参数一起控制最终车漆质感。
-  { name: 'corvette-red', label: 'Corvette Red', color: '#8f1418', metalness: 0.16, roughness: 0.22, clearcoatRoughness: 0.03, reflectivity: 0.68, envMapIntensity: 1.36, pearl: 0.04 }, // 红色车漆配置，作为默认展示颜色。
-  { name: 'ceramic-white', label: 'Ceramic White', color: '#98a3ad', metalness: 0.05, roughness: 0.43, clearcoatRoughness: 0.09, reflectivity: 0.28, envMapIntensity: 0.58, pearl: 0.02 }, // 陶瓷白车漆配置，降低亮度避免过白。
-  { name: 'blade-silver', label: 'Blade Silver', color: '#b5bec7', metalness: 0.28, roughness: 0.2, clearcoatRoughness: 0.028, reflectivity: 0.7, envMapIntensity: 1.42, pearl: 0.1 }, // 银色车漆配置，金属感和环境反射更强。
-  { name: 'night-black', label: 'Night Black', color: '#05070a', metalness: 0.14, roughness: 0.18, clearcoatRoughness: 0.026, reflectivity: 0.74, envMapIntensity: 1.58, pearl: 0.02 }, // 黑色车漆配置，依赖高反射表现轮廓。
+  {
+    name: 'corvette-red',
+    label: 'Corvette Red',
+    color: '#8f1418',
+    metalness: 0.16,
+    roughness: 0.22,
+    clearcoatRoughness: 0.03,
+    reflectivity: 0.68,
+    envMapIntensity: 1.36,
+    pearl: 0.04,
+  }, // 红色车漆配置，作为默认展示颜色。
+  {
+    name: 'ceramic-white',
+    label: 'Ceramic White',
+    color: '#98a3ad',
+    metalness: 0.05,
+    roughness: 0.43,
+    clearcoatRoughness: 0.09,
+    reflectivity: 0.28,
+    envMapIntensity: 0.58,
+    pearl: 0.02,
+  }, // 陶瓷白车漆配置，降低亮度避免过白。
+  {
+    name: 'blade-silver',
+    label: 'Blade Silver',
+    color: '#b5bec7',
+    metalness: 0.28,
+    roughness: 0.2,
+    clearcoatRoughness: 0.028,
+    reflectivity: 0.7,
+    envMapIntensity: 1.42,
+    pearl: 0.1,
+  }, // 银色车漆配置，金属感和环境反射更强。
+  {
+    name: 'night-black',
+    label: 'Night Black',
+    color: '#05070a',
+    metalness: 0.14,
+    roughness: 0.18,
+    clearcoatRoughness: 0.026,
+    reflectivity: 0.74,
+    envMapIntensity: 1.58,
+    pearl: 0.02,
+  }, // 黑色车漆配置，依赖高反射表现轮廓。
 ]
 
 let scene: THREE.Scene | null = null // Three.js 场景，所有模型、灯光、网格都添加到这里。
@@ -103,7 +131,17 @@ let environmentMap: THREE.WebGLRenderTarget | null = null // PMREM 生成的环�
 let animationFrameId = 0 // requestAnimationFrame 的 id，用来在组件卸载时停止渲染循环。
 
 const paintKeywords = ['paint', 'body', 'carpaint', 'car_paint', 'exterior', 'corvette', 'c8'] // 用来判断某个 Mesh 是否可能是车身漆面。
-const ignorePaintKeywords = ['glass', 'window', 'tire', 'tyre', 'rubber', 'rim', 'wheel', 'light', 'lamp'] // 排除玻璃、轮胎、灯光等不应该换车漆的 Mesh。
+const ignorePaintKeywords = [
+  'glass',
+  'window',
+  'tire',
+  'tyre',
+  'rubber',
+  'rim',
+  'wheel',
+  'light',
+  'lamp',
+] // 排除玻璃、轮胎、灯光等不应该换车漆的 Mesh。
 
 const getHostSize = () => {
   // 获取 Three.js 容器尺寸，初始化和窗口变化时都会用到。
@@ -116,14 +154,16 @@ const getHostSize = () => {
   }
 }
 
-const includesAny = (value: string, keywords: string[]) => keywords.some(keyword => value.includes(keyword)) // 判断字符串是否包含任意一个关键词。
+const includesAny = (value: string, keywords: string[]) =>
+  keywords.some((keyword) => value.includes(keyword)) // 判断字符串是否包含任意一个关键词。
 
 const getFirstMaterial = (material: THREE.Material | THREE.Material[]) => {
   // glTF 的 Mesh 可能是单材质，也可能是材质数组，这里统一取第一项。
   return Array.isArray(material) ? material[0] : material // 如果是数组就取第一个，否则直接返回当前材质。
 }
 
-const getActivePaint = () => paintOptions.find(paint => paint.name === activePaint.value) || paintOptions[0]! // 根据 activePaint 找当前车漆配置，找不到时兜底第一个。
+const getActivePaint = () =>
+  paintOptions.find((paint) => paint.name === activePaint.value) || paintOptions[0]! // 根据 activePaint 找当前车漆配置，找不到时兜底第一个。
 
 const applyCarPaintToMaterial = (material: THREE.MeshPhysicalMaterial, paint: PaintOption) => {
   // 把某个车漆配置写入 MeshPhysicalMaterial。
@@ -185,7 +225,7 @@ const prepareCarModel = (model: THREE.Object3D) => {
   // 遍历模型，隐藏底座、开启阴影、替换车身材质。
   const currentPaint = getActivePaint() // 获取当前选中的车漆配置。
 
-  model.traverse(object => {
+  model.traverse((object) => {
     // 递归遍历模型对象树。
     if (!(object instanceof THREE.Mesh)) {
       // 只处理真正可渲染的 Mesh。
@@ -226,7 +266,7 @@ const applyInitialAnimationPose = (model: THREE.Object3D, animations: THREE.Anim
   const mixer = new THREE.AnimationMixer(model) // 创建动画混合器，用来应用 glTF 里的动画片段。
   let closeTime = 0 // 记录所有动画片段里最长的时间，C8 的末帧是闭合状态。
 
-  animations.forEach(clip => {
+  animations.forEach((clip) => {
     // 遍历模型里的每个动画片段。
     const action = mixer.clipAction(clip) // 为当前动画片段创建可播放的 AnimationAction。
     closeTime = Math.max(closeTime, clip.duration) // 取最大动画时长，后面直接跳到这一帧。
@@ -397,11 +437,14 @@ const handleResize = () => {
   renderer.setSize(width, height) // 更新 canvas 绘制尺寸。
 }
 
-const disposeMaterial = (material: THREE.Material | THREE.Material[], disposedMaterials: Set<THREE.Material>) => {
+const disposeMaterial = (
+  material: THREE.Material | THREE.Material[],
+  disposedMaterials: Set<THREE.Material>,
+) => {
   // 释放一个材质或一组材质，避免重复 dispose。
   const materials = Array.isArray(material) ? material : [material] // 统一转成数组，方便后面遍历。
 
-  materials.forEach(item => {
+  materials.forEach((item) => {
     // 遍历每一个材质。
     if (disposedMaterials.has(item)) {
       // 如果这个材质已经释放过，就不重复处理。
@@ -418,7 +461,7 @@ const disposeObject = (object: THREE.Object3D) => {
   const disposedGeometries = new Set<THREE.BufferGeometry>() // 记录已释放的几何体，避免重复释放。
   const disposedMaterials = new Set<THREE.Material>() // 记录已释放的材质，避免重复释放。
 
-  object.traverse(child => {
+  object.traverse((child) => {
     // 递归遍历对象树里的所有子节点。
     if (!(child instanceof THREE.Mesh)) {
       // 只有 Mesh 才有 geometry 和 material。
@@ -493,7 +536,7 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 .showcase-copy {
   position: relative;
   z-index: 1;
-  width: min(560px, calc(100vw - 40px));
+  width: min(560px, 100%);
   padding: 48px 0 0 48px;
   pointer-events: none;
 }
@@ -583,7 +626,7 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 
 @media (max-width: 720px) {
   .showcase-copy {
-    width: calc(100vw - 32px);
+    width: 100%;
     padding: 28px 16px 0;
   }
 
@@ -608,11 +651,13 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "3D 汽车展示基础版",
     "category": "动画动效",
     "tag": "Three.js",
     "difficulty": 4
   }
-}</route>
+}
+</route>

@@ -1,13 +1,14 @@
 ---
-title: "React 版图片懒加载实现"
-description: "前言 图片懒加载是一种优化网页性能的技术，它允许在用户滚动到图片位置之前延迟加载图片。通过懒加载，可以在用户需要查看图片时才加载图片，避免了不必要的图片加载，从而提高了网页的加载速度和用户体验。 方案一 实现思路 在说明思路之前，先了解几个"
-pubDate: "2026-08-21"
-category: "性能优化"
-categorySlug: "performance"
-tags: ["Lazy Load"]
+title: 'React 版图片懒加载实现'
+description: '前言 图片懒加载是一种优化网页性能的技术，它允许在用户滚动到图片位置之前延迟加载图片。通过懒加载，可以在用户需要查看图片时才加载图片，避免了不必要的图片加载，从而提高了网页的加载速度和用户体验。 方案一 实现思路 在说明思路之前，先了解几个'
+pubDate: '2026-08-21'
+category: '性能优化'
+categorySlug: 'performance'
+tags: ['Lazy Load']
 difficulty: 3
-source: "vue-practice/src/views/performance/lazy-image/react-version.md"
+source: 'vue-practice/src/views/performance/lazy-image/react-version.md'
 ---
+
 ## 前言
 
 图片懒加载是一种优化网页性能的技术，它允许在用户滚动到图片位置之前延迟加载图片。通过懒加载，可以在用户需要查看图片时才加载图片，避免了不必要的图片加载，从而提高了网页的加载速度和用户体验。
@@ -97,7 +98,7 @@ const LazyLoading = () => {
 
   return (
     <div className={styles['box-one']} ref={scrollRef} onScroll={changeScroll}>
-      {imgUrls(100).map(item => {
+      {imgUrls(100).map((item) => {
         return <img data-src={item} key={item} src={loadingUrl} alt="" />
       })}
     </div>
@@ -120,7 +121,7 @@ const FirstLazyload = () => {
     setCount(Math.ceil(scrollTop / clientHeight))
   }
 
-  const initPage = num => {
+  const initPage = (num) => {
     const childNodes = scrollRef?.current.childNodes // 获取所有图片集合
     const element = childNodes[num] // 当前加载到第几个
     element.src = element.getAttribute('data-src') // 替换当前的src
@@ -133,7 +134,7 @@ const FirstLazyload = () => {
     <div>
       <p>1. 监听页面的滚动事件</p>
       <div className="imgGroups" ref={scrollRef} onScroll={changeScroll}>
-        {imgUrls(100).map(item => {
+        {imgUrls(100).map((item) => {
           return <img data-src={item} key={item} src={loadingUrl} alt="" />
         })}
       </div>
@@ -183,8 +184,8 @@ const LazyLoadImage = ({ src, alt }) => {
           }
         },
         {
-          rootMargin: '0px 0px 200px 0px' // 可视区域的上边距设置为200px
-        }
+          rootMargin: '0px 0px 200px 0px', // 可视区域的上边距设置为200px
+        },
       )
       observer.observe(imgRef.current) //开始观察目标元素
     }
@@ -201,7 +202,7 @@ const LazyLoadImage = ({ src, alt }) => {
 const LazyLoading = () => {
   return (
     <div className={styles['box-two']}>
-      {imgUrls(100).map(item => {
+      {imgUrls(100).map((item) => {
         return <LazyLoadImage src={item} alt="lazy load image" />
       })}
     </div>
@@ -251,7 +252,7 @@ const LazyLoading = () => {
 
   return (
     <div className={styles['box-three']} ref={scrollRef}>
-      {imgUrls(100).map(item => {
+      {imgUrls(100).map((item) => {
         return (
           <LazyLoad
             height={200}

@@ -1,7 +1,13 @@
 <template>
   <!-- vue如何监听键盘事件？ -->
   <div class="box">
-    <input type="text" @keyup.enter="handleEnter" @keydown="handleKeydown" @keydown.ctrl.s="handleSave" placeholder="按回车提交" />
+    <input
+      type="text"
+      @keyup.enter="handleEnter"
+      @keydown="handleKeydown"
+      @keydown.ctrl.s="handleSave"
+      placeholder="按回车提交"
+    />
     <div>全局监听键盘事件</div>
   </div>
 </template>
@@ -46,12 +52,13 @@ onUnmounted(() => {
 
 <style lang="less"></style>
 
-
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "如何监听键盘事件？",
     "category": "Vue 基础",
     "tag": "基础交互",
     "difficulty": 1
   }
-}</route>
+}
+</route>

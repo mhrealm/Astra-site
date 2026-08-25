@@ -1,5 +1,5 @@
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content'
 
 export function getBlogSlug(post: CollectionEntry<'blog'>) {
-	return post.id.replace(/\/index$/, '');
+  return post.id.replace(/\/index$/, '')
 }

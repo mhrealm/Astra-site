@@ -1,13 +1,14 @@
 ---
-title: "网易音乐七夕活动复刻"
-description: "前言 在日常的开发过程中，我们常常需要复刻某些经典的需求———— 既要高度还原优质的交互体验，又要适配不同的业务场景。比如：最近公司让我做一个德国冬季口味营销活动，具体的交互参考网易云七夕营销活动，由于公司的代码是nuxt实现的并支持外网访"
-pubDate: "2026-08-10"
-category: "经典复刻"
-categorySlug: "classic-replica"
-tags: ["qa-session"]
+title: '网易音乐七夕活动复刻'
+description: '前言 在日常的开发过程中，我们常常需要复刻某些经典的需求———— 既要高度还原优质的交互体验，又要适配不同的业务场景。比如：最近公司让我做一个德国冬季口味营销活动，具体的交互参考网易云七夕营销活动，由于公司的代码是nuxt实现的并支持外网访'
+pubDate: '2026-08-10'
+category: '经典复刻'
+categorySlug: 'classic-replica'
+tags: ['qa-session']
 difficulty: 4
-source: "vue-practice/src/views/classic-replica/qa-session/index.md"
+source: 'vue-practice/src/views/classic-replica/qa-session/index.md'
 ---
+
 ## 前言
 
 在日常的开发过程中，我们常常需要复刻某些经典的需求———— 既要高度还原优质的交互体验，又要适配不同的业务场景。比如：最近公司让我做一个德国冬季口味营销活动，具体的交互参考网易云七夕营销活动，由于公司的代码是nuxt实现的并支持外网访问，所有我打算用react重新复现一下这个活动（素材使用网易云的七夕活动中的素材）。本文将从技术角度拆解复刻过程中的核心思路和踩坑经验。
@@ -35,7 +36,7 @@ const Index = () => {
   }
 
   const handleAnsweringQuestion = () => {
-    setCurrentStep(a => a + 1)
+    setCurrentStep((a) => a + 1)
   }
 
   return (
@@ -49,10 +50,20 @@ const Index = () => {
             <img className="image-bg" src={item.imgSrc} alt="" />
             {index === 0 && <div onClick={handleBeginTesting} className="begin-testing"></div>}
             {!!item.question1 && (
-              <img onClick={handleAnsweringQuestion} className="question question1" src={item.question1} alt="" />
+              <img
+                onClick={handleAnsweringQuestion}
+                className="question question1"
+                src={item.question1}
+                alt=""
+              />
             )}
             {!!item.question2 && (
-              <img onClick={handleAnsweringQuestion} className="question question2" src={item.question2} alt="" />
+              <img
+                onClick={handleAnsweringQuestion}
+                className="question question2"
+                src={item.question2}
+                alt=""
+              />
             )}
           </div>
         )
@@ -214,7 +225,7 @@ const Index = () => {
   }
 
   const handleAnsweringQuestion = () => {
-    setCurrentStep(a => a + 1)
+    setCurrentStep((a) => a + 1)
   }
 
   return (
@@ -281,7 +292,7 @@ const StepItem = React.memo(({ item, index, isActive, onBegin, onAnswer }) => {
   const [animationState, setAnimationState] = useState({
     imageOpacity: 0,
     question1Opacity: 0,
-    question2Opacity: 0
+    question2Opacity: 0,
   })
   const [imageLoaded, setImageLoaded] = useState(false)
   const imageRef = useRef(null)
@@ -292,7 +303,7 @@ const StepItem = React.memo(({ item, index, isActive, onBegin, onAnswer }) => {
       setAnimationState({
         imageOpacity: 0,
         question1Opacity: 0,
-        question2Opacity: 0
+        question2Opacity: 0,
       })
       setImageLoaded(false)
     }
@@ -312,17 +323,17 @@ const StepItem = React.memo(({ item, index, isActive, onBegin, onAnswer }) => {
     const timers = []
 
     // 立即显示图片
-    setAnimationState(prev => ({ ...prev, imageOpacity: 1 }))
+    setAnimationState((prev) => ({ ...prev, imageOpacity: 1 }))
 
     // 延迟显示 question1
     if (item.question1) {
       const question1Timer = setTimeout(() => {
-        setAnimationState(prev => ({ ...prev, question1Opacity: 1 }))
+        setAnimationState((prev) => ({ ...prev, question1Opacity: 1 }))
 
         // question1 显示后，延迟显示 question2
         if (item.question2) {
           const question2Timer = setTimeout(() => {
-            setAnimationState(prev => ({ ...prev, question2Opacity: 1 }))
+            setAnimationState((prev) => ({ ...prev, question2Opacity: 1 }))
           }, 500)
           timers.push(question2Timer)
         }
@@ -331,7 +342,7 @@ const StepItem = React.memo(({ item, index, isActive, onBegin, onAnswer }) => {
     }
 
     return () => {
-      timers.forEach(timer => clearTimeout(timer))
+      timers.forEach((timer) => clearTimeout(timer))
     }
   }, [isActive, imageLoaded, item.question1, item.question2])
 
@@ -341,7 +352,7 @@ const StepItem = React.memo(({ item, index, isActive, onBegin, onAnswer }) => {
 
   const stepClassName = useMemo(
     () => `step-content step${index} ${isActive ? 'fade-enter-done' : 'fade-item'}`,
-    [index, isActive]
+    [index, isActive],
   )
 
   return (
@@ -386,11 +397,13 @@ const Index = () => {
   }, [])
 
   const handleAnsweringQuestion = useCallback(() => {
-    setCurrentStep(prev => prev + 1)
+    setCurrentStep((prev) => prev + 1)
   }, [])
 
   const renderedItems = useMemo(() => {
-    return questionList.map((item, index) => ({ item, index })).filter(({ index }) => index <= currentStep + 1)
+    return questionList
+      .map((item, index) => ({ item, index }))
+      .filter(({ index }) => index <= currentStep + 1)
   }, [currentStep])
 
   return (

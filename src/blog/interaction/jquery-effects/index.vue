@@ -8,7 +8,11 @@
     <section class="demo-section zoom-section">
       <h2 class="section-title">图片 Hover 放大</h2>
       <div class="image-frame">
-        <img class="zoom-image" src="https://work.herodash.ai/assets/img/chat1-1.png" alt="jQuery hover zoom demo">
+        <img
+          class="zoom-image"
+          src="https://work.herodash.ai/assets/img/chat1-1.png"
+          alt="jQuery hover zoom demo"
+        />
       </div>
     </section>
 
@@ -57,7 +61,8 @@ onMounted(() => {
     })
   })
 
-  $page.find('.zoom-image')
+  $page
+    .find('.zoom-image')
     .on('mouseenter.jqueryEffects', function () {
       $(this).css({
         transform: 'scale(1.18)',
@@ -124,7 +129,7 @@ onBeforeUnmount(() => {
 
 .section-title {
   margin: 0 0 20px;
-  font-size: clamp(22px, 2.2vw, 36px);
+  font-size: 30px;
   font-weight: 600;
 }
 
@@ -136,7 +141,10 @@ onBeforeUnmount(() => {
   color: #2d3436;
   background: #fff;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 
   &:hover {
     box-shadow: 0 8px 18px rgba(45, 52, 54, 0.12);
@@ -189,7 +197,6 @@ onBeforeUnmount(() => {
 }
 
 @keyframes blink {
-
   from,
   to {
     border-color: transparent;
@@ -205,6 +212,10 @@ onBeforeUnmount(() => {
     padding: 20px;
   }
 
+  .section-title {
+    font-size: 24px;
+  }
+
   .move-actions {
     flex-direction: column;
     align-items: flex-start;
@@ -212,11 +223,13 @@ onBeforeUnmount(() => {
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "jQuery 交互动效",
     "category": "交互组件",
     "tag": "jQuery",
     "difficulty": 2
   }
-}</route>
+}
+</route>

@@ -1,13 +1,14 @@
 ---
-title: "Vue + Three.js 实现 3D 汽车交互展示"
-description: "上一篇基础版已经完成了模型加载、展台、灯光、环境反射和车漆切换。"
-pubDate: "2026-08-25"
-category: "动画动效"
-categorySlug: "animation"
-tags: ["Three.js", "动效"]
+title: 'Vue + Three.js 实现 3D 汽车交互展示'
+description: '上一篇基础版已经完成了模型加载、展台、灯光、环境反射和车漆切换。'
+pubDate: '2026-08-25'
+category: '动画动效'
+categorySlug: 'animation'
+tags: ['Three.js', '动效']
 difficulty: 5
-source: "vue-practice/src/views/animation/car-showcase/interactive.md"
+source: 'vue-practice/src/views/animation/car-showcase/interactive.md'
 ---
+
 ## 前言
 
 上一篇基础版已经完成了模型加载、展台、灯光、环境反射和车漆切换。
@@ -205,7 +206,7 @@ C8 的动画名是 `Object_239Action` 这种形式，名字本身看不出含义
 const getAnimationTargetText = (clip: THREE.AnimationClip, root: THREE.Object3D) => {
   const texts = new Set<string>()
 
-  clip.tracks.forEach(track => {
+  clip.tracks.forEach((track) => {
     const targetName = getTrackTargetName(track.name)
     let current = targetName ? root.getObjectByName(targetName) : null
 
@@ -232,7 +233,7 @@ const getAnimationTargetText = (clip: THREE.AnimationClip, root: THREE.Object3D)
 const playAnimatedActions = (key: AnimatedPartKey, open: boolean) => {
   const actions = animatedActions[key]
 
-  actions.forEach(action => {
+  actions.forEach((action) => {
     const duration = action.getClip().duration
 
     action.paused = true
@@ -286,7 +287,7 @@ C8 本身带有车门动画，所以实际点击“车门”按钮时，优先�
 前备箱：
 
 ```ts
-parts.hood.forEach(part => {
+parts.hood.forEach((part) => {
   animatePart(part, featureState.hood, { x: -0.72 })
 })
 ```
@@ -294,7 +295,7 @@ parts.hood.forEach(part => {
 后备箱：
 
 ```ts
-parts.trunk.forEach(part => {
+parts.trunk.forEach((part) => {
   animatePart(part, featureState.trunk, { x: 0.72 })
 })
 ```
@@ -311,7 +312,7 @@ const spinWheels = () => {
     return
   }
 
-  parts.wheels.forEach(wheel => {
+  parts.wheels.forEach((wheel) => {
     wheel.rotation.x += 0.04
   })
 }
@@ -335,7 +336,10 @@ wheel.rotation.z += 0.12
 
 ```ts
 const createLightMaterial = (sourceMaterial: THREE.Material, text: string) => {
-  const material = sourceMaterial instanceof THREE.MeshStandardMaterial ? sourceMaterial.clone() : new THREE.MeshStandardMaterial()
+  const material =
+    sourceMaterial instanceof THREE.MeshStandardMaterial
+      ? sourceMaterial.clone()
+      : new THREE.MeshStandardMaterial()
   const isRearLight = includesAny(text, ['tail', 'brake'])
 
   material.color.set(isRearLight ? '#3f080e' : '#eef6ff')
@@ -354,7 +358,9 @@ const createLightMaterial = (sourceMaterial: THREE.Material, text: string) => {
 const isMainLightMesh = (text: string) => {
   const ignored = ['day light', 'indicator', 'reverse', 'license', 'brake disc']
 
-  return includesAny(text, ['light', 'headlight', 'taillight', 'brake']) && !includesAny(text, ignored)
+  return (
+    includesAny(text, ['light', 'headlight', 'taillight', 'brake']) && !includesAny(text, ignored)
+  )
 }
 ```
 
@@ -364,7 +370,7 @@ const isMainLightMesh = (text: string) => {
 const updateLights = () => {
   const intensityKey = featureState.lights ? 'lightOnIntensity' : 'lightOffIntensity'
 
-  lightMaterials.forEach(material => {
+  lightMaterials.forEach((material) => {
     material.emissiveIntensity = Number(material.userData[intensityKey])
     material.needsUpdate = true
   })
@@ -417,7 +423,7 @@ controls.maxPolarAngle = Math.PI - 0.05
 所以拿到模型后，第一步应该打印节点树：
 
 ```ts
-model.traverse(object => {
+model.traverse((object) => {
   console.log(object.name)
 })
 ```

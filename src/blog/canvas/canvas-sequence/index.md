@@ -1,13 +1,14 @@
 ---
-title: "如何用 Canvas + GSAP 实现滚动序列帧动画？"
-description: "在很多产品官网中，经常能看到一种非常丝滑的滚动动画：用户向下滚动时，画面里的产品像视频一样旋转、展开、变化，但它并不一定是一个真正的视频。"
-pubDate: "2026-08-10"
-category: "Canvas 实验"
-categorySlug: "canvas"
-tags: ["Canvas"]
+title: '如何用 Canvas + GSAP 实现滚动序列帧动画？'
+description: '在很多产品官网中，经常能看到一种非常丝滑的滚动动画：用户向下滚动时，画面里的产品像视频一样旋转、展开、变化，但它并不一定是一个真正的视频。'
+pubDate: '2026-08-10'
+category: 'Canvas 实验'
+categorySlug: 'canvas'
+tags: ['Canvas']
 difficulty: 4
-source: "vue-practice/src/views/canvas/canvas-sequence/index.md"
+source: 'vue-practice/src/views/canvas/canvas-sequence/index.md'
 ---
+
 ## 前言
 
 在很多产品官网中，经常能看到一种非常丝滑的滚动动画：用户向下滚动时，画面里的产品像视频一样旋转、展开、变化，但它并不一定是一个真正的视频。
@@ -227,10 +228,7 @@ const images = Array.from({ length: frameCount }, (_, index) => {
 
 ```ts
 const render = () => {
-  const frameIndex = Math.min(
-    frameCount - 1,
-    Math.max(0, Math.round(sequenceState.frame)),
-  )
+  const frameIndex = Math.min(frameCount - 1, Math.max(0, Math.round(sequenceState.frame)))
   const image = images[frameIndex]
 
   if (!image || !image.complete || image.naturalWidth === 0) {
@@ -247,10 +245,7 @@ const render = () => {
 第一步，计算当前应该显示哪一帧：
 
 ```ts
-const frameIndex = Math.min(
-  frameCount - 1,
-  Math.max(0, Math.round(sequenceState.frame)),
-)
+const frameIndex = Math.min(frameCount - 1, Math.max(0, Math.round(sequenceState.frame)))
 ```
 
 `Math.round()` 把当前帧取整，因为图片帧只能是整数。
@@ -398,8 +393,8 @@ scrollTrigger: {
   position: fixed;
   left: 50%;
   top: 50%;
-  max-width: 100vw;
-  max-height: 100vh;
+  max-width: 100%;
+  max-height: 100%;
   transform: translate(-50%, -50%);
 }
 ```
@@ -439,7 +434,7 @@ ScrollTrigger 会把这段滚动距离映射到 `frame: 0 -> 146`。
   margin: 0;
   padding-top: 64px;
   color: #fff;
-  font-size: clamp(32px, 4vw, 72px);
+  font-size: 56px;
   font-weight: 500;
   line-height: 1.1;
   text-align: center;

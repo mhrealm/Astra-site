@@ -48,16 +48,22 @@ const props = withDefaults(
 const scrollTop = ref(0)
 
 const viewHeight = computed(() => props.viewHeight)
-const listData = computed<ListItem[]>(() => Array.from({ length: props.total }, (_, index) => ({
-  id: index + 1,
-  title: `订单渲染任务 ${index + 1}`,
-  status: index % 3 === 0 ? '待处理' : index % 3 === 1 ? '执行中' : '已完成',
-})))
+const listData = computed<ListItem[]>(() =>
+  Array.from({ length: props.total }, (_, index) => ({
+    id: index + 1,
+    title: `订单渲染任务 ${index + 1}`,
+    status: index % 3 === 0 ? '待处理' : index % 3 === 1 ? '执行中' : '已完成',
+  })),
+)
 
 const fullHeight = computed(() => props.total * props.rowHeight)
-const start = computed(() => Math.max(Math.floor(scrollTop.value / props.rowHeight) - props.buffer, 0))
+const start = computed(() =>
+  Math.max(Math.floor(scrollTop.value / props.rowHeight) - props.buffer, 0),
+)
 const showCount = computed(() => Math.ceil(props.viewHeight / props.rowHeight))
-const end = computed(() => Math.min(showCount.value + start.value + props.buffer * 2, listData.value.length))
+const end = computed(() =>
+  Math.min(showCount.value + start.value + props.buffer * 2, listData.value.length),
+)
 const showData = computed(() => listData.value.slice(start.value, end.value))
 const moveY = computed(() => start.value * props.rowHeight)
 

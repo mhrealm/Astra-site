@@ -1,84 +1,87 @@
 ---
 interface CategorySummary {
-	name: string;
-	slug: string;
-	count: number;
+  name: string
+  slug: string
+  count: number
 }
 
 interface Props {
-	categories: CategorySummary[];
-	total: number;
-	active?: string;
+  categories: CategorySummary[]
+  total: number
+  active?: string
 }
 
-const { categories, total, active = 'all' } = Astro.props;
+const { categories, total, active = 'all' } = Astro.props
 ---
 
 <nav class="category-nav" aria-label="文章分类">
-	<a href="/blog/" class:list={[{ active: active === 'all' }]}>
-		<span>全部</span>
-		<small>{total}</small>
-	</a>
-	{
-		categories.map((category) => (
-			<a href={`/blog/category/${category.slug}/`} class:list={[{ active: active === category.slug }]}>
-				<span>{category.name}</span>
-				<small>{category.count}</small>
-			</a>
-		))
-	}
+  <a href="/blog/" class:list={[{ active: active === 'all' }]}>
+    <span>全部</span>
+    <small>{total}</small>
+  </a>
+  {
+    categories.map((category) => (
+      <a
+        href={`/blog/category/${category.slug}/`}
+        class:list={[{ active: active === category.slug }]}
+      >
+        <span>{category.name}</span>
+        <small>{category.count}</small>
+      </a>
+    ))
+  }
 </nav>
 
 <style>
-	.category-nav {
-		align-items: center;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 6px;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.45rem;
-		margin: 0 0 1.25rem;
-		padding: 0.75rem;
-	}
-	a {
-		align-items: center;
-		border: 1px solid transparent;
-		border-radius: 6px;
-		color: var(--muted);
-		display: inline-flex;
-		font-size: 0.92rem;
-		font-weight: 600;
-		gap: 0.45rem;
-		line-height: 1;
-		padding: 0.58rem 0.74rem;
-		text-decoration: none;
-		transition:
-			background-color 180ms ease,
-			border-color 180ms ease,
-			color 180ms ease;
-	}
-	a:hover,
-	a.active {
-		background: var(--accent-soft);
-		border-color: rgba(30, 128, 255, 18%);
-		color: var(--accent);
-	}
-	small {
-		color: var(--muted-soft);
-		font-size: 0.75rem;
-		font-weight: 700;
-	}
-	a.active small {
-		color: var(--accent);
-	}
-	@media (max-width: 640px) {
-		.category-nav {
-			flex-wrap: wrap;
-			overflow: visible;
-		}
-		a {
-			flex: 0 0 auto;
-		}
-	}
+  .category-nav {
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 0 0 1.25rem;
+    padding: 0.75rem;
+  }
+  a {
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: var(--muted);
+    display: inline-flex;
+    font-size: 0.92rem;
+    font-weight: 600;
+    gap: 0.45rem;
+    line-height: 1;
+    padding: 0.58rem 0.74rem;
+    text-decoration: none;
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease;
+  }
+  a:hover,
+  a.active {
+    background: var(--accent-soft);
+    border-color: rgba(30, 128, 255, 18%);
+    color: var(--accent);
+  }
+  small {
+    color: var(--muted-soft);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  a.active small {
+    color: var(--accent);
+  }
+  @media (max-width: 640px) {
+    .category-nav {
+      flex-wrap: wrap;
+      overflow: visible;
+    }
+    a {
+      flex: 0 0 auto;
+    }
+  }
 </style>

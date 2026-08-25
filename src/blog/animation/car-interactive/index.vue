@@ -1,15 +1,9 @@
 <template>
   <main class="interactive-car-page">
     <!-- 交互版的 3D 场景仍然只挂载 canvas，控制面板继续使用普通 DOM。 -->
-    <div
-      ref="sceneHostRef"
-      class="interactive-canvas"
-    ></div>
+    <div ref="sceneHostRef" class="interactive-canvas"></div>
 
-    <section
-      class="hero-copy"
-      aria-label="车型信息"
-    >
+    <section class="hero-copy" aria-label="车型信息">
       <p>{{ modelKicker }}</p>
       <h1>Chevrolet Corvette C8</h1>
       <dl>
@@ -26,18 +20,12 @@
           <dd>Three.js</dd>
         </div>
       </dl>
-      <span
-        v-if="modelNote"
-        class="model-note"
-      >
+      <span v-if="modelNote" class="model-note">
         {{ modelNote }}
       </span>
     </section>
 
-    <aside
-      class="control-panel"
-      aria-label="车辆交互控制"
-    >
+    <aside class="control-panel" aria-label="车辆交互控制">
       <div class="control-group">
         <h2>Parts</h2>
         <div class="control-grid">
@@ -172,10 +160,50 @@ const initialCameraPosition = new THREE.Vector3(2.15, 0.55, 4.85)
 const cockpitTargetPosition = new THREE.Vector3(-0.08, 0.76, 0.22)
 
 const paintOptions: CarPaintOption[] = [
-  { name: 'corvette-red', label: 'Corvette Red', color: '#8f1418', metalness: 0.16, roughness: 0.22, clearcoatRoughness: 0.03, reflectivity: 0.68, envMapIntensity: 1.36, pearl: 0.04 },
-  { name: 'ceramic-white', label: 'Ceramic White', color: '#98a3ad', metalness: 0.05, roughness: 0.43, clearcoatRoughness: 0.09, reflectivity: 0.28, envMapIntensity: 0.58, pearl: 0.02 },
-  { name: 'blade-silver', label: 'Blade Silver', color: '#b5bec7', metalness: 0.28, roughness: 0.2, clearcoatRoughness: 0.028, reflectivity: 0.7, envMapIntensity: 1.42, pearl: 0.1 },
-  { name: 'night-black', label: 'Night Black', color: '#05070a', metalness: 0.14, roughness: 0.18, clearcoatRoughness: 0.026, reflectivity: 0.74, envMapIntensity: 1.58, pearl: 0.02 },
+  {
+    name: 'corvette-red',
+    label: 'Corvette Red',
+    color: '#8f1418',
+    metalness: 0.16,
+    roughness: 0.22,
+    clearcoatRoughness: 0.03,
+    reflectivity: 0.68,
+    envMapIntensity: 1.36,
+    pearl: 0.04,
+  },
+  {
+    name: 'ceramic-white',
+    label: 'Ceramic White',
+    color: '#98a3ad',
+    metalness: 0.05,
+    roughness: 0.43,
+    clearcoatRoughness: 0.09,
+    reflectivity: 0.28,
+    envMapIntensity: 0.58,
+    pearl: 0.02,
+  },
+  {
+    name: 'blade-silver',
+    label: 'Blade Silver',
+    color: '#b5bec7',
+    metalness: 0.28,
+    roughness: 0.2,
+    clearcoatRoughness: 0.028,
+    reflectivity: 0.7,
+    envMapIntensity: 1.42,
+    pearl: 0.1,
+  },
+  {
+    name: 'night-black',
+    label: 'Night Black',
+    color: '#05070a',
+    metalness: 0.14,
+    roughness: 0.18,
+    clearcoatRoughness: 0.026,
+    reflectivity: 0.74,
+    envMapIntensity: 1.58,
+    pearl: 0.02,
+  },
 ]
 
 const featureState = reactive({
@@ -231,7 +259,8 @@ const getHostSize = () => {
   }
 }
 
-const includesAny = (value: string, keywords: string[]) => keywords.some(keyword => value.includes(keyword))
+const includesAny = (value: string, keywords: string[]) =>
+  keywords.some((keyword) => value.includes(keyword))
 
 const normalizeText = (...values: Array<string | undefined>) => {
   return values.filter(Boolean).join(' ').toLowerCase().replace(/[_-]+/g, ' ')
@@ -281,7 +310,8 @@ const clonePhysicalMaterial = (
   return material
 }
 
-const getActivePaint = () => paintOptions.find(paint => paint.name === activePaint.value) || paintOptions[0]!
+const getActivePaint = () =>
+  paintOptions.find((paint) => paint.name === activePaint.value) || paintOptions[0]!
 
 const applyCarPaintToMaterial = (material: THREE.MeshPhysicalMaterial, paint: CarPaintOption) => {
   // 真实车漆不是一整块金属，而是底色 + 透明清漆层。
@@ -340,7 +370,9 @@ const isBodyMesh = (text: string) => {
 const isMainLightMesh = (text: string) => {
   const ignored = ['day light', 'indicator', 'reverse', 'license', 'brake disc']
 
-  return includesAny(text, ['light', 'headlight', 'taillight', 'brake']) && !includesAny(text, ignored)
+  return (
+    includesAny(text, ['light', 'headlight', 'taillight', 'brake']) && !includesAny(text, ignored)
+  )
 }
 
 const isModelBaseMesh = (mesh: THREE.Mesh) => {
@@ -358,7 +390,7 @@ const clearPartCollections = () => {
 }
 
 const clearAllPartCollections = () => {
-  Object.values(parts).forEach(collection => {
+  Object.values(parts).forEach((collection) => {
     collection.length = 0
   })
 }
@@ -366,7 +398,7 @@ const clearAllPartCollections = () => {
 const clearAnimationActions = () => {
   animationMixer?.stopAllAction()
 
-  Object.values(animatedActions).forEach(collection => {
+  Object.values(animatedActions).forEach((collection) => {
     collection.length = 0
   })
 
@@ -387,10 +419,14 @@ const hasMatchedAncestor = (object: THREE.Object3D, root: THREE.Object3D, keywor
   return false
 }
 
-const collectTopLevelObjects = (root: THREE.Object3D, keywords: string[], ignored: string[] = []) => {
+const collectTopLevelObjects = (
+  root: THREE.Object3D,
+  keywords: string[],
+  ignored: string[] = [],
+) => {
   const result: THREE.Object3D[] = []
 
-  root.traverse(object => {
+  root.traverse((object) => {
     if (object === root) {
       return
     }
@@ -420,7 +456,9 @@ const collectInteractiveParts = (model: THREE.Object3D) => {
   parts.hood.push(...collectTopLevelObjects(model, ['frunk'], ['badge', 'logo']))
 
   if (!parts.hood.length) {
-    parts.hood.push(...collectTopLevelObjects(model, ['hood', 'bonnet'], ['badge', 'logo', 'trunk', 'boot']))
+    parts.hood.push(
+      ...collectTopLevelObjects(model, ['hood', 'bonnet'], ['badge', 'logo', 'trunk', 'boot']),
+    )
   }
 
   parts.trunk.push(...collectTopLevelObjects(model, ['trunk', 'boot'], ['badge', 'logo']))
@@ -442,7 +480,7 @@ const getTrackTargetName = (trackName: string) => {
 const getAnimationTargetText = (clip: THREE.AnimationClip, root: THREE.Object3D) => {
   const texts = new Set<string>()
 
-  clip.tracks.forEach(track => {
+  clip.tracks.forEach((track) => {
     const targetName = getTrackTargetName(track.name)
     let current = targetName ? root.getObjectByName(targetName) : null
 
@@ -465,7 +503,7 @@ const getAnimationTargetText = (clip: THREE.AnimationClip, root: THREE.Object3D)
 const resetAnimatedActionsToStart = () => {
   const actions = Object.values(animatedActions).flat()
 
-  actions.forEach(action => {
+  actions.forEach((action) => {
     const duration = action.getClip().duration
 
     action.reset()
@@ -492,13 +530,16 @@ const collectAnimatedActions = (model: THREE.Object3D, animations: THREE.Animati
 
   animationMixer = new THREE.AnimationMixer(model)
 
-  animations.forEach(clip => {
+  animations.forEach((clip) => {
     const text = getAnimationTargetText(clip, model)
     let key: AnimatedPartKey | null = null
 
     if (includesAny(text, ['door'])) {
       key = 'doors'
-    } else if (includesAny(text, ['frunk', 'bonnet']) || (includesAny(text, ['hood']) && !includesAny(text, ['trunk', 'boot']))) {
+    } else if (
+      includesAny(text, ['frunk', 'bonnet']) ||
+      (includesAny(text, ['hood']) && !includesAny(text, ['trunk', 'boot']))
+    ) {
       key = 'hood'
     } else if (includesAny(text, ['trunk', 'boot'])) {
       key = 'trunk'
@@ -522,7 +563,7 @@ const collectAnimatedActions = (model: THREE.Object3D, animations: THREE.Animati
 const prepareCarModel = (model: THREE.Object3D) => {
   clearAllPartCollections()
 
-  model.traverse(object => {
+  model.traverse((object) => {
     if (!(object instanceof THREE.Mesh)) {
       return
     }
@@ -761,7 +802,7 @@ const playAnimatedActions = (key: AnimatedPartKey, open: boolean) => {
     return false
   }
 
-  actions.forEach(action => {
+  actions.forEach((action) => {
     const duration = action.getClip().duration
 
     action.setLoop(THREE.LoopOnce, 1)
@@ -789,7 +830,7 @@ const toggleDoors = () => {
     return
   }
 
-  parts.doors.forEach(part => {
+  parts.doors.forEach((part) => {
     const side = getObjectSide(part)
     animatePart(part, featureState.doors, { y: side === 'left' ? -0.92 : 0.92 })
   })
@@ -802,7 +843,7 @@ const toggleHood = () => {
     return
   }
 
-  parts.hood.forEach(part => animatePart(part, featureState.hood, { x: -0.72 }))
+  parts.hood.forEach((part) => animatePart(part, featureState.hood, { x: -0.72 }))
 }
 
 const toggleTrunk = () => {
@@ -812,7 +853,7 @@ const toggleTrunk = () => {
     return
   }
 
-  parts.trunk.forEach(part => animatePart(part, featureState.trunk, { x: 0.72 }))
+  parts.trunk.forEach((part) => animatePart(part, featureState.trunk, { x: 0.72 }))
 }
 
 const toggleWheels = () => {
@@ -822,7 +863,7 @@ const toggleWheels = () => {
 const updateLights = () => {
   const intensityKey = featureState.lights ? 'lightOnIntensity' : 'lightOffIntensity'
 
-  lightMaterials.forEach(material => {
+  lightMaterials.forEach((material) => {
     material.emissiveIntensity = Number(material.userData[intensityKey])
     material.needsUpdate = true
   })
@@ -848,7 +889,7 @@ const spinWheels = () => {
     return
   }
 
-  parts.wheels.forEach(wheel => {
+  parts.wheels.forEach((wheel) => {
     wheel.rotation.x += 0.04
   })
 }
@@ -878,10 +919,13 @@ const handleResize = () => {
   renderer.setSize(width, height)
 }
 
-const disposeMaterial = (material: THREE.Material | THREE.Material[], disposedMaterials: Set<THREE.Material>) => {
+const disposeMaterial = (
+  material: THREE.Material | THREE.Material[],
+  disposedMaterials: Set<THREE.Material>,
+) => {
   const materials = Array.isArray(material) ? material : [material]
 
-  materials.forEach(item => {
+  materials.forEach((item) => {
     if (disposedMaterials.has(item)) {
       return
     }
@@ -895,7 +939,7 @@ const disposeObject = (object: THREE.Object3D) => {
   const disposedGeometries = new Set<THREE.BufferGeometry>()
   const disposedMaterials = new Set<THREE.Material>()
 
-  object.traverse(child => {
+  object.traverse((child) => {
     if (!(child instanceof THREE.Mesh)) {
       return
     }
@@ -925,7 +969,7 @@ const disposeScene = () => {
     disposeObject(scene)
   }
 
-  customMaterials.forEach(material => material.dispose())
+  customMaterials.forEach((material) => material.dispose())
   environmentMap?.dispose()
   renderer?.dispose()
   renderer?.domElement.remove()
@@ -975,7 +1019,7 @@ onBeforeUnmount(disposeScene)
 .hero-copy {
   position: relative;
   z-index: 1;
-  width: min(560px, calc(100vw - 40px));
+  width: min(560px, 100%);
   padding: 44px 0 0 44px;
   pointer-events: none;
 }
@@ -1036,7 +1080,7 @@ onBeforeUnmount(disposeScene)
   bottom: 28px;
   z-index: 2;
   box-sizing: border-box;
-  width: min(288px, calc(100vw - 32px));
+  width: min(288px, calc(100% - 32px));
   padding: 14px;
   border: 1px solid rgb(255 255 255 / 14%);
   border-radius: 8px;
@@ -1045,7 +1089,7 @@ onBeforeUnmount(disposeScene)
   backdrop-filter: blur(14px);
 }
 
-.control-group+.control-group {
+.control-group + .control-group {
   margin-top: 14px;
 }
 
@@ -1130,7 +1174,7 @@ onBeforeUnmount(disposeScene)
 
 @media (max-width: 820px) {
   .hero-copy {
-    width: calc(100vw - 32px);
+    width: 100%;
     padding: 28px 16px 0;
   }
 
@@ -1157,11 +1201,13 @@ onBeforeUnmount(disposeScene)
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "3D 汽车交互展示",
     "category": "动画动效",
     "tag": "Three.js",
     "difficulty": 5
   }
-}</route>
+}
+</route>

@@ -1,13 +1,14 @@
 ---
-title: "鼠标跟随倾斜动效卡片"
-description: "前言： 最近在 gsap 上看到一个有趣的动效（Cursor driven perspective tilt），于是决定自己实现一下，下面将介绍实现的过程，希望你能喜欢。 观察动效 1. 卡片的倾斜角度会随着鼠标的移入在 x 轴和 y 轴上"
-pubDate: "2026-08-10"
-category: "交互组件"
-categorySlug: "interaction"
-tags: ["鼠标交互"]
+title: '鼠标跟随倾斜动效卡片'
+description: '前言： 最近在 gsap 上看到一个有趣的动效（Cursor driven perspective tilt），于是决定自己实现一下，下面将介绍实现的过程，希望你能喜欢。 观察动效 1. 卡片的倾斜角度会随着鼠标的移入在 x 轴和 y 轴上'
+pubDate: '2026-08-10'
+category: '交互组件'
+categorySlug: 'interaction'
+tags: ['鼠标交互']
 difficulty: 3
-source: "vue-practice/src/views/interaction/tilt-card/index.md"
+source: 'vue-practice/src/views/interaction/tilt-card/index.md'
 ---
+
 ## 前言：
 
 最近在 gsap 上看到一个有趣的动效（[Cursor-driven perspective tilt](https://demos.gsap.com/demo/cursor-driven-perspective-tilt/)），于是决定自己实现一下，下面将介绍实现的过程，希望你能喜欢。
@@ -77,45 +78,45 @@ source: "vue-practice/src/views/interaction/tilt-card/index.md"
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive, computed } from 'vue'
 
-const cardRef = ref(null);
+const cardRef = ref(null)
 
 // 存储旋转角度
 const transform = reactive({
   rotateX: 0,
-  rotateY: 0
-});
+  rotateY: 0,
+})
 
 // 计算最终的 CSS 样式
 const cardStyle = computed(() => {
-  const scale = 1;
+  const scale = 1
   return {
     transform: `rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg)`,
-    transition: 'transform 0.5s ease-out'
-  };
-});
+    transition: 'transform 0.5s ease-out',
+  }
+})
 
 const handleMouseMove = (e) => {
-  if (!cardRef.value) return;
+  if (!cardRef.value) return
 
-  const rect = cardRef.value.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
+  const rect = cardRef.value.getBoundingClientRect()
+  const centerX = rect.left + rect.width / 2
+  const centerY = rect.top + rect.height / 2
 
   // 计算鼠标距离中心点的偏移量 (-1 到 1)
-  const percentX = (e.clientX - centerX) / (rect.width / 2);
-  const percentY = (e.clientY - centerY) / (rect.height / 2);
+  const percentX = (e.clientX - centerX) / (rect.width / 2)
+  const percentY = (e.clientY - centerY) / (rect.height / 2)
 
-  const deg = 25; // 最大旋转角度
-  transform.rotateY = percentX * deg;
-  transform.rotateX = -percentY * deg; // 取反是因为鼠标向上移动时图片应向下倾斜
-};
+  const deg = 25 // 最大旋转角度
+  transform.rotateY = percentX * deg
+  transform.rotateX = -percentY * deg // 取反是因为鼠标向上移动时图片应向下倾斜
+}
 
 const handleMouseLeave = () => {
-  transform.rotateX = 0;
-  transform.rotateY = 0;
-};
+  transform.rotateX = 0
+  transform.rotateY = 0
+}
 </script>
 
 <style scoped>

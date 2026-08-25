@@ -1,13 +1,14 @@
 ---
-title: "如何使用GSAP实现一个 `pinned` 滚动楼层叙事？"
-description: "最近在做的一个动画，特意去网上查了一下叫 pinned 滚动叙事，感觉蛮有趣，分享给你们。"
-pubDate: "2026-08-10"
-category: "经典复刻"
-categorySlug: "classic-replica"
-tags: ["GSAP"]
+title: '如何使用GSAP实现一个 `pinned` 滚动楼层叙事？'
+description: '最近在做的一个动画，特意去网上查了一下叫 pinned 滚动叙事，感觉蛮有趣，分享给你们。'
+pubDate: '2026-08-10'
+category: '经典复刻'
+categorySlug: 'classic-replica'
+tags: ['GSAP']
 difficulty: 5
-source: "vue-practice/src/views/classic-replica/pinned-story/index.md"
+source: 'vue-practice/src/views/classic-replica/pinned-story/index.md'
 ---
+
 ## 准备工作
 
 技术栈： vue + gsap
@@ -15,6 +16,7 @@ source: "vue-practice/src/views/classic-replica/pinned-story/index.md"
 最近在做的一个动画，特意去网上查了一下叫 pinned 滚动叙事，感觉蛮有趣，分享给你们。
 
 大致的动画如下：
+
 【动态图】
 
 对应的网址是：https://www.vaporesso.com/series-product/xros-series/xros6
@@ -114,7 +116,7 @@ source: "vue-practice/src/views/classic-replica/pinned-story/index.md"
 因为一张卡片对应一组详情内容，所以这里不适合把 DOM 写死。更好的方式是用一份 `storyGroups` 数据同时生成卡片和详情 section。
 
 ```js
-const storyGroups= [
+const storyGroups = [
   {
     id: 'signal',
     kicker: 'Insight Layer',
@@ -243,7 +245,6 @@ const storyGroups= [
     ],
   },
 ]
-
 ```
 
 这样做的好处是，动画流程只需要写一套。后面如果要增加第四张卡片，只需要继续往数组里加数据。
@@ -257,7 +258,7 @@ const storyGroups= [
 整条轨道需要移动多少，才能让当前卡片的中心点和舞台中心点重合。
 
 ```js
-const getMoveX = targetCard => () => {
+const getMoveX = (targetCard) => () => {
   const stageRect = stageRef.value.getBoundingClientRect()
   const cardRect = targetCard.getBoundingClientRect()
   const stageCenter = stageRect.left + stageRect.width / 2
@@ -294,7 +295,7 @@ const addCardSequence = (timeline, group) => {
   const cardTrack = cardTrackRef.value
   if (!cardTrack) return
 
-  const otherCards = cards.filter(item => item !== card)
+  const otherCards = cards.filter((item) => item !== card)
   const currentPanels = getPanelsByGroupId(group.id)
 
   // 第一段：轨道整体移动到目标卡片居中，然后卡片放大淡出，交给详情面板。
@@ -303,7 +304,11 @@ const addCardSequence = (timeline, group) => {
     .set(card, { zIndex: 3 })
     .set(cardTrack, { autoAlpha: 1 })
     .to(cardTrack, { x: getMoveX(card), duration: 0.85 })
-    .to(otherCards, { opacity: 0, scale: 0.94, filter: 'saturate(0.55)', duration: 0.38 }, '<+=0.12')
+    .to(
+      otherCards,
+      { opacity: 0, scale: 0.94, filter: 'saturate(0.55)', duration: 0.38 },
+      '<+=0.12',
+    )
     .to(card, { opacity: 0, scale: 4, duration: 0.72 }, '<+=0.18')
     .to(image, { y: -54, scale: 1.06, duration: 0.72 }, '<')
     .to(copy, { y: 58, opacity: 0, duration: 0.58 }, '<')
@@ -412,7 +417,7 @@ let activeVideo = null
 然后封装一个从头播放视频的方法：
 
 ```js
-const playFromStart = video => {
+const playFromStart = (video) => {
   try {
     video.currentTime = 0
     video.play().catch(() => undefined)
@@ -430,7 +435,7 @@ const playFromStart = video => {
 const pauseAllVideos = () => {
   activeVideo = null
 
-  containerRef.value?.querySelectorAll('video').forEach(video => {
+  containerRef.value?.querySelectorAll('video').forEach((video) => {
     video.pause()
   })
 }
@@ -442,11 +447,11 @@ const pauseAllVideos = () => {
 const videos = Array.from(containerRef.value.querySelectorAll('video'))
 
 const videoPanels = videos
-  .map(video => ({
+  .map((video) => ({
     video,
     panel: video.closest('.story-section'),
   }))
-  .filter(item => item.panel)
+  .filter((item) => item.panel)
 ```
 
 有了这个映射关系之后，就可以在 timeline 更新时判断当前该播放哪个视频：
@@ -454,10 +459,10 @@ const videoPanels = videos
 ```js
 const syncVideos = () => {
   const visibleVideo =
-    videoPanels.find(({ panel }) => Number(gsap.getProperty(panel, 'opacity')) > 0.65)
-      ?.video ?? null
+    videoPanels.find(({ panel }) => Number(gsap.getProperty(panel, 'opacity')) > 0.65)?.video ??
+    null
 
-  videos.forEach(video => {
+  videos.forEach((video) => {
     if (video !== visibleVideo) {
       video.pause()
     }
@@ -545,7 +550,7 @@ onMounted(async () => {
       },
     })
 
-    storyGroups.forEach(group => addCardSequence(timeline, group))
+    storyGroups.forEach((group) => addCardSequence(timeline, group))
     timeline.call(pauseAllVideos)
   }, containerRef.value)
 

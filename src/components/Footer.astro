@@ -1,63 +1,63 @@
 ---
-const today = new Date();
+const today = new Date()
 ---
 
 <footer>
-	<div class="footer-inner">
-		<p>&copy; {today.getFullYear()} Your Name. All rights reserved.</p>
-		<div class="footer-meta">
-			<a href="mailto:hello@example.com">hello@example.com</a>
-			<span aria-hidden="true"></span>
-			<a href="/about">关于我</a>
-		</div>
-	</div>
+  <div class="footer-inner">
+    <p>&copy; {today.getFullYear()} Your Name. All rights reserved.</p>
+    <div class="footer-meta">
+      <a href="mailto:hello@example.com">hello@example.com</a>
+      <span aria-hidden="true"></span>
+      <a href="/about">关于我</a>
+    </div>
+  </div>
 </footer>
 <style>
-	footer {
-		background: #ffffff;
-		border-top: 1px solid var(--border);
-		color: var(--muted);
-		font-size: 0.92rem;
-		padding: 2rem 1rem;
-	}
-	.footer-inner {
-		align-items: center;
-		display: flex;
-		gap: 1.5rem;
-		justify-content: space-between;
-		margin: 0 auto;
-		max-width: 1120px;
-	}
-	p {
-		margin: 0;
-	}
-	.footer-meta {
-		align-items: center;
-		display: flex;
-		gap: 0.9rem;
-	}
-	.footer-meta span {
-		background: var(--border);
-		display: block;
-		height: 0.9rem;
-		width: 1px;
-	}
-	a {
-		color: var(--muted);
-		text-decoration: none;
-	}
-	a:hover {
-		color: var(--accent-strong);
-	}
-	@media (max-width: 640px) {
-		.footer-inner,
-		.footer-meta {
-			align-items: flex-start;
-			flex-direction: column;
-			gap: 0.7rem;
-		}
-		.footer-meta span {
-			display: none;
-		}
-	}
+  footer {
+    background: #ffffff;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.92rem;
+    padding: 2rem 1rem;
+  }
+  .footer-inner {
+    align-items: center;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 1120px;
+  }
+  p {
+    margin: 0;
+  }
+  .footer-meta {
+    align-items: center;
+    display: flex;
+    gap: 0.9rem;
+  }
+  .footer-meta span {
+    background: var(--border);
+    display: block;
+    height: 0.9rem;
+    width: 1px;
+  }
+  a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--accent-strong);
+  }
+  @media (max-width: 640px) {
+    .footer-inner,
+    .footer-meta {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .footer-meta span {
+      display: none;
+    }
+  }
 </style>

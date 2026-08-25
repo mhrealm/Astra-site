@@ -1,9 +1,19 @@
 <template>
-  <div ref="containerRef" class="container" :style="{ '--story-scroll-distance': storyScrollDistance }">
+  <div
+    ref="containerRef"
+    class="container"
+    :style="{ '--story-scroll-distance': storyScrollDistance }"
+  >
     <div class="story-stage" ref="stageRef">
       <!-- 概览卡片轨道 -->
       <div class="story-card" ref="cardTrackRef">
-        <article ref="cardRef" class="story-item" v-for="group in storyGroups" :key="group.id" :data-card-id="group.id">
+        <article
+          ref="cardRef"
+          class="story-item"
+          v-for="group in storyGroups"
+          :key="group.id"
+          :data-card-id="group.id"
+        >
           <figure class="story-img">
             <img :src="group.cardImage" :alt="group.title" loading="lazy" />
           </figure>
@@ -17,9 +27,23 @@
       <!-- 详情内容面板 -->
       <div class="story-panel">
         <template v-for="group in storyGroups" :key="`${group.id}-panels`">
-          <section ref="panelRef" v-for="panel in group.panels" :key="`${group.id}-${panel.id}`" class="story-section" :style="{ '--panel-accent': group.accent }" :data-card-id="group.id">
+          <section
+            ref="panelRef"
+            v-for="panel in group.panels"
+            :key="`${group.id}-${panel.id}`"
+            class="story-section"
+            :style="{ '--panel-accent': group.accent }"
+            :data-card-id="group.id"
+          >
             <div class="panel-visual">
-              <video v-if="panel.video" :src="panel.video" :poster="panel.image" muted playsinline preload="metadata"></video>
+              <video
+                v-if="panel.video"
+                :src="panel.video"
+                :poster="panel.image"
+                muted
+                playsinline
+                preload="metadata"
+              ></video>
               <img v-else :src="panel.image" :alt="panel.title" loading="lazy" />
             </div>
             <div class="panel-content">
@@ -60,15 +84,18 @@ let animationContext = null
 let activeVideo = null
 
 const isReady = () =>
-  containerRef.value && stageRef.value && cardTrackRef.value && cardRef.value.length && panelRef.value.length
+  containerRef.value &&
+  stageRef.value &&
+  cardTrackRef.value &&
+  cardRef.value.length &&
+  panelRef.value.length
 
-const getCardByGroupId = groupId =>
-  cardRef.value.find(card => card.dataset.cardId === groupId)
+const getCardByGroupId = (groupId) => cardRef.value.find((card) => card.dataset.cardId === groupId)
 
-const getPanelsByGroupId = groupId =>
-  panelRef.value.filter(panel => panel.dataset.cardId === groupId)
+const getPanelsByGroupId = (groupId) =>
+  panelRef.value.filter((panel) => panel.dataset.cardId === groupId)
 
-const getCardNodes = groupId => {
+const getCardNodes = (groupId) => {
   const card = getCardByGroupId(groupId)
   if (!card) return null
 
@@ -78,7 +105,7 @@ const getCardNodes = groupId => {
 }
 
 // 计算整条轨道需要移动的距离，让目标卡片对齐舞台中心。
-const getMoveX = targetCard => () => {
+const getMoveX = (targetCard) => () => {
   const stage = stageRef.value
   if (!stage) return 0
   const stageRect = stage.getBoundingClientRect()
@@ -88,7 +115,7 @@ const getMoveX = targetCard => () => {
   return stageCenter - cardCenter
 }
 
-const playFromStart = video => {
+const playFromStart = (video) => {
   try {
     video.currentTime = 0
     video.play().catch(() => undefined)
@@ -100,7 +127,7 @@ const playFromStart = video => {
 // 离开滚动区域或组件卸载时暂停所有视频，避免后台继续播放。
 const pauseAllVideos = () => {
   activeVideo = null
-  containerRef.value?.querySelectorAll('video').forEach(video => {
+  containerRef.value?.querySelectorAll('video').forEach((video) => {
     video.pause()
   })
 }
@@ -133,7 +160,7 @@ const addCardSequence = (timeline, group) => {
   const cardTrack = cardTrackRef.value
   if (!cardTrack) return
 
-  const otherCards = cards.filter(item => item !== card)
+  const otherCards = cards.filter((item) => item !== card)
   const currentPanels = getPanelsByGroupId(group.id)
 
   // 第一段：轨道整体移动到目标卡片居中，然后卡片放大淡出，交给详情面板。
@@ -142,7 +169,11 @@ const addCardSequence = (timeline, group) => {
     .set(card, { zIndex: 3 })
     .set(cardTrack, { autoAlpha: 1 })
     .to(cardTrack, { x: getMoveX(card), duration: 0.85 })
-    .to(otherCards, { opacity: 0, scale: 0.94, filter: 'saturate(0.55)', duration: 0.38 }, '<+=0.12')
+    .to(
+      otherCards,
+      { opacity: 0, scale: 0.94, filter: 'saturate(0.55)', duration: 0.38 },
+      '<+=0.12',
+    )
     .to(card, { opacity: 0, scale: 4, duration: 0.72 }, '<+=0.18')
     .to(image, { y: -54, scale: 1.06, duration: 0.72 }, '<')
     .to(copy, { y: 58, opacity: 0, duration: 0.58 }, '<')
@@ -170,16 +201,16 @@ onMounted(async () => {
   animationContext = gsap.context(() => {
     const videos = Array.from(containerRef.value.querySelectorAll('video'))
     const videoPanels = videos
-      .map(video => ({ video, panel: video.closest('.story-section') }))
-      .filter(item => item.panel)
+      .map((video) => ({ video, panel: video.closest('.story-section') }))
+      .filter((item) => item.panel)
 
     // 根据当前可见的 section 同步视频，只播放正在展示的那一个。
     const syncVideos = () => {
       const visibleVideo =
-        videoPanels.find(({ panel }) => Number(gsap.getProperty(panel, 'opacity')) > 0.65)
-          ?.video ?? null
+        videoPanels.find(({ panel }) => Number(gsap.getProperty(panel, 'opacity')) > 0.65)?.video ??
+        null
 
-      videos.forEach(video => {
+      videos.forEach((video) => {
         if (video !== visibleVideo) {
           video.pause()
         }
@@ -212,7 +243,7 @@ onMounted(async () => {
         onLeaveBack: pauseAllVideos,
       },
     })
-    storyGroups.forEach(group => addCardSequence(timeline, group))
+    storyGroups.forEach((group) => addCardSequence(timeline, group))
     timeline.call(pauseAllVideos)
   }, containerRef.value)
 
@@ -223,7 +254,6 @@ onBeforeUnmount(() => {
   pauseAllVideos()
   animationContext?.revert()
 })
-
 </script>
 
 <style lang="less" scoped>
@@ -250,8 +280,7 @@ onBeforeUnmount(() => {
     isolation: isolate;
     background:
       linear-gradient(120deg, rgba(53, 183, 168, 0.14), transparent 30%),
-      linear-gradient(250deg, rgba(232, 109, 91, 0.16), transparent 34%),
-      #101214;
+      linear-gradient(250deg, rgba(232, 109, 91, 0.16), transparent 34%), #101214;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -326,7 +355,7 @@ onBeforeUnmount(() => {
     grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
     gap: 40px;
     align-items: center;
-    padding: 60px max(36px, calc((100vw - 1180px) / 2));
+    padding: 60px max(36px, calc((100% - 1180px) / 2));
     opacity: 0;
     visibility: hidden;
   }
@@ -403,11 +432,13 @@ onBeforeUnmount(() => {
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "Pinned 滚动叙事楼层",
     "category": "经典复刻",
     "tag": "GSAP",
     "difficulty": 5
   }
-}</route>
+}
+</route>

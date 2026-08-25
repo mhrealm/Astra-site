@@ -1,105 +1,105 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getBlogSlug } from '../data/blogSlugs';
-import FormattedDate from './FormattedDate.astro';
+import type { CollectionEntry } from 'astro:content'
+import { getBlogSlug } from '../data/blogSlugs'
+import FormattedDate from './FormattedDate.astro'
 
 interface Props {
-	post: CollectionEntry<'blog'>;
+  post: CollectionEntry<'blog'>
 }
 
-const { post } = Astro.props;
-const tags = post.data.tags ?? [];
-const slug = getBlogSlug(post);
+const { post } = Astro.props
+const tags = post.data.tags ?? []
+const slug = getBlogSlug(post)
 ---
 
 <a class="post-row" href={`/blog/${slug}/`}>
-	<div class="meta-line">
-		<span class="category">{post.data.category}</span>
-		<span><FormattedDate date={post.data.pubDate} /></span>
-		{post.data.difficulty && <span>难度 {post.data.difficulty}/5</span>}
-	</div>
-	<h3>{post.data.title}</h3>
-	<p>{post.data.description}</p>
-	{
-		tags.length > 0 && (
-			<div class="tag-list" aria-label="文章标签">
-				{tags.map((tag) => (
-					<span>{tag}</span>
-				))}
-			</div>
-		)
-	}
+  <div class="meta-line">
+    <span class="category">{post.data.category}</span>
+    <span><FormattedDate date={post.data.pubDate} /></span>
+    {post.data.difficulty && <span>难度 {post.data.difficulty}/5</span>}
+  </div>
+  <h3>{post.data.title}</h3>
+  <p>{post.data.description}</p>
+  {
+    tags.length > 0 && (
+      <div class="tag-list" aria-label="文章标签">
+        {tags.map((tag) => (
+          <span>{tag}</span>
+        ))}
+      </div>
+    )
+  }
 </a>
 
 <style>
-	.post-row {
-		background: var(--surface);
-		border-bottom: 1px solid var(--border);
-		color: var(--text);
-		display: block;
-		padding: 1.15rem 1.35rem;
-		text-decoration: none;
-		transition:
-			background-color 180ms ease,
-			color 180ms ease;
-	}
-	.post-row:first-child {
-		border-top-left-radius: 6px;
-		border-top-right-radius: 6px;
-	}
-	.post-row:last-child {
-		border-bottom: 0;
-		border-bottom-left-radius: 6px;
-		border-bottom-right-radius: 6px;
-	}
-	.post-row:hover {
-		background: var(--surface-raised);
-		color: var(--text);
-	}
-	.meta-line {
-		align-items: center;
-		color: var(--muted-soft);
-		display: flex;
-		flex-wrap: wrap;
-		font-size: 0.78rem;
-		font-weight: 600;
-		gap: 0.45rem;
-		margin-bottom: 0.45rem;
-	}
-	.meta-line span:not(:last-child)::after {
-		color: #c2c8d1;
-		content: '|';
-		margin-left: 0.45rem;
-	}
-	.category {
-		color: var(--accent);
-	}
-	h3 {
-		color: var(--text-bright);
-		font-size: 1.08rem;
-		line-height: 1.4;
-		margin: 0 0 0.5rem;
-	}
-	p {
-		color: var(--muted);
-		font-size: 0.92rem;
-		line-height: 1.7;
-		margin: 0;
-	}
-	.tag-list {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.45rem;
-		margin-top: 0.8rem;
-	}
-	.tag-list span {
-		background: rgba(30, 128, 255, 6%);
-		border: 1px solid rgba(30, 128, 255, 12%);
-		border-radius: 999px;
-		color: var(--muted);
-		font-size: 0.74rem;
-		font-weight: 700;
-		line-height: 1;
-		padding: 0.35rem 0.52rem;
-	}
+  .post-row {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    display: block;
+    padding: 1.15rem 1.35rem;
+    text-decoration: none;
+    transition:
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+  .post-row:first-child {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+  .post-row:last-child {
+    border-bottom: 0;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  .post-row:hover {
+    background: var(--surface-raised);
+    color: var(--text);
+  }
+  .meta-line {
+    align-items: center;
+    color: var(--muted-soft);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    font-weight: 600;
+    gap: 0.45rem;
+    margin-bottom: 0.45rem;
+  }
+  .meta-line span:not(:last-child)::after {
+    color: #c2c8d1;
+    content: '|';
+    margin-left: 0.45rem;
+  }
+  .category {
+    color: var(--accent);
+  }
+  h3 {
+    color: var(--text-bright);
+    font-size: 1.08rem;
+    line-height: 1.4;
+    margin: 0 0 0.5rem;
+  }
+  p {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.8rem;
+  }
+  .tag-list span {
+    background: rgba(30, 128, 255, 6%);
+    border: 1px solid rgba(30, 128, 255, 12%);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.35rem 0.52rem;
+  }
 </style>

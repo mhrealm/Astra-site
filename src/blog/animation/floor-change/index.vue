@@ -1,46 +1,50 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { onMounted, ref } from 'vue'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // 注册插件
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger)
 
-const mainContainer = ref(null);
-const stickyRef = ref(null);
+const mainContainer = ref(null)
+const stickyRef = ref(null)
 
 onMounted(() => {
-  const item2 = document.querySelector('.item2');
-  const rect = item2.getBoundingClientRect();
+  const item2 = document.querySelector('.item2')
+  const rect = item2.getBoundingClientRect()
   // 1. 计算覆盖比例
-  const scaleX = window.innerWidth / rect.width;
-  const scaleY = window.innerHeight / rect.height;
-  const coverScale = Math.max(scaleX, scaleY);
+  const scaleX = window.innerWidth / rect.width
+  const scaleY = window.innerHeight / rect.height
+  const coverScale = Math.max(scaleX, scaleY)
 
   // 2. 计算中心点偏移
   // 屏幕中心点 Y 坐标
-  const screenCenterY = window.innerHeight / 2;
+  const screenCenterY = window.innerHeight / 2
   // 元素在当前布局下相对于视口的中心点 Y 坐标
-  const elementCenterY = rect.top + rect.height / 2;
+  const elementCenterY = rect.top + rect.height / 2
   // 这里的 yOffset 就是元素需要移动多少像素才能到达屏幕中心
-  const yOffset = screenCenterY - elementCenterY;
+  const yOffset = screenCenterY - elementCenterY
 
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: mainContainer.value,
-      start: "top top",
-      end: "+=300%", // 滚动距离，决定了动画的快慢
-      scrub: 1,      // 关键：将动画与滚动条绑定，1 表示平滑延迟
-      pin: true,     // 固定容器
-    }
-  });
+      start: 'top top',
+      end: '+=300%', // 滚动距离，决定了动画的快慢
+      scrub: 1, // 关键：将动画与滚动条绑定，1 表示平滑延迟
+      pin: true, // 固定容器
+    },
+  })
 
-  tl.fromTo(".item2", { y: yOffset, scale: coverScale, zIndex: 100 }, { y: 0, scale: 1, zIndex: 1, duration: 2 }, 0);
-  tl.fromTo(".item1", { x: -window.innerWidth / 2.9 }, { x: 0, duration: 2 }, 0);
-  tl.fromTo(".item3", { x: window.innerWidth / 2.9 }, { x: 0, duration: 2 }, 0);
-  tl.fromTo(".floor2-content-bottom", { y: window.innerHeight / 2 }, { y: 0, duration: 2 }, 0);
-
-});
+  tl.fromTo(
+    '.item2',
+    { y: yOffset, scale: coverScale, zIndex: 100 },
+    { y: 0, scale: 1, zIndex: 1, duration: 2 },
+    0,
+  )
+  tl.fromTo('.item1', { x: -window.innerWidth / 2.9 }, { x: 0, duration: 2 }, 0)
+  tl.fromTo('.item3', { x: window.innerWidth / 2.9 }, { x: 0, duration: 2 }, 0)
+  tl.fromTo('.floor2-content-bottom', { y: window.innerHeight / 2 }, { y: 0, duration: 2 }, 0)
+})
 </script>
 
 <template>
@@ -48,53 +52,71 @@ onMounted(() => {
     <div class="sticky-wrapper" ref="stickyRef">
       <section class="floor1-container">
         <div class="floor1-text">
-          <img src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ai_phone-1.png.webp" alt="">
+          <img
+            src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ai_phone-1.png.webp"
+            alt=""
+          />
           <p class="floor-title">Reno14 Pro <span>5G</span></p>
           <p class="floor-desc">AI Flash Photography | Al Editor 2.0</p>
         </div>
-        <img class="kv-bg" src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-kv-1.jpg.webp" alt="">
+        <img
+          class="kv-bg"
+          src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-kv-1.jpg.webp"
+          alt=""
+        />
         <!-- <img class="kv-phone" src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-phone-s1.png" alt=""> -->
       </section>
       <section class="floor2-container">
         <ul class="floor2-content-top">
           <li class="item1 card">
             <p>AI Flash Photography</p>
-            <img src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-0.jpg" alt="">
+            <img
+              src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-0.jpg"
+              alt=""
+            />
           </li>
           <li class="item2 card">
             <p>Iridescent Mermaid Design</p>
-            <img src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-0-mo.jpg" alt="">
+            <img
+              src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-0-mo.jpg"
+              alt=""
+            />
           </li>
           <li class="item3 card">
             <p>AI Editor 2.0</p>
-            <img src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-2.jpg" alt="">
+            <img
+              src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-2.jpg"
+              alt=""
+            />
           </li>
         </ul>
         <ul class="floor2-content-bottom">
           <li class="item4 card">
             <p>AI Gaming</p>
-            <img src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-3.jpg" alt="">
+            <img
+              src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-3.jpg"
+              alt=""
+            />
           </li>
           <li class="item5 card">
             <p>ColorOS with Google Gemini</p>
-            <img src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-4.jpg" alt="">
+            <img
+              src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-4.jpg"
+              alt=""
+            />
           </li>
           <li class="item6 card">
             <p>Mobile Intelligent Ecosystem</p>
-            <img src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-5.jpg" alt="">
+            <img
+              src="https://www.oppo.com/content/dam/oppo/product-asset-library/reno/reno14-series/en/reno14-pro/white-grey/v1/assets/images-ksp-s1-img-5.jpg"
+              alt=""
+            />
           </li>
         </ul>
       </section>
     </div>
   </div>
 </template>
-
-<style>
-html {
-  --base: 1920;
-  font-size: clamp(8px, calc(10 / var(--base) * 100vw), 12px);
-}
-</style>
 
 <style scoped>
 .floor-container {
@@ -126,7 +148,7 @@ html {
   z-index: 10;
   position: absolute;
   top: 15%;
-  left: 10rem;
+  left: 100px;
 }
 
 .floor1-text img {
@@ -134,17 +156,17 @@ html {
 }
 
 .floor1-text .floor-title {
-  font-size: 7rem;
+  font-size: 70px;
   font-weight: 600;
 }
 
 .floor1-text .floor-title span {
-  font-size: 3rem;
+  font-size: 30px;
   font-weight: 400;
 }
 
 .floor1-text .floor-desc {
-  font-size: 3rem;
+  font-size: 30px;
   font-weight: 400;
 }
 
@@ -188,9 +210,9 @@ html {
 
 .floor2-container p {
   position: absolute;
-  bottom: 2rem;
-  left: 4rem;
-  font-size: 3rem;
+  bottom: 20px;
+  left: 40px;
+  font-size: 30px;
   font-weight: 400;
 }
 
@@ -209,13 +231,47 @@ html {
   height: 100%;
   object-fit: cover;
 }
+
+@media (max-width: 720px) {
+  .floor1-text {
+    right: 24px;
+    left: 24px;
+  }
+
+  .floor1-text .floor-title {
+    font-size: 42px;
+  }
+
+  .floor1-text .floor-title span,
+  .floor1-text .floor-desc {
+    font-size: 20px;
+  }
+
+  .floor2-container {
+    gap: 12px;
+    padding: 24px;
+  }
+
+  .floor2-content-top,
+  .floor2-content-bottom {
+    gap: 12px;
+  }
+
+  .floor2-container p {
+    bottom: 14px;
+    left: 16px;
+    font-size: 16px;
+  }
+}
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "楼层转场动画",
     "category": "动画动效",
     "tag": "GSAP",
     "difficulty": 4
   }
-}</route>
+}
+</route>

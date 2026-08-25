@@ -1,13 +1,14 @@
 ---
-title: "异步调用和延迟执行有哪些应用？"
-description: "先区分两个概念 异步调用强调“任务不会阻塞当前流程，结果稍后回来”。常见形式有 Promise 、 async/await 、事件监听、网络请求、Worker 消息等。 延迟执行强调“先不执行，等到某个时间点或条件再执行”。常见形式有 se"
-pubDate: "2026-08-21"
-category: "JavaScript 实战"
-categorySlug: "javascript"
-tags: ["异步"]
+title: '异步调用和延迟执行有哪些应用？'
+description: '先区分两个概念 异步调用强调“任务不会阻塞当前流程，结果稍后回来”。常见形式有 Promise 、 async/await 、事件监听、网络请求、Worker 消息等。 延迟执行强调“先不执行，等到某个时间点或条件再执行”。常见形式有 se'
+pubDate: '2026-08-21'
+category: 'JavaScript 实战'
+categorySlug: 'javascript'
+tags: ['异步']
 difficulty: 2
-source: "vue-practice/src/views/javascript/async-delay/index.md"
+source: 'vue-practice/src/views/javascript/async-delay/index.md'
 ---
+
 ## 先区分两个概念
 
 异步调用强调“任务不会阻塞当前流程，结果稍后回来”。常见形式有 `Promise`、`async/await`、事件监听、网络请求、Worker 消息等。
@@ -30,10 +31,7 @@ async function loadUser(id) {
 ### 2. 并发请求
 
 ```js
-const [user, orders] = await Promise.all([
-  fetchUser(),
-  fetchOrders(),
-])
+const [user, orders] = await Promise.all([fetchUser(), fetchOrders()])
 ```
 
 ### 3. 用户交互后的异步流程
@@ -58,7 +56,7 @@ async function submit() {
 ```js
 worker.postMessage({ type: 'calculate', payload })
 
-worker.onmessage = event => {
+worker.onmessage = (event) => {
   renderResult(event.data)
 }
 ```
@@ -104,7 +102,7 @@ function throttle(fn, delay = 300) {
 接口临时失败时，不要立刻连续轰炸服务，可以延迟后重试。
 
 ```js
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 async function retry(task, times = 3) {
   for (let i = 0; i < times; i++) {

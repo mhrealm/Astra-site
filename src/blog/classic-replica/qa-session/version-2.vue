@@ -1,10 +1,35 @@
 <template>
   <div class="version version2">
-    <div v-for="(item, index) in questionList" :key="index" class="step-content" :class="[`step${index}`, currentStep === index ? 'fade-enter-done' : 'fade-item']">
-      <img class="image-bg" :src="item.imgSrc" alt="" :style="{ opacity: animationStates[index]?.imageOpacity ?? 0 }" @load="handleImageLoad(index)" />
+    <div
+      v-for="(item, index) in questionList"
+      :key="index"
+      class="step-content"
+      :class="[`step${index}`, currentStep === index ? 'fade-enter-done' : 'fade-item']"
+    >
+      <img
+        class="image-bg"
+        :src="item.imgSrc"
+        alt=""
+        :style="{ opacity: animationStates[index]?.imageOpacity ?? 0 }"
+        @load="handleImageLoad(index)"
+      />
       <div v-if="index === 0" class="begin-testing" @click="handleBeginTesting"></div>
-      <img v-if="item.question1" class="question question1" :src="item.question1" alt="" :style="{ opacity: animationStates[index]?.question1Opacity ?? 0 }" @click="handleAnsweringQuestion" />
-      <img v-if="item.question2" class="question question2" :src="item.question2" alt="" :style="{ opacity: animationStates[index]?.question2Opacity ?? 0 }" @click="handleAnsweringQuestion" />
+      <img
+        v-if="item.question1"
+        class="question question1"
+        :src="item.question1"
+        alt=""
+        :style="{ opacity: animationStates[index]?.question1Opacity ?? 0 }"
+        @click="handleAnsweringQuestion"
+      />
+      <img
+        v-if="item.question2"
+        class="question question2"
+        :src="item.question2"
+        alt=""
+        :style="{ opacity: animationStates[index]?.question2Opacity ?? 0 }"
+        @click="handleAnsweringQuestion"
+      />
     </div>
   </div>
 </template>
@@ -26,7 +51,7 @@ const animationStates = reactive(
 let timers: number[] = []
 
 const clearTimers = () => {
-  timers.forEach(timer => window.clearTimeout(timer))
+  timers.forEach((timer) => window.clearTimeout(timer))
   timers = []
 }
 
@@ -87,7 +112,7 @@ const handleAnsweringQuestion = () => {
   currentStep.value += 1
 }
 
-watch(currentStep, index => {
+watch(currentStep, (index) => {
   clearTimers()
   resetAnimation(index)
   runAnimation(index)

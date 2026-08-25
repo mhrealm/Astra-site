@@ -17,7 +17,7 @@
 }
 
 .blend-card {
-  width: min(90vw, 520px);
+  width: min(100%, 520px);
   border-radius: 8px;
   background: #fff;
   padding: 32px;
@@ -35,11 +35,13 @@
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "混合模式",
     "category": "CSS 布局与效果",
     "tag": "混合模式",
     "difficulty": 2
   }
-}</route>
+}
+</route>

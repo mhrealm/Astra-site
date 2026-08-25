@@ -25,11 +25,13 @@ import NormalList from './NormalList.vue'
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "虚拟列表",
     "category": "性能优化",
     "tag": "Virtual List",
     "difficulty": 4
   }
-}</route>
+}
+</route>

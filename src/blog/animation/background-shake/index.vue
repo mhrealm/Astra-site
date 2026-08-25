@@ -2,18 +2,12 @@
   <div class="background-shake">
     <section class="step1">
       <button type="button">Let's Get Started！</button>
-      <img
-        src="https://img.xjh.me/desktop/nature/59411146_p0.jpg"
-        alt="step1"
-      />
+      <img src="https://img.xjh.me/desktop/nature/59411146_p0.jpg" alt="step1" />
     </section>
 
     <section class="step2">
       <p>step2</p>
-      <img
-        src="https://img.xjh.me/desktop/acg/34844544_p0.jpg"
-        alt="step2"
-      />
+      <img src="https://img.xjh.me/desktop/acg/34844544_p0.jpg" alt="step2" />
     </section>
   </div>
 </template>
@@ -62,11 +56,13 @@
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "背景抖动",
     "category": "动画动效",
     "tag": "视觉动效",
     "difficulty": 2
   }
-}</route>
+}
+</route>

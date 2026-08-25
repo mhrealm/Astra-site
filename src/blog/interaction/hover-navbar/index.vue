@@ -3,7 +3,13 @@
     <nav ref="navRef" class="hover-highlight-nav">
       <div class="menu-bg" :style="dynamicStyles"></div>
       <ul class="menu-list">
-        <li v-for="item in menuList" :key="item" class="menu-item" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+        <li
+          v-for="item in menuList"
+          :key="item"
+          class="menu-item"
+          @mouseenter="handleMouseEnter"
+          @mouseleave="handleMouseLeave"
+        >
           <span class="menu-label">{{ item }}</span>
         </li>
       </ul>
@@ -121,16 +127,16 @@ const handleMouseLeave = (event: MouseEvent) => {
   position: relative;
   display: inline-flex;
   margin: 0;
-  padding: clamp(6px, 0.8vw, 14px);
+  padding: 10px;
   list-style: none;
-  border-radius: clamp(14px, 1vw, 20px);
+  border-radius: 18px;
   background-color: #ecefec;
 }
 
 .menu-item {
-  padding: clamp(6px, 0.7vw, 14px);
+  padding: 10px;
   color: #202520;
-  font-size: clamp(16px, 1.8vw, 32px);
+  font-size: 24px;
   line-height: 1;
   cursor: pointer;
 }
@@ -139,7 +145,7 @@ const handleMouseLeave = (event: MouseEvent) => {
   position: relative;
   z-index: 2;
   display: block;
-  padding: clamp(10px, 1vw, 18px) clamp(24px, 3vw, 56px);
+  padding: 14px 40px;
   border-radius: 999px;
 }
 
@@ -147,7 +153,7 @@ const handleMouseLeave = (event: MouseEvent) => {
   content: '';
   position: absolute;
   top: 50%;
-  right: clamp(-12px, -1vw, -6px);
+  right: -8px;
   width: 4px;
   height: 50%;
   background-color: rgb(117, 116, 116);
@@ -163,6 +169,10 @@ const handleMouseLeave = (event: MouseEvent) => {
     display: flex;
     width: min(100%, 360px);
     flex-direction: column;
+  }
+
+  .menu-item {
+    font-size: 18px;
   }
 
   .menu-label {
@@ -182,11 +192,13 @@ const handleMouseLeave = (event: MouseEvent) => {
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "Hover 高亮导航",
     "category": "交互组件",
     "tag": "导航",
     "difficulty": 3
   }
-}</route>
+}
+</route>

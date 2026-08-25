@@ -1,10 +1,27 @@
 <template>
   <div class="version version1">
-    <div v-for="(item, index) in questionList" :key="index" class="step-content" :class="[`step${index}`, currentStep !== index ? 'fade-item' : 'fade-enter-done']">
+    <div
+      v-for="(item, index) in questionList"
+      :key="index"
+      class="step-content"
+      :class="[`step${index}`, currentStep !== index ? 'fade-item' : 'fade-enter-done']"
+    >
       <img class="image-bg" :src="item.imgSrc" alt="" />
       <div v-if="index === 0" class="begin-testing" @click="handleBeginTesting"></div>
-      <img v-if="item.question1" class="question question1" :src="item.question1" alt="" @click="handleAnsweringQuestion" />
-      <img v-if="item.question2" class="question question2" :src="item.question2" alt="" @click="handleAnsweringQuestion" />
+      <img
+        v-if="item.question1"
+        class="question question1"
+        :src="item.question1"
+        alt=""
+        @click="handleAnsweringQuestion"
+      />
+      <img
+        v-if="item.question2"
+        class="question question2"
+        :src="item.question2"
+        alt=""
+        @click="handleAnsweringQuestion"
+      />
     </div>
   </div>
 </template>

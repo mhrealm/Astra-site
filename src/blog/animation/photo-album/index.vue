@@ -57,11 +57,13 @@ const list = [
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "相册动画",
     "category": "动画动效",
     "tag": "3D",
     "difficulty": 3
   }
-}</route>
+}
+</route>

@@ -2,7 +2,13 @@
   <div class="slide">
     <div class="listDelete">
       <div v-for="item in listData" :key="item.id" class="list-item" @click="resetSwipeState">
-        <div class="content-wrapper" :style="{ transform: `translateX(${swipeState[item.id] || 0}px)` }" @touchstart="event => handleTouchStart(event, item.id)" @touchmove="event => handleTouchMove(event, item.id)" @touchend="handleTouchEnd(item.id)">
+        <div
+          class="content-wrapper"
+          :style="{ transform: `translateX(${swipeState[item.id] || 0}px)` }"
+          @touchstart="(event) => handleTouchStart(event, item.id)"
+          @touchmove="(event) => handleTouchMove(event, item.id)"
+          @touchend="handleTouchEnd(item.id)"
+        >
           <div class="content">
             <div class="message-info">
               <h3 class="name">{{ item.name }}</h3>
@@ -68,12 +74,12 @@ const handleTouchEnd = (id: number) => {
 }
 
 const handleDelete = (id: number) => {
-  listData.value = listData.value.filter(item => item.id !== id)
+  listData.value = listData.value.filter((item) => item.id !== id)
   delete swipeState[id]
 }
 
 const resetSwipeState = () => {
-  Object.keys(swipeState).forEach(id => {
+  Object.keys(swipeState).forEach((id) => {
     swipeState[Number(id)] = 0
   })
 }
@@ -173,11 +179,13 @@ const resetSwipeState = () => {
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "滑动交互",
     "category": "交互组件",
     "tag": "滑动",
     "difficulty": 3
   }
-}</route>
+}
+</route>

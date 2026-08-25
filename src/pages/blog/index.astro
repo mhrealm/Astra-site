@@ -1,169 +1,173 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import BlogCategoryNav from '../../components/BlogCategoryNav.astro';
-import BlogPostRow from '../../components/BlogPostRow.astro';
-import Footer from '../../components/Footer.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { getCollection } from 'astro:content'
+import BaseHead from '../../components/BaseHead.astro'
+import BlogCategoryNav from '../../components/BlogCategoryNav.astro'
+import BlogPostRow from '../../components/BlogPostRow.astro'
+import Footer from '../../components/Footer.astro'
+import Header from '../../components/Header.astro'
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts'
 
 const categoryOrder = [
-	'performance',
-	'javascript',
-	'vue',
-	'interaction',
-	'animation',
-	'canvas',
-	'css-effects',
-	'classic-replica',
-	'uncategorized',
-];
+  'performance',
+  'javascript',
+  'vue',
+  'interaction',
+  'animation',
+  'canvas',
+  'css-effects',
+  'classic-replica',
+  'uncategorized',
+]
 
 const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+)
 
-const categoryMap = new Map<string, { name: string; slug: string; count: number }>();
+const categoryMap = new Map<string, { name: string; slug: string; count: number }>()
 
 for (const post of posts) {
-	const slug = post.data.categorySlug ?? 'uncategorized';
-	const current = categoryMap.get(slug);
-	if (current) {
-		current.count += 1;
-	} else {
-		categoryMap.set(slug, {
-			name: post.data.category ?? '未分类',
-			slug,
-			count: 1,
-		});
-	}
+  const slug = post.data.categorySlug ?? 'uncategorized'
+  const current = categoryMap.get(slug)
+  if (current) {
+    current.count += 1
+  } else {
+    categoryMap.set(slug, {
+      name: post.data.category ?? '未分类',
+      slug,
+      count: 1,
+    })
+  }
 }
 
 const categories = [...categoryMap.values()].sort((a, b) => {
-	const aIndex = categoryOrder.indexOf(a.slug);
-	const bIndex = categoryOrder.indexOf(b.slug);
-	return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex);
-});
+  const aIndex = categoryOrder.indexOf(a.slug)
+  const bIndex = categoryOrder.indexOf(b.slug)
+  return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex)
+})
 
 const groupedPosts = categories.map((category) => ({
-	...category,
-	posts: posts.filter((post) => post.data.categorySlug === category.slug),
-}));
+  ...category,
+  posts: posts.filter((post) => post.data.categorySlug === category.slug),
+}))
 ---
 
 <!doctype html>
 <html lang="zh-CN">
-	<head>
-		<BaseHead title={`博客 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: min(1120px, calc(100% - 32px));
-			}
-			.listing-hero {
-				margin: 0 auto 2rem;
-				max-width: 720px;
-				text-align: center;
-			}
-			.eyebrow {
-				color: var(--accent);
-				font-size: 0.84rem;
-				font-weight: 800;
-				letter-spacing: 0;
-				margin: 0 0 0.85rem;
-				text-transform: uppercase;
-			}
-			.listing-hero h1 {
-				margin-bottom: 0.85rem;
-			}
-			.listing-hero p:not(.eyebrow) {
-				color: var(--muted);
-				margin: 0;
-			}
-			.category-groups {
-				display: grid;
-				gap: 1.25rem;
-			}
-			.category-section {
-				scroll-margin-top: 5.5rem;
-			}
-			.category-heading {
-				align-items: center;
-				display: flex;
-				gap: 1rem;
-				justify-content: space-between;
-				margin-bottom: 0.65rem;
-			}
-			.category-heading h2 {
-				align-items: baseline;
-				display: flex;
-				font-size: 1.1rem;
-				gap: 0.5rem;
-				margin: 0;
-			}
-			.category-heading h2 span {
-				color: var(--muted-soft);
-				font-size: 0.82rem;
-				font-weight: 600;
-			}
-			.category-heading a {
-				color: var(--muted);
-				font-size: 0.86rem;
-				font-weight: 700;
-				text-decoration: none;
-			}
-			.category-heading a:hover {
-				color: var(--accent);
-			}
-			.post-list {
-				background: var(--surface);
-				border: 1px solid var(--border);
-				border-radius: 6px;
-				box-shadow: var(--box-shadow);
-				overflow: hidden;
-			}
-			@media (max-width: 640px) {
-				main {
-					width: min(100% - 24px, 1120px);
-				}
-				.category-heading {
-					align-items: flex-start;
-					flex-direction: column;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section class="listing-hero">
-				<p class="eyebrow">Writing</p>
-				<h1>博客文章</h1>
-				<p>按主题整理前端实践笔记，快速找到性能、动画、Canvas、Vue 和业务编码相关内容。</p>
-			</section>
+  <head>
+    <BaseHead title={`博客 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <style>
+      main {
+        width: min(1120px, calc(100% - 32px));
+      }
+      .listing-hero {
+        margin: 0 auto 2rem;
+        max-width: 720px;
+        text-align: center;
+      }
+      .eyebrow {
+        color: var(--accent);
+        font-size: 0.84rem;
+        font-weight: 800;
+        letter-spacing: 0;
+        margin: 0 0 0.85rem;
+        text-transform: uppercase;
+      }
+      .listing-hero h1 {
+        margin-bottom: 0.85rem;
+      }
+      .listing-hero p:not(.eyebrow) {
+        color: var(--muted);
+        margin: 0;
+      }
+      .category-groups {
+        display: grid;
+        gap: 1.25rem;
+      }
+      .category-section {
+        scroll-margin-top: 5.5rem;
+      }
+      .category-heading {
+        align-items: center;
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        margin-bottom: 0.65rem;
+      }
+      .category-heading h2 {
+        align-items: baseline;
+        display: flex;
+        font-size: 1.1rem;
+        gap: 0.5rem;
+        margin: 0;
+      }
+      .category-heading h2 span {
+        color: var(--muted-soft);
+        font-size: 0.82rem;
+        font-weight: 600;
+      }
+      .category-heading a {
+        color: var(--muted);
+        font-size: 0.86rem;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .category-heading a:hover {
+        color: var(--accent);
+      }
+      .post-list {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+      }
+      @media (max-width: 640px) {
+        main {
+          width: min(100% - 24px, 1120px);
+        }
+        .category-heading {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="listing-hero">
+        <p class="eyebrow">Writing</p>
+        <h1>博客文章</h1>
+        <p>按主题整理前端实践笔记，快速找到性能、动画、Canvas、Vue 和业务编码相关内容。</p>
+      </section>
 
-			<BlogCategoryNav categories={categories} total={posts.length} />
+      <BlogCategoryNav categories={categories} total={posts.length} />
 
-			<div class="category-groups">
-				{
-					groupedPosts.map((group) => (
-						<section class="category-section" id={group.slug} aria-labelledby={`${group.slug}-title`}>
-							<div class="category-heading">
-								<h2 id={`${group.slug}-title`}>
-									{group.name}
-									<span>{group.count} 篇</span>
-								</h2>
-								<a href={`/blog/category/${group.slug}/`}>只看这个分类</a>
-							</div>
-							<div class="post-list">
-								{group.posts.map((post) => (
-									<BlogPostRow post={post} />
-								))}
-							</div>
-						</section>
-					))
-				}
-			</div>
-		</main>
-		<Footer />
-	</body>
+      <div class="category-groups">
+        {
+          groupedPosts.map((group) => (
+            <section
+              class="category-section"
+              id={group.slug}
+              aria-labelledby={`${group.slug}-title`}
+            >
+              <div class="category-heading">
+                <h2 id={`${group.slug}-title`}>
+                  {group.name}
+                  <span>{group.count} 篇</span>
+                </h2>
+                <a href={`/blog/category/${group.slug}/`}>只看这个分类</a>
+              </div>
+              <div class="post-list">
+                {group.posts.map((post) => (
+                  <BlogPostRow post={post} />
+                ))}
+              </div>
+            </section>
+          ))
+        }
+      </div>
+    </main>
+    <Footer />
+  </body>
 </html>

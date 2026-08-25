@@ -28,11 +28,22 @@
             <td>{{ row.orderStatus }}</td>
             <td>￥{{ row.receivableAmount }}</td>
             <td>
-              <input v-model.number="row.receivedAmount" class="amount-input" type="number" min="0" @blur="updateOrder(row)" />
+              <input
+                v-model.number="row.receivedAmount"
+                class="amount-input"
+                type="number"
+                min="0"
+                @blur="updateOrder(row)"
+              />
             </td>
             <td>￥{{ row.remainingAmount }}</td>
             <td>
-              <input v-model="row.remark" class="remark-input" type="text" @blur="updateOrder(row)" />
+              <input
+                v-model="row.remark"
+                class="remark-input"
+                type="text"
+                @blur="updateOrder(row)"
+              />
             </td>
           </tr>
         </tbody>
@@ -50,7 +61,7 @@ const selectedOrderMap = reactive(new Map())
 const apiVersionLabel = computed(() => `${apiVersionIndex.value + 1} / ${apiOrderVersions.length}`)
 
 const createOrderRows = () => {
-  return apiOrderVersions[apiVersionIndex.value].map(row => {
+  return apiOrderVersions[apiVersionIndex.value].map((row) => {
     // row 是接口原始数据；这里用对象展开生成新对象，避免 v-model 改到 apiOrderVersions。
     const mergedRow = {
       ...row,
@@ -58,19 +69,19 @@ const createOrderRows = () => {
     }
     return {
       ...mergedRow,
-      remainingAmount: mergedRow.receivableAmount - mergedRow.receivedAmount
+      remainingAmount: mergedRow.receivableAmount - mergedRow.receivedAmount,
     }
   })
 }
 
 const orderRows = ref(createOrderRows())
 
-const updateOrder = row => {
+const updateOrder = (row) => {
   row.remainingAmount = row.receivableAmount - row.receivedAmount
   // Map 只保存用户编辑字段；同一个 orderId 重复 set 会直接覆盖旧值。
   selectedOrderMap.set(row.orderId, {
     receivedAmount: row.receivedAmount,
-    remark: row.remark
+    remark: row.remark,
   })
 }
 
@@ -84,7 +95,6 @@ const resetDemo = () => {
   selectedOrderMap.clear()
   orderRows.value = createOrderRows()
 }
-
 </script>
 
 <style lang="less" scoped>

@@ -1,13 +1,14 @@
 ---
-title: "如何使用 GSAP 实现一个楼层切换动画？"
-description: "最近在拆一个楼层切换动画：页面滚动到某一段时，当前区域会被固定住，继续滚动时页面本身不再往下走，而是开始播放一段过渡动画。"
-pubDate: "2026-08-10"
-category: "动画动效"
-categorySlug: "animation"
-tags: ["GSAP", "动效"]
+title: '如何使用 GSAP 实现一个楼层切换动画？'
+description: '最近在拆一个楼层切换动画：页面滚动到某一段时，当前区域会被固定住，继续滚动时页面本身不再往下走，而是开始播放一段过渡动画。'
+pubDate: '2026-08-10'
+category: '动画动效'
+categorySlug: 'animation'
+tags: ['GSAP', '动效']
 difficulty: 4
-source: "vue-practice/src/views/animation/floor-change/index.md"
+source: 'vue-practice/src/views/animation/floor-change/index.md'
 ---
+
 ## 前言
 
 最近在拆一个楼层切换动画：页面滚动到某一段时，当前区域会被固定住，继续滚动时页面本身不再往下走，而是开始播放一段过渡动画。
@@ -132,18 +133,18 @@ source: "vue-practice/src/views/animation/floor-change/index.md"
 脚本部分先引入 GSAP 和 ScrollTrigger：
 
 ```js
-import { onMounted, ref } from 'vue';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { onMounted, ref } from 'vue'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger)
 ```
 
 然后准备两个 ref：
 
 ```js
-const mainContainer = ref(null);
-const stickyRef = ref(null);
+const mainContainer = ref(null)
+const stickyRef = ref(null)
 ```
 
 当前代码中真正用到的是 `mainContainer`，它作为 ScrollTrigger 的 `trigger`。
@@ -155,12 +156,12 @@ const stickyRef = ref(null);
 动画一开始要让 `.item2` 看起来像全屏图，所以需要计算它应该放大多少倍。
 
 ```js
-const item2 = document.querySelector('.item2');
-const rect = item2.getBoundingClientRect();
+const item2 = document.querySelector('.item2')
+const rect = item2.getBoundingClientRect()
 
-const scaleX = window.innerWidth / rect.width;
-const scaleY = window.innerHeight / rect.height;
-const coverScale = Math.max(scaleX, scaleY);
+const scaleX = window.innerWidth / rect.width
+const scaleY = window.innerHeight / rect.height
+const coverScale = Math.max(scaleX, scaleY)
 ```
 
 这里分别计算了两个比例：
@@ -171,7 +172,7 @@ const coverScale = Math.max(scaleX, scaleY);
 最后取 `Math.max(scaleX, scaleY)`：
 
 ```js
-const coverScale = Math.max(scaleX, scaleY);
+const coverScale = Math.max(scaleX, scaleY)
 ```
 
 原因是：如果要让卡片图片覆盖整个屏幕，宽和高至少都要覆盖住视口。
@@ -185,9 +186,9 @@ const coverScale = Math.max(scaleX, scaleY);
 所以还要计算它距离屏幕中心差多少：
 
 ```js
-const screenCenterY = window.innerHeight / 2;
-const elementCenterY = rect.top + rect.height / 2;
-const yOffset = screenCenterY - elementCenterY;
+const screenCenterY = window.innerHeight / 2
+const elementCenterY = rect.top + rect.height / 2
+const yOffset = screenCenterY - elementCenterY
 ```
 
 可以这样理解：
@@ -210,12 +211,12 @@ const yOffset = screenCenterY - elementCenterY;
 const tl = gsap.timeline({
   scrollTrigger: {
     trigger: mainContainer.value,
-    start: "top top",
-    end: "+=300%",
+    start: 'top top',
+    end: '+=300%',
     scrub: 1,
     pin: true,
-  }
-});
+  },
+})
 ```
 
 这里几个配置很关键。
@@ -236,32 +237,17 @@ const tl = gsap.timeline({
 
 ```js
 tl.fromTo(
-  ".item2",
+  '.item2',
   { y: yOffset, scale: coverScale, zIndex: 100 },
   { y: 0, scale: 1, zIndex: 1, duration: 2 },
-  0
-);
+  0,
+)
 
-tl.fromTo(
-  ".item1",
-  { x: -window.innerWidth / 2.9 },
-  { x: 0, duration: 2 },
-  0
-);
+tl.fromTo('.item1', { x: -window.innerWidth / 2.9 }, { x: 0, duration: 2 }, 0)
 
-tl.fromTo(
-  ".item3",
-  { x: window.innerWidth / 2.9 },
-  { x: 0, duration: 2 },
-  0
-);
+tl.fromTo('.item3', { x: window.innerWidth / 2.9 }, { x: 0, duration: 2 }, 0)
 
-tl.fromTo(
-  ".floor2-content-bottom",
-  { y: window.innerHeight / 2 },
-  { y: 0, duration: 2 },
-  0
-);
+tl.fromTo('.floor2-content-bottom', { y: window.innerHeight / 2 }, { y: 0, duration: 2 }, 0)
 ```
 
 最后一个参数 `0` 很重要。
@@ -290,11 +276,11 @@ tl.fromTo(target, fromVars, toVars, position)
 
 ```js
 tl.fromTo(
-  ".item2",
+  '.item2',
   { y: yOffset, scale: coverScale, zIndex: 100 },
   { y: 0, scale: 1, zIndex: 1, duration: 2 },
-  0
-);
+  0,
+)
 ```
 
 这段代码可以翻译成：
@@ -406,7 +392,7 @@ item3 从右侧进入
 当前代码中是这样获取 `.item2` 的：
 
 ```js
-const item2 = document.querySelector('.item2');
+const item2 = document.querySelector('.item2')
 ```
 
 在 Vue 组件中，更推荐给元素绑定 `ref`，这样可以避免全局查询，也能减少多个同类组件同时存在时的冲突。

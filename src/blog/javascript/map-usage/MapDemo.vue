@@ -24,12 +24,11 @@
 import { reactive } from 'vue'
 import { goods } from './order-data.js'
 
-
 // Vue 3 可以让 Map 响应式化，set、delete、clear、size、has 都能参与页面更新。
 // 这里的结构是 Map<商品 id, 商品对象>，适合把“是否选中”和“选中项详情”放在同一个映射里。
 const selectedMap = reactive(new Map())
 
-const toggleItem = item => {
+const toggleItem = (item) => {
   // has 用来判断 key 是否存在，比从数组中 includes 查找更贴合“映射表”的语义。
   if (selectedMap.has(item.id)) {
     // delete 只删除当前商品 id 对应的选中项，不需要手动重建数组。
@@ -42,7 +41,7 @@ const toggleItem = item => {
 }
 
 const selectAll = () => {
-  goods.forEach(item => {
+  goods.forEach((item) => {
     selectedMap.set(item.id, item)
   })
 }

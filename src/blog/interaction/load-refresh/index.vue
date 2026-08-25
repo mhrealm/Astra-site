@@ -37,7 +37,9 @@ const versions = [
 ] as const
 
 const activeVersion = ref<(typeof versions)[number]['key']>('version-1')
-const activeComponent = computed(() => versions.find(item => item.key === activeVersion.value)?.component ?? VersionOne)
+const activeComponent = computed(
+  () => versions.find((item) => item.key === activeVersion.value)?.component ?? VersionOne,
+)
 </script>
 
 <style scoped>

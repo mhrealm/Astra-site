@@ -127,11 +127,13 @@ onMounted(drawShapes)
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "Canvas 基础图形",
     "category": "Canvas 实验",
     "tag": "Canvas",
     "difficulty": 1
   }
-}</route>
+}
+</route>

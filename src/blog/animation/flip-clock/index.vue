@@ -17,7 +17,7 @@
 }
 
 .flip-clock-card {
-  width: min(90vw, 480px);
+  width: min(100%, 480px);
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   background: #fff;
@@ -36,11 +36,13 @@
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "翻页时钟",
     "category": "动画动效",
     "tag": "时钟动效",
     "difficulty": 3
   }
-}</route>
+}
+</route>

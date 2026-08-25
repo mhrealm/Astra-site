@@ -41,11 +41,9 @@ const drawOrbit = () => {
 
   const time = new Date()
   const earthAngle =
-    ((2 * Math.PI) / 60) * time.getSeconds() +
-    ((2 * Math.PI) / 60000) * time.getMilliseconds()
+    ((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds()
   const moonAngle =
-    ((2 * Math.PI) / 6) * time.getSeconds() +
-    ((2 * Math.PI) / 6000) * time.getMilliseconds()
+    ((2 * Math.PI) / 6) * time.getSeconds() + ((2 * Math.PI) / 6000) * time.getMilliseconds()
 
   context.clearRect(0, 0, canvas.width, canvas.height)
   context.save()
@@ -130,11 +128,13 @@ onBeforeUnmount(() => {
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "Canvas 轨道动画",
     "category": "Canvas 实验",
     "tag": "Canvas",
     "difficulty": 3
   }
-}</route>
+}
+</route>

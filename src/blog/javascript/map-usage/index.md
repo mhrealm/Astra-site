@@ -1,13 +1,14 @@
 ---
-title: "别再只会 `find` 了：Map 在前端业务里的真实用法"
-description: "很多前端同学知道 Map ，但真正写业务时却很少用。 原因也很简单：接口返回的数据通常是数组，表单提交的数据通常是对象或数组，最后给后端的也是 JSON。大多数时候，数组和普通对象已经够用了。 但有一类问题，只要出现， Map 就会非常顺手"
-pubDate: "2026-08-21"
-category: "JavaScript 实战"
-categorySlug: "javascript"
-tags: ["Map"]
+title: '别再只会 `find` 了：Map 在前端业务里的真实用法'
+description: '很多前端同学知道 Map ，但真正写业务时却很少用。 原因也很简单：接口返回的数据通常是数组，表单提交的数据通常是对象或数组，最后给后端的也是 JSON。大多数时候，数组和普通对象已经够用了。 但有一类问题，只要出现， Map 就会非常顺手'
+pubDate: '2026-08-21'
+category: 'JavaScript 实战'
+categorySlug: 'javascript'
+tags: ['Map']
 difficulty: 3
-source: "vue-practice/src/views/javascript/map-usage/index.md"
+source: 'vue-practice/src/views/javascript/map-usage/index.md'
 ---
+
 很多前端同学知道 `Map`，但真正写业务时却很少用。
 
 原因也很简单：接口返回的数据通常是数组，表单提交的数据通常是对象或数组，最后给后端的也是 JSON。大多数时候，数组和普通对象已经够用了。
@@ -31,8 +32,8 @@ source: "vue-practice/src/views/javascript/map-usage/index.md"
 当你写出这种代码时，就可以想一下是不是该用 `Map`：
 
 ```js
-listA.map(itemA => {
-  const itemB = listB.find(itemB => itemB.id === itemA.id)
+listA.map((itemA) => {
+  const itemB = listB.find((itemB) => itemB.id === itemA.id)
 })
 ```
 
@@ -56,9 +57,9 @@ listB.length === 1000
 这时可以先把 `listB` 建成索引：
 
 ```js
-const listBMap = new Map(listB.map(itemB => [itemB.id, itemB]))
+const listBMap = new Map(listB.map((itemB) => [itemB.id, itemB]))
 
-listA.map(itemA => {
+listA.map((itemA) => {
   const itemB = listBMap.get(itemA.id)
 })
 ```
@@ -74,7 +75,7 @@ listA.map(itemA => {
 const listB = [
   { id: 1, name: 'A' },
   { id: 2, name: 'B' },
-  { id: 3, name: 'C' }
+  { id: 3, name: 'C' },
 ]
 ```
 
@@ -101,7 +102,7 @@ const listB = [
 const goods = [
   { id: 101, name: '键盘', price: 299 },
   { id: 102, name: '鼠标', price: 189 },
-  { id: 103, name: '显示器支架', price: 129 }
+  { id: 103, name: '显示器支架', price: 129 },
 ]
 ```
 
@@ -128,13 +129,13 @@ import { ref } from 'vue'
 const goods = [
   { id: 101, name: '键盘', price: 299 },
   { id: 102, name: '鼠标', price: 189 },
-  { id: 103, name: '显示器支架', price: 129 }
+  { id: 103, name: '显示器支架', price: 129 },
 ]
 
 const selectedIds = ref([])
 
 const selectAll = () => {
-  selectedIds.value = goods.map(item => item.id)
+  selectedIds.value = goods.map((item) => item.id)
 }
 
 const clearSelected = () => {
@@ -146,7 +147,7 @@ const clearSelected = () => {
 这里最终拿到的是：
 
 ```js
-[101, 102, 103]
+;[101, 102, 103]
 ```
 
 这个结构非常适合提交接口。
@@ -190,12 +191,12 @@ import { reactive } from 'vue'
 const goods = [
   { id: 101, name: '键盘', price: 299 },
   { id: 102, name: '鼠标', price: 189 },
-  { id: 103, name: '显示器支架', price: 129 }
+  { id: 103, name: '显示器支架', price: 129 },
 ]
 
 const selectedMap = reactive(new Map())
 
-const toggleItem = item => {
+const toggleItem = (item) => {
   if (selectedMap.has(item.id)) {
     selectedMap.delete(item.id)
     return
@@ -205,7 +206,7 @@ const toggleItem = item => {
 }
 
 const selectAll = () => {
-  goods.forEach(item => {
+  goods.forEach((item) => {
     selectedMap.set(item.id, item)
   })
 }
@@ -271,15 +272,15 @@ const apiOrderVersions = [
       customerName: '张三',
       orderStatus: '待收款',
       receivableAmount: 200,
-      receivedAmount: 0
+      receivedAmount: 0,
     },
     {
       orderId: '1002',
       customerName: '李四',
       orderStatus: '待收款',
       receivableAmount: 350,
-      receivedAmount: 0
-    }
+      receivedAmount: 0,
+    },
   ],
   [
     {
@@ -287,23 +288,23 @@ const apiOrderVersions = [
       customerName: '张三',
       orderStatus: '部分收款',
       receivableAmount: 210,
-      receivedAmount: 0
+      receivedAmount: 0,
     },
     {
       orderId: '1002',
       customerName: '李四',
       orderStatus: '待收款',
       receivableAmount: 350,
-      receivedAmount: 0
+      receivedAmount: 0,
     },
     {
       orderId: '1003',
       customerName: '王五',
       orderStatus: '新订单',
       receivableAmount: 480,
-      receivedAmount: 0
-    }
-  ]
+      receivedAmount: 0,
+    },
+  ],
 ]
 ```
 
@@ -337,14 +338,14 @@ const selectedOrderMap = reactive(new Map())
 如果不用 `Map`，很容易写成：
 
 ```js
-const selectedOrder = selectedOrders.find(order => order.orderId === row.orderId)
+const selectedOrder = selectedOrders.find((order) => order.orderId === row.orderId)
 ```
 
 当这段逻辑出现在 `map` 里时，就会变成：
 
 ```js
-orderRows.map(row => {
-  const selectedOrder = selectedOrders.find(order => order.orderId === row.orderId)
+orderRows.map((row) => {
+  const selectedOrder = selectedOrders.find((order) => order.orderId === row.orderId)
 })
 ```
 
@@ -353,12 +354,12 @@ orderRows.map(row => {
 用 `Map` 后，保存编辑状态时直接按订单号写入：
 
 ```js
-const updateOrder = row => {
+const updateOrder = (row) => {
   row.remainingAmount = row.receivableAmount - row.receivedAmount
 
   selectedOrderMap.set(row.orderId, {
     receivedAmount: row.receivedAmount,
-    remark: row.remark
+    remark: row.remark,
   })
 }
 ```
@@ -375,15 +376,15 @@ const updateOrder = row => {
 
 ```js
 const createOrderRows = () => {
-  return apiOrderVersions[apiVersionIndex.value].map(row => {
+  return apiOrderVersions[apiVersionIndex.value].map((row) => {
     const mergedRow = {
       ...row,
-      ...selectedOrderMap.get(row.orderId)
+      ...selectedOrderMap.get(row.orderId),
     }
 
     return {
       ...mergedRow,
-      remainingAmount: mergedRow.receivableAmount - mergedRow.receivedAmount
+      remainingAmount: mergedRow.receivableAmount - mergedRow.receivedAmount,
     }
   })
 }
@@ -413,7 +414,7 @@ const createOrderRows = () => {
 ```js
 const mergedRow = {
   ...row,
-  ...selectedOrderMap.get(row.orderId)
+  ...selectedOrderMap.get(row.orderId),
 }
 ```
 
@@ -428,7 +429,7 @@ const mergedRow = {
 ```js
 selectedOrderMap.set(row.orderId, {
   receivedAmount: row.receivedAmount,
-  remark: row.remark
+  remark: row.remark,
 })
 ```
 
@@ -438,7 +439,7 @@ selectedOrderMap.set(row.orderId, {
 selectedOrderMap.set(row.orderId, {
   ...row,
   receivedAmount: row.receivedAmount,
-  remark: row.remark
+  remark: row.remark,
 })
 ```
 
@@ -482,27 +483,27 @@ const selectedOrderMap = reactive(new Map())
 const apiVersionLabel = computed(() => `${apiVersionIndex.value + 1} / ${apiOrderVersions.length}`)
 
 const createOrderRows = () => {
-  return apiOrderVersions[apiVersionIndex.value].map(row => {
+  return apiOrderVersions[apiVersionIndex.value].map((row) => {
     const mergedRow = {
       ...row,
-      ...selectedOrderMap.get(row.orderId)
+      ...selectedOrderMap.get(row.orderId),
     }
 
     return {
       ...mergedRow,
-      remainingAmount: mergedRow.receivableAmount - mergedRow.receivedAmount
+      remainingAmount: mergedRow.receivableAmount - mergedRow.receivedAmount,
     }
   })
 }
 
 const orderRows = ref(createOrderRows())
 
-const updateOrder = row => {
+const updateOrder = (row) => {
   row.remainingAmount = row.receivableAmount - row.receivedAmount
 
   selectedOrderMap.set(row.orderId, {
     receivedAmount: row.receivedAmount,
-    remark: row.remark
+    remark: row.remark,
   })
 }
 
@@ -536,17 +537,17 @@ const resetDemo = () => {
 当你频繁写出这些代码时，可以考虑 `Map`：
 
 ```js
-arrayA.map(itemA => {
-  arrayB.find(itemB => itemB.id === itemA.id)
+arrayA.map((itemA) => {
+  arrayB.find((itemB) => itemB.id === itemA.id)
 })
 ```
 
 ```js
-selectedList.some(item => item.id === id)
+selectedList.some((item) => item.id === id)
 ```
 
 ```js
-selectedList.filter(item => item.id !== id)
+selectedList.filter((item) => item.id !== id)
 ```
 
 不是说这些写法都必须替换。

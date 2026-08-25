@@ -54,10 +54,7 @@ onMounted(() => {
   })
 
   const render = () => {
-    const frameIndex = Math.min(
-      frameCount - 1,
-      Math.max(0, Math.round(sequenceState.frame)),
-    )
+    const frameIndex = Math.min(frameCount - 1, Math.max(0, Math.round(sequenceState.frame)))
     const image = images[frameIndex]
 
     if (!image || !image.complete || image.naturalWidth === 0) {
@@ -116,7 +113,7 @@ onBeforeUnmount(() => {
   margin: 0;
   padding-top: 64px;
   color: #fff;
-  font-size: clamp(32px, 4vw, 72px);
+  font-size: 56px;
   font-weight: 500;
   line-height: 1.1;
   text-align: center;
@@ -126,17 +123,25 @@ onBeforeUnmount(() => {
   position: fixed;
   left: 50%;
   top: 50%;
-  max-width: 100vw;
-  max-height: 100vh;
+  max-width: 100%;
+  max-height: 100%;
   transform: translate(-50%, -50%);
+}
+
+@media (max-width: 720px) {
+  .sequence-title {
+    font-size: 36px;
+  }
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "Canvas 序列帧滚动",
     "category": "Canvas 实验",
     "tag": "Canvas",
     "difficulty": 4
   }
-}</route>
+}
+</route>

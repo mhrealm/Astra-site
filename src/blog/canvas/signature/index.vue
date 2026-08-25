@@ -2,7 +2,15 @@
   <main class="canvas-page">
     <section class="canvas-panel">
       <h1 class="canvas-title">Canvas 电子签名</h1>
-      <canvas ref="canvasRef" class="demo-canvas signature-canvas" @pointerdown="startDrawing" @pointermove="draw" @pointerup="stopDrawing" @pointercancel="stopDrawing" @pointerleave="stopDrawing" />
+      <canvas
+        ref="canvasRef"
+        class="demo-canvas signature-canvas"
+        @pointerdown="startDrawing"
+        @pointermove="draw"
+        @pointerup="stopDrawing"
+        @pointercancel="stopDrawing"
+        @pointerleave="stopDrawing"
+      />
       <div class="canvas-actions">
         <button type="button" @click="clearCanvas">清空</button>
       </div>
@@ -181,11 +189,13 @@ onBeforeUnmount(() => {
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "Canvas 电子签名",
     "category": "Canvas 实验",
     "tag": "Canvas",
     "difficulty": 3
   }
-}</route>
+}
+</route>

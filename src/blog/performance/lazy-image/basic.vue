@@ -2,7 +2,13 @@
   <div class="image-lazy-loading-case-1">
     <div v-for="(url, index) in imageLists" :key="`${url}-${index}`" class="lazy-img-wrapper">
       <div class="loading-spinner"></div>
-      <img :ref="observeImage" class="lazy-img" :data-url="url" :alt="`robot ${index}`" @load="handleImageLoad" />
+      <img
+        :ref="observeImage"
+        class="lazy-img"
+        :data-url="url"
+        :alt="`robot ${index}`"
+        @load="handleImageLoad"
+      />
     </div>
   </div>
 </template>
@@ -49,8 +55,8 @@ const handleImageLoad = (event: Event) => {
 
 onMounted(() => {
   observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
+    (entries) => {
+      entries.forEach((entry) => {
         if (!entry.isIntersecting || !(entry.target instanceof HTMLImageElement)) {
           return
         }

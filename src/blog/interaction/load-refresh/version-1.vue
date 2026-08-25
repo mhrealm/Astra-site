@@ -1,6 +1,15 @@
 <template>
-  <section ref="containerRef" class="version version1" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-    <div class="pull-refresh" :style="{ height: `${pullDistance}px`, opacity: pullDistance > 0 ? 1 : 0 }">
+  <section
+    ref="containerRef"
+    class="version version1"
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
+    @touchend="handleTouchEnd"
+  >
+    <div
+      class="pull-refresh"
+      :style="{ height: `${pullDistance}px`, opacity: pullDistance > 0 ? 1 : 0 }"
+    >
       {{ refreshing ? '正在刷新...' : '下拉刷新' }}
     </div>
 
@@ -43,7 +52,7 @@ const containerRef = ref<HTMLElement | null>(null)
 let startY = 0
 
 const fetchListApi = async (pageIndex: number) => {
-  await new Promise(resolve => window.setTimeout(resolve, 800))
+  await new Promise((resolve) => window.setTimeout(resolve, 800))
 
   const currentTotal = (pageIndex - 1) * pageSize
   const remain = maxTotal - currentTotal
@@ -210,11 +219,13 @@ onBeforeUnmount(() => {
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "上拉加载下拉刷新",
     "category": "交互组件",
     "tag": "列表加载",
     "difficulty": 3
   }
-}</route>
+}
+</route>

@@ -1,13 +1,14 @@
 ---
-title: "vue 如何监听键盘事件？"
-description: "在 vue 中监听键盘事件可以使用 v on 配合键盘事件修饰符实现，常见的键盘事件如 keydown，keyup 等。 1. 监听所有的键盘事件"
-pubDate: "2026-08-19"
-category: "Vue 基础"
-categorySlug: "vue"
-tags: ["基础交互", "Vue"]
+title: 'vue 如何监听键盘事件？'
+description: '在 vue 中监听键盘事件可以使用 v on 配合键盘事件修饰符实现，常见的键盘事件如 keydown，keyup 等。 1. 监听所有的键盘事件'
+pubDate: '2026-08-19'
+category: 'Vue 基础'
+categorySlug: 'vue'
+tags: ['基础交互', 'Vue']
 difficulty: 1
-source: "vue-practice/src/views/vue/keyboard-events/index.md"
+source: 'vue-practice/src/views/vue/keyboard-events/index.md'
 ---
+
 在 vue 中监听键盘事件可以使用 v-on 配合键盘事件修饰符实现，常见的键盘事件如 keydown，keyup 等。
 
 1. 监听所有的键盘事件

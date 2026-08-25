@@ -1,191 +1,192 @@
 ---
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
-import BaseHead from '../../../components/BaseHead.astro';
-import Footer from '../../../components/Footer.astro';
-import Header from '../../../components/Header.astro';
-import { SITE_TITLE } from '../../../consts';
-import { demoRegistry, type DemoEntry } from '../../../data/demoRegistry';
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import BaseHead from '../../../components/BaseHead.astro'
+import Footer from '../../../components/Footer.astro'
+import Header from '../../../components/Header.astro'
+import { SITE_TITLE } from '../../../consts'
+import { demoRegistry, type DemoEntry } from '../../../data/demoRegistry'
 
 export function getStaticPaths() {
-	return demoRegistry.map((demo) => ({
-		params: { demo: demo.slug },
-		props: { demo },
-	}));
+  return demoRegistry.map((demo) => ({
+    params: { demo: demo.slug },
+    props: { demo },
+  }))
 }
 
 interface Props {
-	demo: DemoEntry;
+  demo: DemoEntry
 }
 
-const { demo } = Astro.props;
-const sourceRoot = path.resolve(process.cwd(), demo.sourceRoot);
+const { demo } = Astro.props
+const sourceRoot = path.resolve(process.cwd(), demo.sourceRoot)
 const languageByExtension: Record<string, string> = {
-	'.vue': 'vue',
-	'.ts': 'ts',
-	'.js': 'js',
-	'.md': 'md',
-};
+  '.vue': 'vue',
+  '.ts': 'ts',
+  '.js': 'js',
+  '.md': 'md',
+}
 
 const files = demo.sourceFiles.map((filePath) => {
-	const absolutePath = path.resolve(sourceRoot, filePath);
+  const absolutePath = path.resolve(sourceRoot, filePath)
 
-	if (!absolutePath.startsWith(sourceRoot + path.sep) && absolutePath !== sourceRoot) {
-		throw new Error(`Unexpected source path: ${filePath}`);
-	}
+  if (!absolutePath.startsWith(sourceRoot + path.sep) && absolutePath !== sourceRoot) {
+    throw new Error(`Unexpected source path: ${filePath}`)
+  }
 
-	return {
-		path: filePath,
-		absolutePath,
-		language: languageByExtension[path.extname(filePath)] ?? 'text',
-		content: readFileSync(absolutePath, 'utf-8'),
-	};
-});
+  return {
+    path: filePath,
+    absolutePath,
+    language: languageByExtension[path.extname(filePath)] ?? 'text',
+    content: readFileSync(absolutePath, 'utf-8'),
+  }
+})
 ---
 
 <!doctype html>
 <html lang="zh-CN">
-	<head>
-		<BaseHead title={`${demo.title} 源码 | ${SITE_TITLE}`} description={demo.description} />
-		<style>
-			main {
-				width: min(1120px, calc(100% - 32px));
-			}
+  <head>
+    <BaseHead title={`${demo.title} 源码 | ${SITE_TITLE}`} description={demo.description} />
+    <style>
+      main {
+        width: min(1120px, calc(100% - 32px));
+      }
 
-			.source-hero {
-				background: var(--surface);
-				border: 1px solid var(--border);
-				border-radius: 6px;
-				box-shadow: var(--box-shadow);
-				margin-bottom: 1rem;
-				padding: 1.35rem;
-			}
+      .source-hero {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        box-shadow: var(--box-shadow);
+        margin-bottom: 1rem;
+        padding: 1.35rem;
+      }
 
-			.source-hero p,
-			.source-hero h1 {
-				margin: 0;
-			}
+      .source-hero p,
+      .source-hero h1 {
+        margin: 0;
+      }
 
-			.source-hero p {
-				color: var(--accent);
-				font-size: 0.82rem;
-				font-weight: 800;
-			}
+      .source-hero p {
+        color: var(--accent);
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
 
-			.source-hero h1 {
-				font-size: 1.7rem;
-				line-height: 1.3;
-				margin-top: 0.4rem;
-			}
+      .source-hero h1 {
+        font-size: 1.7rem;
+        line-height: 1.3;
+        margin-top: 0.4rem;
+      }
 
-			.source-links {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.65rem;
-				margin-top: 1rem;
-			}
+      .source-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 1rem;
+      }
 
-			.source-links a {
-				border: 1px solid var(--border);
-				border-radius: 6px;
-				color: var(--muted);
-				font-size: 0.86rem;
-				font-weight: 800;
-				line-height: 1;
-				padding: 0.65rem 0.85rem;
-				text-decoration: none;
-			}
+      .source-links a {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.86rem;
+        font-weight: 800;
+        line-height: 1;
+        padding: 0.65rem 0.85rem;
+        text-decoration: none;
+      }
 
-			.source-links a:hover {
-				border-color: var(--accent);
-				color: var(--accent);
-			}
+      .source-links a:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
 
-			.file-stack {
-				display: grid;
-				gap: 1rem;
-			}
+      .file-stack {
+        display: grid;
+        gap: 1rem;
+      }
 
-			.source-file {
-				overflow: hidden;
-				border: 1px solid var(--border);
-				border-radius: 6px;
-				background: var(--surface);
-				box-shadow: var(--box-shadow);
-			}
+      .source-file {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--surface);
+        box-shadow: var(--box-shadow);
+      }
 
-			.file-name {
-				align-items: center;
-				display: flex;
-				gap: 0.8rem;
-				justify-content: space-between;
-				border-bottom: 1px solid var(--border);
-				color: var(--text-bright);
-				font-size: 0.9rem;
-				font-weight: 800;
-				padding: 0.85rem 1rem;
-			}
+      .file-name {
+        align-items: center;
+        display: flex;
+        gap: 0.8rem;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-bright);
+        font-size: 0.9rem;
+        font-weight: 800;
+        padding: 0.85rem 1rem;
+      }
 
-			.file-name span {
-				color: var(--muted-soft);
-				font-size: 0.76rem;
-				font-weight: 700;
-			}
+      .file-name span {
+        color: var(--muted-soft);
+        font-size: 0.76rem;
+        font-weight: 700;
+      }
 
-			pre {
-				overflow: auto;
-				margin: 0;
-				max-height: 720px;
-				background: #111827;
-				color: #f8fafc;
-				font-size: 0.84rem;
-				line-height: 1.7;
-				padding: 1rem;
-			}
+      pre {
+        overflow: auto;
+        margin: 0;
+        max-height: 720px;
+        background: #111827;
+        color: #f8fafc;
+        font-size: 0.84rem;
+        line-height: 1.7;
+        padding: 1rem;
+      }
 
-			code {
-				font-family:
-					'Fira Code', 'JetBrains Mono', Consolas, 'Liberation Mono', monospace;
-			}
+      code {
+        font-family: 'Fira Code', 'JetBrains Mono', Consolas, 'Liberation Mono', monospace;
+      }
 
-			@media (max-width: 640px) {
-				main {
-					width: min(100% - 24px, 1120px);
-				}
+      @media (max-width: 640px) {
+        main {
+          width: min(100% - 24px, 1120px);
+        }
 
-				.source-hero h1 {
-					font-size: 1.35rem;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section class="source-hero">
-				<p>{demo.category}</p>
-				<h1>{demo.title} 源码</h1>
-				<div class="source-links">
-					<a href="/demos/">全部演示</a>
-					{demo.articleSlug && <a href={`/blog/${demo.articleSlug}/`}>返回文章</a>}
-					<a href={`/demos/${demo.slug}/`}>预览效果</a>
-				</div>
-			</section>
+        .source-hero h1 {
+          font-size: 1.35rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="source-hero">
+        <p>{demo.category}</p>
+        <h1>{demo.title} 源码</h1>
+        <div class="source-links">
+          <a href="/demos/">全部演示</a>
+          {demo.articleSlug && <a href={`/blog/${demo.articleSlug}/`}>返回文章</a>}
+          <a href={`/demos/${demo.slug}/`}>预览效果</a>
+        </div>
+      </section>
 
-			<div class="file-stack">
-				{
-					files.map((file) => (
-						<section class="source-file">
-							<div class="file-name">
-								<strong>{file.path}</strong>
-								<span>{file.language}</span>
-							</div>
-							<pre><code class={`language-${file.language}`}>{file.content}</code></pre>
-						</section>
-					))
-				}
-			</div>
-		</main>
-		<Footer />
-	</body>
+      <div class="file-stack">
+        {
+          files.map((file) => (
+            <section class="source-file">
+              <div class="file-name">
+                <strong>{file.path}</strong>
+                <span>{file.language}</span>
+              </div>
+              <pre>
+                <code class={`language-${file.language}`}>{file.content}</code>
+              </pre>
+            </section>
+          ))
+        }
+      </div>
+    </main>
+    <Footer />
+  </body>
 </html>

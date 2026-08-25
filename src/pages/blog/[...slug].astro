@@ -1,23 +1,23 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
-import { getBlogSlug } from '../../data/blogSlugs';
-import { getDemoByArticleSlug } from '../../data/demoRegistry';
+import { type CollectionEntry, getCollection, render } from 'astro:content'
+import BlogPost from '../../layouts/BlogPost.astro'
+import { getBlogSlug } from '../../data/blogSlugs'
+import { getDemoByArticleSlug } from '../../data/demoRegistry'
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: getBlogSlug(post) },
-		props: post,
-	}));
+  const posts = await getCollection('blog')
+  return posts.map((post) => ({
+    params: { slug: getBlogSlug(post) },
+    props: post,
+  }))
 }
-type Props = CollectionEntry<'blog'>;
+type Props = CollectionEntry<'blog'>
 
-const post = Astro.props;
-const { Content } = await render(post);
-const demo = getDemoByArticleSlug(getBlogSlug(post));
+const post = Astro.props
+const { Content } = await render(post)
+const demo = getDemoByArticleSlug(getBlogSlug(post))
 ---
 
 <BlogPost {...post.data} demo={demo}>
-	<Content />
+  <Content />
 </BlogPost>

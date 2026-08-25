@@ -30,7 +30,7 @@ const selectedIds = ref([])
 
 const selectAll = () => {
   // 全选时只生成 id 数组，页面的 checkbox 会由 v-model 自动同步选中状态。
-  selectedIds.value = goods.map(item => item.id)
+  selectedIds.value = goods.map((item) => item.id)
 }
 
 const clearSelected = () => {

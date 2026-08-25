@@ -7,16 +7,9 @@
       </div>
       <span>{{ listData.length }} 个节点</span>
     </header>
-    <div
-      class="list-view"
-      :style="{ height: `${viewHeight}px` }"
-    >
+    <div class="list-view" :style="{ height: `${viewHeight}px` }">
       <ul class="list-body">
-        <li
-          v-for="item in listData"
-          :key="item.id"
-          class="list-item"
-        >
+        <li v-for="item in listData" :key="item.id" class="list-item">
           <strong>#{{ item.id }}</strong>
           <span>{{ item.title }}</span>
           <em>{{ item.status }}</em>
@@ -47,11 +40,13 @@ const props = withDefaults(
 )
 
 const viewHeight = computed(() => props.viewHeight)
-const listData = computed<ListItem[]>(() => Array.from({ length: props.total }, (_, index) => ({
-  id: index + 1,
-  title: `订单渲染任务 ${index + 1}`,
-  status: index % 3 === 0 ? '待处理' : index % 3 === 1 ? '执行中' : '已完成',
-})))
+const listData = computed<ListItem[]>(() =>
+  Array.from({ length: props.total }, (_, index) => ({
+    id: index + 1,
+    title: `订单渲染任务 ${index + 1}`,
+    status: index % 3 === 0 ? '待处理' : index % 3 === 1 ? '执行中' : '已完成',
+  })),
+)
 </script>
 
 <style lang="less" scoped>

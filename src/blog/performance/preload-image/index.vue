@@ -41,7 +41,7 @@ let requestId = 0
 const progress = computed(() => Math.round((loadedCount.value / imageList.length) * 100))
 
 const loadImage = (src: string, currentRequestId: number) => {
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     const image = new Image()
 
     image.onload = () => {
@@ -69,7 +69,7 @@ const preloadImages = async () => {
   loading.value = true
   loadedCount.value = 0
 
-  await Promise.all(imageList.map(src => loadImage(src, currentRequestId)))
+  await Promise.all(imageList.map((src) => loadImage(src, currentRequestId)))
 
   if (currentRequestId === requestId) {
     loading.value = false
@@ -189,7 +189,13 @@ onBeforeUnmount(() => {
 }
 
 .preload-placeholder {
-  background: repeating-linear-gradient(135deg, #edf2f7 0, #edf2f7 12px, #f8fafc 12px, #f8fafc 24px);
+  background: repeating-linear-gradient(
+    135deg,
+    #edf2f7 0,
+    #edf2f7 12px,
+    #f8fafc 12px,
+    #f8fafc 24px
+  );
 }
 
 .preload-grid.is-loading li {
@@ -208,11 +214,13 @@ onBeforeUnmount(() => {
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "图片预加载",
     "category": "性能优化",
     "tag": "Preload",
     "difficulty": 3
   }
-}</route>
+}
+</route>

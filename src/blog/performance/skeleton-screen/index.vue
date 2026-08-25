@@ -258,11 +258,13 @@ onBeforeUnmount(() => {
 }
 </style>
 
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "骨架屏",
     "category": "性能优化",
     "tag": "Skeleton",
     "difficulty": 2
   }
-}</route>
+}
+</route>

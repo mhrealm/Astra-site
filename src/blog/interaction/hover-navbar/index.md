@@ -1,13 +1,14 @@
 ---
-title: "如何实现一个 Hover 高亮导航？"
-description: "最近浏览网页时看到一个很有意思的导航效果：当鼠标 hover 到某一项时，导航背景会从当前项的位置出现，并平滑移动到对应菜单项下面；当鼠标离开时，背景会收缩到当前项中心并消失。"
-pubDate: "2026-08-10"
-category: "交互组件"
-categorySlug: "interaction"
-tags: ["导航"]
+title: '如何实现一个 Hover 高亮导航？'
+description: '最近浏览网页时看到一个很有意思的导航效果：当鼠标 hover 到某一项时，导航背景会从当前项的位置出现，并平滑移动到对应菜单项下面；当鼠标离开时，背景会收缩到当前项中心并消失。'
+pubDate: '2026-08-10'
+category: '交互组件'
+categorySlug: 'interaction'
+tags: ['导航']
 difficulty: 3
-source: "vue-practice/src/views/interaction/hover-navbar/index.md"
+source: 'vue-practice/src/views/interaction/hover-navbar/index.md'
 ---
+
 ## 前言
 
 最近浏览网页时看到一个很有意思的导航效果：当鼠标 hover 到某一项时，导航背景会从当前项的位置出现，并平滑移动到对应菜单项下面；当鼠标离开时，背景会收缩到当前项中心并消失。
@@ -246,12 +247,12 @@ top: rect.top + rect.height / 2,
   position: relative;
   z-index: 2;
   display: block;
-  padding: clamp(10px, 1vw, 18px) clamp(24px, 3vw, 56px);
+  padding: 14px 40px;
   border-radius: 999px;
 }
 ```
 
-`clamp()` 用来处理响应式尺寸，让间距和字体在不同屏幕下不会过大或过小。
+这里使用固定间距配合小屏断点即可，避免用视口宽度参与计算后把页面撑出横向滚动。
 
 ## 分隔线
 
@@ -262,7 +263,7 @@ top: rect.top + rect.height / 2,
   content: '';
   position: absolute;
   top: 50%;
-  right: clamp(-12px, -1vw, -6px);
+  right: -8px;
   width: 4px;
   height: 50%;
   background-color: rgb(117, 116, 116);

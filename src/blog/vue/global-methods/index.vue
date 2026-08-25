@@ -12,7 +12,7 @@ import { getCurrentInstance, inject, ref } from 'vue'
 const toastMessage = ref('')
 const instance = getCurrentInstance()
 const proxy = instance?.proxy
-const $sayHello = inject('$sayHello', name => {
+const $sayHello = inject('$sayHello', (name) => {
   window.alert(`hello：${name}`)
 })
 
@@ -48,12 +48,13 @@ const handleShowToastClick = () => {
 }
 </style>
 
-
-<route lang="json">{
+<route lang="json">
+{
   "meta": {
     "title": "如何定义全局的方法？",
     "category": "Vue 基础",
     "tag": "基础交互",
     "difficulty": 1
   }
-}</route>
+}
+</route>
