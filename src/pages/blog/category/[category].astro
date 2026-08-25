@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content'
 import BaseHead from '../../../components/BaseHead.astro'
 import BlogCategoryNav from '../../../components/BlogCategoryNav.astro'
+import BlogListingHero from '../../../components/BlogListingHero.astro'
 import BlogPostRow from '../../../components/BlogPostRow.astro'
 import Footer from '../../../components/Footer.astro'
 import Header from '../../../components/Header.astro'
@@ -106,33 +107,6 @@ const categoryName = activeCategory?.name ?? '未分类'
       main {
         width: min(1120px, calc(100% - 32px));
       }
-      .category-hero {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        box-shadow: var(--box-shadow);
-        margin-bottom: 1rem;
-        padding: 1.5rem;
-      }
-      .back-link {
-        color: var(--accent);
-        display: inline-flex;
-        font-size: 0.86rem;
-        font-weight: 700;
-        margin-bottom: 0.8rem;
-        text-decoration: none;
-      }
-      .back-link:hover {
-        color: var(--accent-strong);
-      }
-      h1 {
-        font-size: 1.8rem;
-        margin-bottom: 0.55rem;
-      }
-      .category-hero p {
-        color: var(--muted);
-        margin: 0;
-      }
       .post-list {
         background: var(--surface);
         border: 1px solid var(--border);
@@ -150,11 +124,7 @@ const categoryName = activeCategory?.name ?? '未分类'
   <body>
     <Header />
     <main>
-      <section class="category-hero">
-        <a class="back-link" href="/blog/">返回全部文章</a>
-        <h1>{categoryName}</h1>
-        <p>共 {posts.length} 篇文章，当前只展示这个分类下的内容。</p>
-      </section>
+      <BlogListingHero />
 
       <BlogCategoryNav categories={categories} total={allPosts.length} active={activeSlug} />
 
