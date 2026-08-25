@@ -32,6 +32,8 @@ const { demo } = Astro.props
         flex-direction: column;
         margin: 0;
         max-width: 100%;
+        min-height: 0;
+        overflow: hidden;
         padding: 0;
         width: 100%;
       }
@@ -39,12 +41,20 @@ const { demo } = Astro.props
       body {
         display: flex;
         flex-direction: column;
-        min-height: 100dvh;
+        height: 100dvh;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      body > :global(header),
+      body > :global(footer) {
+        flex: 0 0 auto;
       }
 
       .demo-header {
         background: var(--surface);
         border-bottom: 1px solid var(--border);
+        flex: 0 0 auto;
       }
 
       .demo-header-inner {
@@ -102,7 +112,9 @@ const { demo } = Astro.props
       .demo-stage {
         background: var(--bg);
         flex: 1;
-        min-height: 240px;
+        min-height: 0;
+        overflow: auto;
+        overscroll-behavior: contain;
       }
 
       @media (max-width: 720px) {
