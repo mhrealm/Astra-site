@@ -1,0 +1,45 @@
+---
+interface Props {
+  value: number
+  variant?: 'inline' | 'chip'
+}
+
+const { value, variant = 'inline' } = Astro.props
+const max = 5
+const difficulty = Math.max(1, Math.min(max, Math.round(value)))
+const stars = `${'★'.repeat(difficulty)}${'☆'.repeat(max - difficulty)}`
+---
+
+<span
+  class:list={['difficulty-stars', `difficulty-stars--${variant}`]}
+  aria-label={`难度 ${difficulty}/${max}`}
+  title={`难度 ${difficulty}/${max}`}
+>
+  难度 <span aria-hidden="true">{stars}</span>
+</span>
+
+<style>
+  .difficulty-stars {
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .difficulty-stars--chip {
+    align-items: center;
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: 0.78rem;
+    font-weight: 700;
+    gap: 0.25rem;
+    line-height: 1;
+    padding: 0.4rem 0.62rem;
+  }
+
+  .difficulty-stars span {
+    color: #ff7d00;
+    font-size: 0.9em;
+    letter-spacing: 0;
+  }
+</style>
