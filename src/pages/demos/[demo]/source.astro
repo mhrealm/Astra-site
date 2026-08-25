@@ -23,9 +23,14 @@ const { demo } = Astro.props
 const sourceRoot = path.resolve(process.cwd(), demo.sourceRoot)
 const languageByExtension: Record<string, string> = {
   '.vue': 'vue',
+  '.tsx': 'tsx',
+  '.jsx': 'jsx',
   '.ts': 'ts',
   '.js': 'js',
+  '.mjs': 'js',
   '.md': 'md',
+  '.css': 'css',
+  '.less': 'less',
 }
 
 const files = demo.sourceFiles.map((filePath) => {

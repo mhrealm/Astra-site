@@ -4,12 +4,13 @@ description: '前言 图片懒加载是一种优化网页性能的技术，它�
 pubDate: '2026-08-21'
 category: '性能优化'
 categorySlug: 'performance'
-tags: ['Lazy Load']
+tags: ['React', 'Lazy Load', 'IntersectionObserver']
 difficulty: 3
-source: 'vue-practice/src/views/performance/lazy-image/react-version.md'
-demoSlug: 'performance-lazy-image-react-version'
-demoTitle: '图片懒加载 Vue 演示'
-demoDescription: '配合 React 版文章，提供一份 Vue 版图片懒加载运行效果。'
+source: 'https://juejin.cn/post/7321531849851027490'
+demoSlug: 'react-lazy-image'
+demoComponent: 'index.tsx'
+demoTitle: 'React 图片懒加载演示'
+demoDescription: '使用 IntersectionObserver 在 React 中实现图片进入视口后再加载。'
 ---
 
 ## 前言

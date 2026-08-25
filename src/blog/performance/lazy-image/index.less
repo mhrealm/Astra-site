@@ -1,0 +1,123 @@
+.react-lazy-image-demo {
+  min-width: 0;
+  padding: 28px;
+  color: #252933;
+}
+
+.lazy-demo-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  width: min(1080px, 100%);
+  margin: 0 auto 20px;
+}
+
+.lazy-demo-header p,
+.lazy-demo-header h2 {
+  margin: 0;
+}
+
+.lazy-demo-header p {
+  color: #1e80ff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.lazy-demo-header h2 {
+  margin-top: 6px;
+  color: #1d2129;
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+.lazy-demo-header span {
+  flex: 0 0 auto;
+  border: 1px solid #e4e6eb;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 8px 12px;
+  color: #515767;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.lazy-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  width: min(1080px, 100%);
+  margin: 0 auto;
+}
+
+.image-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 206px;
+  margin: 0;
+  border: 1px solid #e4e6eb;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(29, 33, 41, 0.04);
+}
+
+.image-card img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+
+.image-card.is-loaded img {
+  opacity: 1;
+}
+
+.image-placeholder {
+  position: absolute;
+  inset: 0 0 38px;
+  background: linear-gradient(90deg, #edf2f7 0%, #f8fafc 42%, #edf2f7 78%);
+  background-size: 240% 100%;
+  animation: lazy-shimmer 1.1s ease-in-out infinite;
+}
+
+.image-card.is-loaded .image-placeholder {
+  animation: none;
+  opacity: 0;
+}
+
+.image-card figcaption {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid #eef0f3;
+  background: #ffffff;
+  padding: 8px 10px;
+  color: #8a919f;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@keyframes lazy-shimmer {
+  0% {
+    background-position: 120% 0;
+  }
+
+  100% {
+    background-position: -120% 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .react-lazy-image-demo {
+    padding: 18px;
+  }
+
+  .lazy-demo-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

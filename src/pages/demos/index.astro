@@ -4,38 +4,32 @@ import BaseHead from '../../components/BaseHead.astro'
 import Footer from '../../components/Footer.astro'
 import Header from '../../components/Header.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts'
+import { compareCategorySlug } from '../../data/categories'
 import { getDemosFromPosts, type DemoEntry } from '../../data/demos'
 
-const categoryOrder = [
-  '性能优化',
-  'JavaScript 实战',
-  'Vue 基础',
-  '交互组件',
-  '动画动效',
-  'Canvas 实验',
-  'CSS 布局与效果',
-  '经典复刻',
-]
-
 const demos = getDemosFromPosts(await getCollection('blog'))
-const categoryMap = new Map<string, DemoEntry[]>()
+const categoryMap = new Map<
+  string,
+  { category: string; categorySlug: string; items: DemoEntry[] }
+>()
 
 for (const demo of demos) {
-  const group = categoryMap.get(demo.category) ?? []
-  group.push(demo)
-  categoryMap.set(demo.category, group)
+  const group = categoryMap.get(demo.categorySlug) ?? {
+    category: demo.category,
+    categorySlug: demo.categorySlug,
+    items: [],
+  }
+
+  group.items.push(demo)
+  categoryMap.set(demo.categorySlug, group)
 }
 
-const groups = [...categoryMap.entries()]
-  .map(([category, items]) => ({
-    category,
-    items: items.sort((a, b) => a.title.localeCompare(b.title, 'zh-CN')),
+const groups = [...categoryMap.values()]
+  .map((group) => ({
+    ...group,
+    items: group.items.sort((a, b) => a.title.localeCompare(b.title, 'zh-CN')),
   }))
-  .sort((a, b) => {
-    const aIndex = categoryOrder.indexOf(a.category)
-    const bIndex = categoryOrder.indexOf(b.category)
-    return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex)
-  })
+  .sort((a, b) => compareCategorySlug(a.categorySlug, b.categorySlug))
 ---
 
 <!doctype html>
@@ -197,7 +191,7 @@ const groups = [...categoryMap.entries()]
     <main>
       <section class="demo-hero">
         <p>Demos</p>
-        <h1>Vue 示例预览</h1>
+        <h1>示例预览</h1>
       </section>
 
       <div class="demo-groups">

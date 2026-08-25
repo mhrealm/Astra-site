@@ -7,79 +7,11 @@ import BlogPostRow from '../../../components/BlogPostRow.astro'
 import Footer from '../../../components/Footer.astro'
 import Header from '../../../components/Header.astro'
 import { SITE_TITLE } from '../../../consts'
-
-type BlogEntry = Awaited<ReturnType<typeof getCollection<'blog'>>>[number]
-
-const categoryOrder = [
-  'performance',
-  'javascript',
-  'vue',
-  'interaction',
-  'animation',
-  'canvas',
-  'css-effects',
-  'classic-replica',
-  'uncategorized',
-]
-
-function getCategorySummaries(posts: BlogEntry[]) {
-  const categoryMap = new Map<string, { name: string; slug: string; count: number }>()
-
-  for (const post of posts) {
-    const slug = post.data.categorySlug ?? 'uncategorized'
-    const current = categoryMap.get(slug)
-    if (current) {
-      current.count += 1
-    } else {
-      categoryMap.set(slug, {
-        name: post.data.category ?? '未分类',
-        slug,
-        count: 1,
-      })
-    }
-  }
-
-  return [...categoryMap.values()].sort((a, b) => {
-    const aIndex = categoryOrder.indexOf(a.slug)
-    const bIndex = categoryOrder.indexOf(b.slug)
-    return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex)
-  })
-}
+import { getCategorySummaries } from '../../../data/categories'
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog')
-  const staticCategoryOrder = [
-    'performance',
-    'javascript',
-    'vue',
-    'interaction',
-    'animation',
-    'canvas',
-    'css-effects',
-    'classic-replica',
-    'uncategorized',
-  ]
-  const categoryMap = new Map<string, { name: string; slug: string; count: number }>()
-
-  for (const post of posts) {
-    const slug = post.data.categorySlug ?? 'uncategorized'
-    const current = categoryMap.get(slug)
-    if (current) {
-      current.count += 1
-    } else {
-      categoryMap.set(slug, {
-        name: post.data.category ?? '未分类',
-        slug,
-        count: 1,
-      })
-    }
-  }
-
-  const categories = [...categoryMap.values()].sort((a, b) => {
-    const aIndex = staticCategoryOrder.indexOf(a.slug)
-    const bIndex = staticCategoryOrder.indexOf(b.slug)
-    return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex)
-  })
+  const categories = getCategorySummaries(posts)
 
   return categories.map((category) => ({
     params: { category: category.slug },

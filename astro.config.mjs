@@ -1,6 +1,7 @@
 // @ts-check
 
 import mdx from '@astrojs/mdx'
+import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import vue from '@astrojs/vue'
 import { defineConfig, fontProviders } from 'astro/config'
@@ -11,7 +12,18 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
-  integrations: [mdx(), vue(), sitemap()],
+  integrations: [mdx(), vue(), react(), sitemap()],
+  vite: {
+    optimizeDeps: {
+      rolldownOptions: {
+        transform: {
+          define: {
+            'process.env.NODE_ENV': '"development"',
+          },
+        },
+      },
+    },
+  },
   fonts: [
     {
       provider: fontProviders.local(),

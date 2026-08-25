@@ -1,6 +1,7 @@
 ---
 import type { DemoEntry } from '../data/demos'
 import DemoMount from './DemoMount.vue'
+import ReactDemoMount from './ReactDemoMount'
 
 interface Props {
   demo: DemoEntry
@@ -9,4 +10,10 @@ interface Props {
 const { demo } = Astro.props
 ---
 
-<DemoMount componentPath={demo.componentPath} client:only="vue" />
+{
+  demo.framework === 'react' ? (
+    <ReactDemoMount componentPath={demo.componentPath} client:only="react" />
+  ) : (
+    <DemoMount componentPath={demo.componentPath} client:only="vue" />
+  )
+}

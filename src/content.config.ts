@@ -21,7 +21,7 @@ const blog = defineCollection({
       source: z.string().optional(),
       demoSlug: z.string().optional(),
       demoInline: z.boolean().default(false),
-      demoComponent: z.string().default('index.vue'),
+      demoComponent: z.string().optional(),
       demoSourceFiles: z.array(z.string()).optional(),
       demoTitle: z.string().optional(),
       demoDescription: z.string().optional(),
