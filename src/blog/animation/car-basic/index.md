@@ -91,6 +91,10 @@ renderer = new THREE.WebGLRenderer({ antialias: true })
 2. `camera` 是观察这个世界的眼睛；
 3. `renderer` 是把 3D 世界画成 canvas 的渲染器。
 
+![Three.js 汽车展示渲染流程图](./render-flow.svg)
+
+这张图可以按一句话理解：模型、灯光、展台和环境都放进 `scene`，`camera` 决定从哪里看，`renderer.render(scene, camera)` 负责把这一刻的 3D 世界画到页面里的 `canvas` 上。
+
 初始化完成后，把 canvas 挂到 Vue 的容器里：
 
 ```ts

@@ -1,0 +1,198 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1000 500"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">Three.js 汽车展示渲染流程图</title>
+  <desc id="desc">
+    从 Vue 容器初始化，到加载 GLB 模型、创建场景灯光，再由渲染循环把 Scene 和 Camera 绘制到 Canvas。
+  </desc>
+  <defs>
+    <linearGradient id="page-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7fbff" />
+      <stop offset="54%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f6f8fb" />
+    </linearGradient>
+    <linearGradient id="scene-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eff6ff" />
+      <stop offset="100%" stop-color="#f8fafc" />
+    </linearGradient>
+    <linearGradient id="render-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ecfdf5" />
+      <stop offset="100%" stop-color="#f7fee7" />
+    </linearGradient>
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#1d2129" flood-opacity="0.08" />
+    </filter>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="8"
+      refY="5"
+      orient="auto"
+      markerUnits="strokeWidth"
+    >
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7b8794" />
+    </marker>
+    <style>
+      .page {
+        fill: url(#page-bg);
+      }
+      .title {
+        fill: #1d2129;
+        font-family: Inter, 'Microsoft YaHei', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+      }
+      .subtitle {
+        fill: #515767;
+        font-family: Inter, 'Microsoft YaHei', sans-serif;
+        font-size: 14px;
+      }
+      .card,
+      .scene {
+        stroke-width: 1.3;
+        filter: url(#soft-shadow);
+      }
+      .card {
+        fill: #ffffff;
+        stroke: #e4e6eb;
+      }
+      .card-blue {
+        fill: #f5f9ff;
+      }
+      .card-green {
+        fill: url(#render-bg);
+      }
+      .scene {
+        fill: url(#scene-bg);
+        stroke: #bcd7ff;
+      }
+      .node-title {
+        fill: #1d2129;
+        font-family: Inter, 'Microsoft YaHei', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .node-text {
+        fill: #4e5969;
+        font-family: Inter, 'Microsoft YaHei', sans-serif;
+        font-size: 13px;
+      }
+      .code {
+        fill: #1e80ff;
+        font-family: 'Cascadia Mono', Consolas, monospace;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .tiny {
+        fill: #86909c;
+        font-family: Inter, 'Microsoft YaHei', sans-serif;
+        font-size: 12px;
+      }
+      .badge {
+        fill: rgba(30, 128, 255, 0.1);
+        stroke: rgba(30, 128, 255, 0.22);
+        stroke-width: 1;
+      }
+      .badge-green {
+        fill: rgba(0, 180, 83, 0.1);
+        stroke: rgba(0, 180, 83, 0.2);
+      }
+      .arrow {
+        fill: none;
+        stroke: #7b8794;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        marker-end: url(#arrow);
+      }
+      .arrow-blue {
+        stroke: #1e80ff;
+      }
+      .arrow-green {
+        stroke: #00a86b;
+      }
+      .divider {
+        stroke: #e4e6eb;
+        stroke-width: 1;
+      }
+    </style>
+  </defs>
+
+  <rect class="page" width="1000" height="500" rx="24" />
+
+  <text class="title" x="34" y="48">Three.js 如何把模型渲染成页面？</text>
+  <text class="subtitle" x="34" y="76">
+    先搭世界，再放模型、灯光和环境，最后每一帧把 Scene + Camera 画到 canvas。
+  </text>
+
+  <rect class="card" x="34" y="108" width="158" height="98" rx="13" />
+  <text class="node-title" x="54" y="140">Vue 容器</text>
+  <text class="node-text" x="54" y="166">拿到挂载 DOM</text>
+  <text class="code" x="54" y="190">sceneHostRef</text>
+
+  <path class="arrow arrow-blue" d="M 192 157 H 224" />
+
+  <rect class="card card-blue" x="224" y="108" width="204" height="98" rx="13" />
+  <text class="node-title" x="246" y="140">初始化三件套</text>
+  <text class="code" x="246" y="165">Scene / Camera</text>
+  <text class="code" x="246" y="188">WebGLRenderer</text>
+
+  <path class="arrow" d="M 428 157 H 460" />
+
+  <rect class="card" x="460" y="108" width="194" height="98" rx="13" />
+  <text class="node-title" x="482" y="140">相机和控制器</text>
+  <text class="node-text" x="482" y="166">决定观察角度</text>
+  <text class="code" x="482" y="190">controls.update()</text>
+
+  <path class="arrow" d="M 654 157 H 686" />
+
+  <rect class="card card-green" x="686" y="108" width="280" height="98" rx="13" />
+  <text class="node-title" x="708" y="140">Renderer 输出 Canvas</text>
+  <text class="node-text" x="708" y="166">设置尺寸、像素比和色调映射</text>
+  <text class="code" x="708" y="190">host.appendChild(renderer.domElement)</text>
+
+  <rect class="card" x="34" y="250" width="222" height="184" rx="14" />
+  <text class="node-title" x="56" y="282">GLB 模型进入流程</text>
+  <text class="code" x="56" y="310">GLTFLoader.loadAsync()</text>
+  <line class="divider" x1="56" y1="326" x2="234" y2="326" />
+  <text class="node-text" x="56" y="354">1. 应用闭合动画帧</text>
+  <text class="node-text" x="56" y="382">2. 替换车身车漆材质</text>
+  <text class="node-text" x="56" y="410">3. 缩放、居中、贴地</text>
+
+  <path class="arrow arrow-blue" d="M 256 342 H 292" />
+
+  <rect class="scene" x="292" y="238" width="392" height="208" rx="16" />
+  <text class="node-title" x="316" y="272">Scene：3D 世界容器</text>
+  <text class="node-text" x="316" y="298">所有可见对象最终都被 add 到这里</text>
+  <line class="divider" x1="316" y1="316" x2="660" y2="316" />
+
+  <rect class="badge" x="316" y="334" width="152" height="42" rx="10" />
+  <text class="node-text" x="334" y="360">carGroup + C8 模型</text>
+
+  <rect class="badge" x="492" y="334" width="144" height="42" rx="10" />
+  <text class="node-text" x="510" y="360">GridHelper 展台</text>
+
+  <rect class="badge badge-green" x="316" y="388" width="152" height="42" rx="10" />
+  <text class="node-text" x="334" y="414">方向光 / 点光</text>
+
+  <rect class="badge badge-green" x="492" y="388" width="144" height="42" rx="10" />
+  <text class="node-text" x="510" y="414">柔光 / 环境反射</text>
+
+  <path class="arrow" d="M 556 206 V 232" />
+  <path class="arrow" d="M 684 342 H 718" />
+
+  <rect class="card card-green" x="718" y="250" width="248" height="184" rx="14" />
+  <text class="node-title" x="740" y="282">每一帧重新绘制</text>
+  <text class="code" x="740" y="310">requestAnimationFrame</text>
+  <line class="divider" x1="740" y1="326" x2="944" y2="326" />
+  <text class="node-text" x="740" y="354">车辆轻微自转</text>
+  <text class="node-text" x="740" y="382">控制器同步阻尼</text>
+  <text class="code" x="740" y="410">renderer.render(scene, camera)</text>
+
+  <path class="arrow arrow-green" d="M 842 434 C 842 462 902 462 902 434" />
+  <text class="tiny" x="746" y="468">循环执行后，静态模型就变成页面上的连续 3D 画面。</text>
+</svg>
