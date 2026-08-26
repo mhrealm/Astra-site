@@ -67,16 +67,17 @@ const getHostSize = () => {
   }
 }
 
+// glTF 的 Mesh 可能是单材质，也可能是材质数组，这里统一取第一项。
 const getFirstMaterial = (material: THREE.Material | THREE.Material[]) => {
-  // glTF 的 Mesh 可能是单材质，也可能是材质数组，这里统一取第一项。
   return Array.isArray(material) ? material[0] : material // 如果是数组就取第一个，否则直接返回当前材质。
 }
 
+// 根据 activePaint 找当前车漆配置，找不到时兜底第一个。
 const getActivePaint = () =>
-  paintOptions.find((paint) => paint.name === activePaint.value) || paintOptions[0]! // 根据 activePaint 找当前车漆配置，找不到时兜底第一个。
+  paintOptions.find((paint) => paint.name === activePaint.value) || paintOptions[0]!
 
+// 把某个车漆配置写入 MeshPhysicalMaterial。
 const applyCarPaintToMaterial = (material: THREE.MeshPhysicalMaterial, paint: PaintOption) => {
-  // 把某个车漆配置写入 MeshPhysicalMaterial。
   material.color.set(paint.color) // 设置车漆基础色。
   material.metalness = paint.metalness // 设置金属度，汽车漆通常只保留少量金属感。
   material.roughness = paint.roughness // 设置粗糙度，控制高光锐利程度。
@@ -93,8 +94,8 @@ const applyCarPaintToMaterial = (material: THREE.MeshPhysicalMaterial, paint: Pa
   material.needsUpdate = true // 通知 Three.js 材质参数变了，需要重新更新渲染。
 }
 
+// 根据原模型材质创建一个新的车身物理材质。
 const createBodyMaterial = (sourceMaterial: THREE.Material, paint: PaintOption) => {
-  // 根据原模型材质创建一个新的车身物理材质。
   const source = sourceMaterial instanceof THREE.MeshStandardMaterial ? sourceMaterial : null // 只有标准/PBR 材质才安全读取贴图字段。
   const material = new THREE.MeshPhysicalMaterial({
     // 创建支持 clearcoat 的物理材质，更适合表现汽车车漆。
@@ -156,16 +157,14 @@ const prepareCarModel = (model: THREE.Object3D) => {
   })
 }
 
+// 把模型自带动画压到闭合帧，避免基础展示页一开始车门/机盖是打开的。
 const applyInitialAnimationPose = (model: THREE.Object3D, animations: THREE.AnimationClip[]) => {
-  // 把模型自带动画压到闭合帧，避免基础展示页一开始车门/机盖是打开的。
   if (!animations.length) {
     // 如果模型没有动画片段，就不需要处理。
     return // 直接结束。
   }
-
   const mixer = new THREE.AnimationMixer(model) // 创建动画混合器，用来应用 glTF 里的动画片段。
   let closeTime = 0 // 记录所有动画片段里最长的时间，C8 的末帧是闭合状态。
-
   animations.forEach((clip) => {
     // 遍历模型里的每个动画片段。
     const action = mixer.clipAction(clip) // 为当前动画片段创建可播放的 AnimationAction。
@@ -174,7 +173,6 @@ const applyInitialAnimationPose = (model: THREE.Object3D, animations: THREE.Anim
     action.clampWhenFinished = true // 播放结束后停留在最后一帧。
     action.play() // 激活动画动作，让 mixer.setTime 可以应用它。
   })
-
   mixer.setTime(closeTime) // 把所有动画直接推进到末帧，让车辆处于闭合展示状态。
 }
 
@@ -207,11 +205,9 @@ const loadCarModel = async () => {
       disposeObject(model) // 释放刚加载出来但不会使用的模型资源。
       return // 不再继续往已销毁的场景里添加对象。
     }
-
     applyInitialAnimationPose(model, gltf.animations) // 把模型自带动画应用到闭合展示状态。
     prepareCarModel(model) // 处理模型材质、阴影和底座隐藏。
     fitModelToStage(model) // 缩放、居中、贴地模型。
-
     carGroup = new THREE.Group() // 创建整车外层 Group，方便整体旋转。
     carGroup.add(model) // 把处理好的模型放进 Group。
     carGroup.rotation.y = -0.52 // 设置初始朝向，让车头角度更适合展示。
@@ -309,17 +305,15 @@ const applyPaint = (paint: PaintOption) => {
   }
 }
 
+// 每一帧执行一次，更新控制器、旋转车辆并重新渲染画面。
 const renderScene = () => {
-  // 每一帧执行一次，更新控制器、旋转车辆并重新渲染画面。
   if (!renderer || !scene || !camera) {
     // 渲染所需对象缺任意一个，都不能继续画。
     return // 直接退出当前帧。
   }
-
   carGroup?.rotateY(0.002) // 让整车轻微自转，基础展示页更有产品展示感。
   controls?.update() // 更新 OrbitControls，阻尼效果需要每帧调用。
   renderer.render(scene, camera) // 用当前相机视角把场景画到 canvas 上。
-
   animationFrameId = window.requestAnimationFrame(renderScene) // 请求下一帧，形成持续渲染循环。
 }
 
@@ -371,22 +365,18 @@ const disposeObject = (object: THREE.Object3D) => {
   })
 }
 
+// 组件卸载时清理 Three.js 场景和浏览器事件。
 const disposeScene = () => {
-  // 组件卸载时清理 Three.js 场景和浏览器事件。
   window.cancelAnimationFrame(animationFrameId) // 停止 requestAnimationFrame 渲染循环。
   window.removeEventListener('resize', handleResize) // 移除窗口尺寸变化监听，避免组件卸载后还触发回调。
-
   controls?.dispose() // 释放 OrbitControls 绑定的鼠标/触摸事件。
-
   if (scene) {
     // 如果场景还存在，就释放场景里所有 Mesh 资源。
     disposeObject(scene) // 释放场景对象树里的 geometry 和 material。
   }
-
   environmentMap?.dispose() // 释放环境贴图渲染目标。
   renderer?.dispose() // 释放渲染器内部资源。
   renderer?.domElement.remove() // 从 DOM 中移除 Three.js 创建的 canvas。
-
   scene = null // 清空场景引用，方便垃圾回收。
   camera = null // 清空相机引用。
   renderer = null // 清空渲染器引用。
