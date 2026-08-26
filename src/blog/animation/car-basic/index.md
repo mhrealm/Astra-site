@@ -268,32 +268,19 @@ const paintOptions: PaintOption[] = [
 
 ## 如何识别车身？
 
-模型内部节点名不一定统一，所以代码用了关键词判断：
+打印过 `mesh.name` 和 `material?.name` 后，可以看到这份 C8 模型里真正需要换车漆的材质名主要是 `Body_Color` 和 `Painted_Black`。
+
+所以这里不用再通过 `paint/body/exterior` 这类关键词猜测，遍历 Mesh 时只看当前 Mesh 的材质名：
 
 ```ts
-const paintKeywords = ['paint', 'body', 'carpaint', 'car_paint', 'exterior', 'corvette', 'c8']
-const ignorePaintKeywords = [
-  'glass',
-  'window',
-  'tire',
-  'tyre',
-  'rubber',
-  'rim',
-  'wheel',
-  'light',
-  'lamp',
-]
+const isPaintMesh = (mesh: THREE.Mesh) => {
+  const material = getFirstMaterial(mesh.material)
+  const materialName = (material?.name || '').toLowerCase().replace(/\.\d+$/, '')
+  return materialName === 'body_color' || materialName === 'painted_black'
+}
 ```
 
-遍历 Mesh 时，把节点名和材质名拼起来：
-
-```ts
-const text = `${mesh.name} ${material?.name || ''}`.toLowerCase()
-```
-
-如果命中 `paint/body/exterior`，同时没有命中 `glass/wheel/light`，就把它当成车身。
-
-这种方式不是绝对完美，但对教学案例很友好。真实项目里，最好还是下载模型后打印节点树，再按实际节点名精确匹配。
+这样玻璃、轮胎、刹车盘这些节点天然不会命中，判断会比关键词排除更稳定。
 
 ## 切换车漆
 

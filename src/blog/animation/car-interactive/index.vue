@@ -360,11 +360,10 @@ const createLightMaterial = (sourceMaterial: THREE.Material, text: string) => {
   return material
 }
 
-const isBodyMesh = (text: string) => {
-  const keywords = ['paint', 'body', 'carpaint', 'car paint', 'exterior', 'corvette', 'c8']
-  const ignored = ['glass', 'window', 'tire', 'tyre', 'rubber', 'rim', 'wheel', 'light', 'lamp']
-
-  return includesAny(text, keywords) && !includesAny(text, ignored)
+const isBodyMesh = (mesh: THREE.Mesh) => {
+  const material = getFirstMaterial(mesh.material)
+  const materialName = (material?.name || '').toLowerCase().replace(/\.\d+$/, '')
+  return materialName === 'body_color' || materialName === 'painted_black'
 }
 
 const isMainLightMesh = (text: string) => {
@@ -590,7 +589,7 @@ const prepareCarModel = (model: THREE.Object3D) => {
       return
     }
 
-    if (isBodyMesh(text)) {
+    if (isBodyMesh(object)) {
       bodyMaterial = bodyMaterial || createBodyMaterial(sourceMaterial)
       object.material = bodyMaterial
     }

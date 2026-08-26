@@ -59,19 +59,6 @@ let bodyMaterial: THREE.MeshPhysicalMaterial | null = null // 当前车身共用
 let environmentMap: THREE.WebGLRenderTarget | null = null // PMREM 生成的环境贴图渲染目标，卸载时需要释放。
 let animationFrameId = 0 // requestAnimationFrame 的 id，用来在组件卸载时停止渲染循环。
 
-const paintKeywords = ['paint', 'body', 'carpaint', 'car_paint', 'exterior', 'corvette', 'c8'] // 用来判断某个 Mesh 是否可能是车身漆面。
-const ignorePaintKeywords = [
-  'glass',
-  'window',
-  'tire',
-  'tyre',
-  'rubber',
-  'rim',
-  'wheel',
-  'light',
-  'lamp',
-] // 排除玻璃、轮胎、灯光等不应该换车漆的 Mesh。
-
 const getHostSize = () => {
   const host = sceneHostRef.value
   return {
@@ -79,10 +66,6 @@ const getHostSize = () => {
     height: host?.clientHeight || window.innerHeight,
   }
 }
-
-// 判断字符串是否包含任意一个关键词。
-const includesAny = (value: string, keywords: string[]) =>
-  keywords.some((keyword) => value.includes(keyword))
 
 const getFirstMaterial = (material: THREE.Material | THREE.Material[]) => {
   // glTF 的 Mesh 可能是单材质，也可能是材质数组，这里统一取第一项。
@@ -113,7 +96,6 @@ const applyCarPaintToMaterial = (material: THREE.MeshPhysicalMaterial, paint: Pa
 const createBodyMaterial = (sourceMaterial: THREE.Material, paint: PaintOption) => {
   // 根据原模型材质创建一个新的车身物理材质。
   const source = sourceMaterial instanceof THREE.MeshStandardMaterial ? sourceMaterial : null // 只有标准/PBR 材质才安全读取贴图字段。
-
   const material = new THREE.MeshPhysicalMaterial({
     // 创建支持 clearcoat 的物理材质，更适合表现汽车车漆。
     color: paint.color, // 设置初始基础色。
@@ -128,15 +110,14 @@ const createBodyMaterial = (sourceMaterial: THREE.Material, paint: PaintOption) 
 
   material.name = 'c8-showcase-paint' // 给新材质命名，方便调试时识别。
   applyCarPaintToMaterial(material, paint) // 把当前车漆配置完整写入新材质。
-
   return material // 返回创建好的车身材质。
 }
 
 // 判断当前 Mesh 是否应该被当成车身漆面处理。
 const isPaintMesh = (mesh: THREE.Mesh) => {
   const material = getFirstMaterial(mesh.material) // 获取当前 Mesh 的第一个材质。
-  const text = `${mesh.name} ${material?.name || ''}`.toLowerCase() // 拼出 mesh 名和材质名，统一转小写做关键词匹配。
-  return includesAny(text, paintKeywords) && !includesAny(text, ignorePaintKeywords) // 命中车漆关键词且没有命中排除关键词，才认为是车身。
+  const materialName = (material?.name || '').toLowerCase().replace(/\.\d+$/, '') // 去掉 Blender 复制材质常见的 .001 后缀。
+  return materialName === 'body_color' || materialName === 'painted_black' // 直接按已确认的车身材质名判断。
 }
 
 // 判断模型自带的展示底座/平面。
