@@ -10,42 +10,6 @@ source: 'vue-practice/src/views/animation/car-showcase/basic.md'
 demoSlug: 'animation-car-showcase-basic'
 ---
 
-## 前言
-
-最近在做一个汽车 3D 产品展示案例，技术栈是 `Vue 3 + Three.js`。
-
-模型来源：
-
-[Animated Chevrolet C8 Model - Sketchfab](https://sketchfab.com/3d-models/animated-chevrolet-c8-model-91d39ff24d6c4e7b83674411f9c5bb67)
-
-这个模型是 `CC Attribution` 授权，使用时需要保留作者署名。当前项目已经把运行时使用的 GLB 放到了当前案例的 `models` 文件夹下，模型和页面代码放在一起，后续移动、删除、写说明都会更直观。
-
-初学 Three.js 的时候，先把这条主线跑通非常重要。因为后面的所有交互，其实都是建立在“模型已经被正确加载并组织好”这个基础上的。
-
-## 页面结构
-
-DOM 结构非常简单：
-
-```vue
-<template>
-  <main class="car-showcase-page">
-    <div ref="sceneHostRef" class="showcase-canvas"></div>
-
-    <section class="showcase-copy">
-      <!-- 车型文案 -->
-    </section>
-
-    <section class="paint-panel">
-      <!-- 车漆色卡，默认第一个红色处于选中状态 -->
-    </section>
-  </main>
-</template>
-```
-
-这里有一个重要思路：3D 归 3D，DOM 归 DOM。
-
-`showcase-canvas` 只负责挂载 Three.js 生成的 canvas。车型标题、参数、按钮还是用普通 DOM 写。这样代码更清晰，布局也更好控制。
-
 ## 页面高度
 
 当前案例运行在博客的 demo 预览页里，外层已经有站点 Header、demo Header 和 Footer，所以组件根节点不要再写 `min-height: 100vh`。
