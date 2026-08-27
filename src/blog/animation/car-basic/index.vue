@@ -269,7 +269,7 @@ const initScene = () => {
   controls.enablePan = false // 禁止平移，避免用户把汽车拖出画面中心。
   controls.minDistance = 4 // 限制最近缩放距离，避免相机贴得太近。
   controls.maxDistance = 9 // 限制最远缩放距离，避免汽车变得太小。
-  controls.maxPolarAngle = Math.PI / 2.05 // 限制相机往下绕到地面以下。
+  controls.maxPolarAngle = Math.PI / 2.05 // 避免相机往下绕到地面以下。
   /***
    这里可以简单理解成相机绕目标点上下旋转的角度
     0              从正上方看
@@ -425,7 +425,7 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
 }
 
 .showcase-copy p,
-.showcase-copy h1 {
+.showcase-copy h2 {
   margin: 0;
 }
 
@@ -437,7 +437,7 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
   text-transform: uppercase;
 }
 
-.showcase-copy h1 {
+.showcase-copy h2 {
   margin-top: 8px;
   font-size: 44px;
   font-weight: 800;
@@ -513,7 +513,7 @@ onBeforeUnmount(disposeScene) // 组件卸载前释放 Three.js 资源和事件�
     padding: 20px 12px 0;
   }
 
-  .showcase-copy h1 {
+  .showcase-copy h2 {
     font-size: 32px;
   }
 
