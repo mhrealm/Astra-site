@@ -581,4 +581,6 @@ object.traverse((child) => {
 
 ## 写在最后
 
-基础版做到这里，一辆可以旋转、可以切换车漆、有灯光和环境反射的科尔维特 C8 就在这里 代码
+基础版做到这里，一辆可以旋转、可以切换车漆、有灯光和环境反射的科尔维特 C8 就在这里：
+
+[GitHub 源码：car-interactive](https://github.com/mhrealm/Astra-site/blob/master/src/blog/animation/car-interactive/index.vue)
