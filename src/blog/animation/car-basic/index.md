@@ -10,56 +10,6 @@ source: 'vue-practice/src/views/animation/car-showcase/basic.md'
 demoSlug: 'animation-car-showcase-basic'
 ---
 
-## 页面高度
-
-当前案例运行在博客的 demo 预览页里，外层已经有站点 Header、demo Header 和 Footer，所以组件根节点不要再写 `min-height: 100vh`。
-
-这里让汽车页面继承中间舞台的高度，并由组件内部隐藏溢出：
-
-```less
-.car-showcase-page {
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
-}
-```
-
-这样基础版和交互版都能占满 demo 舞台，同时不会把外层页面撑出额外滚动条。
-
-## 模型路径
-
-代码里用了一个模型地址：
-
-```ts
-const corvetteModelUrl = new URL('./models/chevrolet-corvette-c8.glb', import.meta.url).href
-```
-
-`corvetteModelUrl` 指向当前组件旁边的 `models/chevrolet-corvette-c8.glb`。
-
-为什么放在当前案例目录？
-
-因为这个模型只服务于 `car-showcase` 这个案例，不是全站公共资源。放到当前案例目录后，Vite 会把它当成模块资源处理，最终构建时自动生成正确的资源地址。
-
-写法是：
-
-```ts
-new URL('./models/chevrolet-corvette-c8.glb', import.meta.url)
-```
-
-这种写法的好处是路径跟着文件走。以后如果把整个 `car-showcase` 文件夹移动到别处，模型路径也不容易散。
-
-目录结构大致是：
-
-```text
-car-showcase/
-├─ basic.vue
-├─ interactive.vue
-└─ models/
-   └─ chevrolet-corvette-c8.glb
-```
-
-这样模型资源不会混到 `public` 里。
-
 ## 加载模型
 
 基础版的加载逻辑是：
@@ -74,65 +24,6 @@ const loadCarModel = async () => {
 现在代码直接加载 C8。因为模型已经进入案例目录，继续保留备用模型反而会让主线变复杂。
 
 如果模型加载失败，代码会把提示写入 `modelNote`，页面上会出现错误信息。基础版这里不做备用模型，目的是让教程主线更干净：先把真实 GLB 模型加载、适配、换色这几件事讲清楚。
-
-## 创建场景
-
-Three.js 最核心的三个对象是：
-
-```ts
-scene = new THREE.Scene()
-camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100)
-renderer = new THREE.WebGLRenderer({ antialias: true })
-```
-
-可以这样理解：
-
-1. `scene` 是 3D 世界；
-2. `camera` 是观察这个世界的眼睛；
-3. `renderer` 是把 3D 世界画成 canvas 的渲染器。
-
-![Three.js 汽车展示渲染流程图](./render-flow.svg)
-
-这张图可以按一句话理解：模型、灯光、展台和环境都放进 `scene`，`camera` 决定从哪里看，`renderer.render(scene, camera)` 负责把这一刻的 3D 世界画到页面里的 `canvas` 上。
-
-初始化完成后，把 canvas 挂到 Vue 的容器里：
-
-```ts
-host.appendChild(renderer.domElement)
-```
-
-## 色彩空间和色调映射
-
-代码里有几行很关键：
-
-```ts
-renderer.outputColorSpace = THREE.SRGBColorSpace
-renderer.toneMapping = THREE.ACESFilmicToneMapping
-renderer.toneMappingExposure = 0.7
-```
-
-`outputColorSpace` 会影响颜色在浏览器里的显示。如果不处理，模型颜色可能偏灰或者不准。
-
-`toneMapping` 可以理解成把 3D 渲染中的高光和暗部映射成屏幕上更舒服的颜色。汽车展示很依赖高光，所以这里用了 `ACESFilmicToneMapping`。
-
-`toneMappingExposure` 是曝光值。过高会让车漆高光炸白，过低又会显得没质感，所以这里设置得比较克制。
-
-## 环境反射
-
-汽车车漆是否真实，很大程度取决于反射。
-
-基础版使用 `RoomEnvironment` 生成环境贴图：
-
-```ts
-const pmremGenerator = new THREE.PMREMGenerator(renderer)
-environmentMap = pmremGenerator.fromScene(new RoomEnvironment(), 0.04)
-scene.environment = environmentMap.texture
-pmremGenerator.dispose()
-```
-
-`scene.environment` 可以理解成“周围环境的反光来源”。
-
-车漆、玻璃、金属这些材质都会从环境贴图里拿到反射信息。如果没有它，车身会显得很平，像普通彩色模型。
 
 ## 展台和初始镜头
 
@@ -367,23 +258,3 @@ object.traverse((child) => {
 ```
 
 在 SPA 项目里，这一步非常重要。否则来回切换路由后，WebGL 资源可能一直留在内存里。
-
-## 放在最后的话
-
-基础版看起来只是“加载一辆车”，但里面已经包含了 Three.js 产品展示的核心判断：
-
-为什么模型路径要考虑构建？
-
-为什么加载后要重新计算尺寸？
-
-为什么车漆不能简单替换成纯色？
-
-为什么环境反射比多加几盏灯更重要？
-
-为什么离开页面时还要手动释放资源？
-
-AI 可以很快生成一段能跑的 Three.js 代码，但能不能把它改成业务真正需要的样子，还是取决于我们是否理解这些细节。
-
-基础版解决“车能不能稳定展示”的问题。
-
-交互版再解决“车能不能被用户操作”的问题。

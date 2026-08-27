@@ -48,7 +48,64 @@
 
 `showcase-canvas` 只负责挂载 Three.js 生成的 canvas。车型标题、参数、按钮还是用普通 DOM 写。这样代码更清晰，布局也更好控制。
 
-## 初始化 Three.js
+## 创建场景
+
+Three.js 最核心的三个对象是：
+
+```ts
+scene = new THREE.Scene()
+camera = new THREE.PerspectiveCamera(25, width / height, 0.1, 100)
+renderer = new THREE.WebGLRenderer({ antialias: true })
+```
+
+可以这样理解：
+
+1. `scene` 是 3D 世界；
+2. `camera` 是观察这个世界的眼睛；
+3. `renderer` 是把 3D 世界画成 canvas 的渲染器。
+
+![Three.js 汽车展示渲染流程图](./render-flow.svg)
+
+这张图可以按一句话理解：模型、灯光、展台和环境都放进 `scene`，`camera` 决定从哪里看，`renderer.render(scene, camera)` 负责把这一刻的 3D 世界画到页面里的 `canvas` 上。
+
+初始化完成后，把 canvas 挂到 Vue 的容器里：
+
+```ts
+host.appendChild(renderer.domElement)
+```
+
+## 色彩空间和色调映射
+
+代码里有几行很关键：
+
+```ts
+renderer.outputColorSpace = THREE.SRGBColorSpace
+renderer.toneMapping = THREE.ACESFilmicToneMapping
+renderer.toneMappingExposure = 0.6
+```
+
+`outputColorSpace` 会影响颜色在浏览器里的显示。如果不处理，模型颜色可能偏灰或者不准。
+
+`toneMapping` 可以理解成把 3D 渲染中的高光和暗部映射成屏幕上更舒服的颜色。汽车展示很依赖高光，所以这里用了 `ACESFilmicToneMapping`。
+
+`toneMappingExposure` 是曝光值。过高会让车漆高光炸白，过低又会显得没质感，所以这里设置得比较克制。
+
+## 环境反射
+
+汽车车漆是否真实，很大程度取决于反射。
+
+基础版使用 `RoomEnvironment` 生成环境贴图：
+
+```ts
+const pmremGenerator = new THREE.PMREMGenerator(renderer)
+environmentMap = pmremGenerator.fromScene(new RoomEnvironment(), 0.04)
+scene.environment = environmentMap.texture
+pmremGenerator.dispose()
+```
+
+`scene.environment` 可以理解成“周围环境的反光来源”。
+
+车漆、玻璃、金属这些材质都会从环境贴图里拿到反射信息。如果没有它，车身会显得很平，像普通彩色模型。
 
 ## 写在最后的话
 
