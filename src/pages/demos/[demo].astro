@@ -144,7 +144,6 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
             <h1>{demo.title}</h1>
           </div>
           <nav class="demo-links" aria-label="演示导航">
-            <a href="/demos/">全部演示</a>
             {demo.articleSlug && <a href={`/blog/${demo.articleSlug}/`}>返回文章</a>}
             <a href={`/demos/${demo.slug}/source/`}>查看源码</a>
           </nav>
