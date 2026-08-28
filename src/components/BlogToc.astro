@@ -1,0 +1,335 @@
+---
+interface HeadingItem {
+  depth: number
+  slug: string
+  text: string
+}
+
+interface Props {
+  headings: HeadingItem[]
+}
+
+const { headings } = Astro.props
+const tocItems = headings.filter((heading) => heading.depth === 2)
+---
+
+<aside class="blog-toc" aria-label="文章目录" data-blog-toc>
+  <div class="toc-head">
+    <h2 class="toc-title">目录</h2>
+    <button class="toc-toggle" type="button" aria-expanded="true" data-toc-toggle>
+      <span data-toc-toggle-label>收起</span>
+      <span class="toggle-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+  <nav class="toc-scroll" data-toc-scroll>
+    <ol>
+      {
+        tocItems.map((heading) => (
+          <li>
+            <a href={`#${heading.slug}`} data-toc-link>
+              {heading.text}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+</aside>
+
+<script>
+  type TocPair = {
+    id: string
+    heading: HTMLElement
+    link: HTMLAnchorElement
+  }
+
+  type SetActiveOptions = {
+    syncScroll?: boolean
+  }
+
+  const toId = (link: HTMLAnchorElement) => {
+    const rawId = link.getAttribute('href')?.slice(1) ?? ''
+
+    try {
+      return decodeURIComponent(rawId)
+    } catch {
+      return rawId
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-blog-toc]').forEach((toc) => {
+    const toggle = toc.querySelector<HTMLButtonElement>('[data-toc-toggle]')
+    const toggleLabel = toc.querySelector<HTMLElement>('[data-toc-toggle-label]')
+    const scrollBox = toc.querySelector<HTMLElement>('[data-toc-scroll]')
+    const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'))
+    const pairs = links
+      .map<TocPair | null>((link) => {
+        const id = toId(link)
+        const heading = document.getElementById(id)
+        return heading ? { id, heading, link } : null
+      })
+      .filter((pair): pair is TocPair => Boolean(pair))
+
+    if (pairs.length === 0) return
+
+    const keepActiveVisible = (pair: TocPair) => {
+      if (!scrollBox) return
+
+      const viewTop = scrollBox.scrollTop
+      const viewBottom = viewTop + scrollBox.clientHeight
+      const itemTop = pair.link.offsetTop
+      const itemBottom = itemTop + pair.link.offsetHeight
+      const edgeGap = 12
+      let nextScrollTop = viewTop
+
+      if (itemTop < viewTop + edgeGap) {
+        nextScrollTop = itemTop - edgeGap
+      } else if (itemBottom > viewBottom - edgeGap) {
+        nextScrollTop = itemBottom - scrollBox.clientHeight + edgeGap
+      }
+
+      if (Math.abs(nextScrollTop - viewTop) > edgeGap) {
+        scrollBox.scrollTop = Math.max(0, nextScrollTop)
+      }
+    }
+
+    const setActive = (id: string, options: SetActiveOptions = {}) => {
+      const shouldSyncScroll = options.syncScroll ?? true
+
+      pairs.forEach((pair) => {
+        const isActive = pair.id === id
+        pair.link.classList.toggle('is-active', isActive)
+        pair.link.toggleAttribute('aria-current', isActive)
+
+        if (isActive && shouldSyncScroll) keepActiveVisible(pair)
+      })
+    }
+
+    let lockedActiveId = ''
+    let unlockTimer = 0
+
+    const updateActive = () => {
+      if (lockedActiveId) {
+        setActive(lockedActiveId, { syncScroll: false })
+        return
+      }
+
+      const anchorOffset = 112
+      const activePair =
+        [...pairs]
+          .reverse()
+          .find((pair) => pair.heading.getBoundingClientRect().top <= anchorOffset) ?? pairs[0]
+
+      setActive(activePair.id)
+    }
+
+    let frame = 0
+    const scheduleUpdate = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(() => {
+        frame = 0
+        updateActive()
+      })
+    }
+
+    const releaseActiveLock = () => {
+      if (!lockedActiveId) return
+
+      lockedActiveId = ''
+      window.clearTimeout(unlockTimer)
+      scheduleUpdate()
+    }
+
+    links.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const id = toId(link)
+        const heading = document.getElementById(id)
+
+        if (!heading) return
+
+        event.preventDefault()
+        lockedActiveId = id
+        window.clearTimeout(unlockTimer)
+        setActive(id, { syncScroll: false })
+
+        const href = link.getAttribute('href') ?? `#${id}`
+        const targetTop = window.scrollY + heading.getBoundingClientRect().top - 96
+
+        try {
+          history.pushState(null, '', href)
+        } catch {
+          window.location.hash = id
+        }
+
+        window.scrollTo({
+          behavior: 'smooth',
+          top: Math.max(0, targetTop),
+        })
+
+        unlockTimer = window.setTimeout(releaseActiveLock, 900)
+      })
+    })
+
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const isCollapsed = toc.classList.toggle('is-collapsed')
+        toggle.setAttribute('aria-expanded', String(!isCollapsed))
+
+        if (toggleLabel) {
+          toggleLabel.textContent = isCollapsed ? '展开' : '收起'
+        }
+
+        scheduleUpdate()
+      })
+    }
+
+    updateActive()
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('scrollend', releaseActiveLock)
+    window.addEventListener('resize', scheduleUpdate)
+    window.addEventListener('hashchange', scheduleUpdate)
+  })
+</script>
+
+<style>
+  .blog-toc {
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+    box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    height: clamp(260px, 46vh, 420px);
+    overflow: hidden;
+    padding: 0 18px 18px;
+  }
+
+  .blog-toc.is-collapsed {
+    height: auto;
+    padding-bottom: 0;
+  }
+
+  .blog-toc.is-collapsed .toc-scroll {
+    display: none;
+  }
+
+  .toc-head {
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    height: 64px;
+    justify-content: space-between;
+  }
+
+  .toc-title {
+    color: var(--text);
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .toc-toggle {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--muted-soft);
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    gap: 0.42rem;
+    line-height: 1;
+    padding: 0.25rem 0;
+  }
+
+  .toc-toggle:hover {
+    color: var(--accent);
+  }
+
+  .toggle-icon {
+    border-right: 2px solid currentColor;
+    border-top: 2px solid currentColor;
+    display: inline-block;
+    height: 0.5rem;
+    margin-top: 0.18rem;
+    transform: rotate(-45deg);
+    transition:
+      transform 180ms ease,
+      margin 180ms ease;
+    width: 0.5rem;
+  }
+
+  .blog-toc.is-collapsed .toggle-icon {
+    margin-top: -0.12rem;
+    transform: rotate(135deg);
+  }
+
+  .toc-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 18px 6px 0 0;
+    scrollbar-color: #cfd4dc transparent;
+    scrollbar-width: thin;
+  }
+
+  .toc-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .toc-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .toc-scroll::-webkit-scrollbar-thumb {
+    background: #d8dce3;
+    border-radius: 999px;
+  }
+
+  .toc-scroll::-webkit-scrollbar-thumb:hover {
+    background: #c6cbd4;
+  }
+
+  ol {
+    display: grid;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    border-radius: 4px;
+    color: var(--text);
+    display: -webkit-box;
+    font-size: 0.95rem;
+    font-weight: 500;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.45;
+    min-height: 2.64rem;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    padding: 0.58rem 0.5rem 0.58rem 1rem;
+    position: relative;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    transition: color 160ms ease;
+  }
+
+  a:hover {
+    color: var(--accent);
+  }
+
+  a.is-active {
+    color: var(--accent);
+  }
+
+  @media (max-width: 1100px) {
+    .blog-toc {
+      display: none;
+    }
+  }
+</style>
