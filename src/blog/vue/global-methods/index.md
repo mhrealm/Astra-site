@@ -1,7 +1,7 @@
 ---
 title: '如何定义全局的方法？'
 description: '演示全局方法、注入方法和组件内 fallback 的调用方式。'
-pubDate: '2026-08-25'
+pubDate: '2021-05-10'
 category: 'Vue 基础'
 categorySlug: 'vue'
 tags: ['基础交互']

@@ -1,7 +1,7 @@
 ---
 title: '异步调用和延迟执行有哪些应用？'
 description: '先区分两个概念 异步调用强调“任务不会阻塞当前流程，结果稍后回来”。常见形式有 Promise 、 async/await 、事件监听、网络请求、Worker 消息等。 延迟执行强调“先不执行，等到某个时间点或条件再执行”。常见形式有 se'
-pubDate: '2026-08-21'
+pubDate: '2023-11-15'
 category: 'JavaScript 实战'
 categorySlug: 'javascript'
 tags: ['异步']

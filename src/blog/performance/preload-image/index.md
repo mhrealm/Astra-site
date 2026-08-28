@@ -1,7 +1,7 @@
 ---
 title: '图片预加载'
 description: '展示图片资源预加载进度和加载完成后的呈现状态。'
-pubDate: '2026-08-25'
+pubDate: '2023-06-23'
 category: '性能优化'
 categorySlug: 'performance'
 tags: ['Preload']

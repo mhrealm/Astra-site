@@ -1,7 +1,7 @@
 ---
 title: '鼠标跟随倾斜动效卡片'
 description: '前言： 最近在 gsap 上看到一个有趣的动效（Cursor driven perspective tilt），于是决定自己实现一下，下面将介绍实现的过程，希望你能喜欢。 观察动效 1. 卡片的倾斜角度会随着鼠标的移入在 x 轴和 y 轴上'
-pubDate: '2026-08-10'
+pubDate: '2023-03-31'
 category: '交互组件'
 categorySlug: 'interaction'
 tags: ['鼠标交互']

@@ -1,7 +1,7 @@
 ---
 title: 'Canvas 轨道动画'
 description: '通过 Canvas 绘制围绕中心运动的轨道动画。'
-pubDate: '2026-08-25'
+pubDate: '2023-02-14'
 category: 'Canvas 实验'
 categorySlug: 'canvas'
 tags: ['Canvas']

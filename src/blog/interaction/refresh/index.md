@@ -1,7 +1,7 @@
 ---
 title: '滚动加载'
 description: '监听滚动容器触底状态，模拟分页加载更多数据。'
-pubDate: '2026-08-25'
+pubDate: '2022-04-19'
 category: '交互组件'
 categorySlug: 'interaction'
 tags: ['列表加载']

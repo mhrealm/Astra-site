@@ -1,7 +1,7 @@
 ---
 title: '滑动交互'
 description: '实现移动端列表项左滑删除的交互效果。'
-pubDate: '2026-08-25'
+pubDate: '2022-08-27'
 category: '交互组件'
 categorySlug: 'interaction'
 tags: ['滑动']

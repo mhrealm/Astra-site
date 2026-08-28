@@ -1,7 +1,7 @@
 ---
 title: 'Canvas 变形'
 description: '演示 Canvas 坐标变换和绘制状态切换。'
-pubDate: '2026-08-25'
+pubDate: '2021-10-05'
 category: 'Canvas 实验'
 categorySlug: 'canvas'
 tags: ['Canvas']

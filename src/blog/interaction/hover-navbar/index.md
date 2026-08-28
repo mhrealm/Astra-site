@@ -1,7 +1,7 @@
 ---
 title: '如何实现一个 Hover 高亮导航？'
 description: '最近浏览网页时看到一个很有意思的导航效果：当鼠标 hover 到某一项时，导航背景会从当前项的位置出现，并平滑移动到对应菜单项下面；当鼠标离开时，背景会收缩到当前项中心并消失。'
-pubDate: '2026-08-10'
+pubDate: '2021-01-26'
 category: '交互组件'
 categorySlug: 'interaction'
 tags: ['导航']

@@ -1,7 +1,7 @@
 ---
 title: '背景抖动'
 description: '通过背景位移和动画节奏模拟抖动反馈效果。'
-pubDate: '2026-08-25'
+pubDate: '2021-03-18'
 category: '动画动效'
 categorySlug: 'animation'
 tags: ['视觉动效']

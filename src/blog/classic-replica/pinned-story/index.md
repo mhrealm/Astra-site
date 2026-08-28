@@ -1,7 +1,7 @@
 ---
 title: '如何使用GSAP实现一个 `pinned` 滚动楼层叙事？'
 description: '最近在做的一个动画，特意去网上查了一下叫 pinned 滚动叙事，感觉蛮有趣，分享给你们。'
-pubDate: '2026-08-10'
+pubDate: '2024-09-03'
 category: '经典复刻'
 categorySlug: 'classic-replica'
 tags: ['GSAP']

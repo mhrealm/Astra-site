@@ -1,7 +1,7 @@
 ---
 title: 'GSAP ScrollTrigger 基础'
 description: '用 ScrollTrigger 绑定滚动进度，观察基础动画触发方式。'
-pubDate: '2026-08-25'
+pubDate: '2023-08-09'
 category: '动画动效'
 categorySlug: 'animation'
 tags: ['GSAP']

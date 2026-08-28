@@ -1,7 +1,7 @@
 ---
 title: '骨架屏'
 description: '模拟数据加载时的骨架屏占位和内容切换。'
-pubDate: '2026-08-25'
+pubDate: '2024-03-12'
 category: '性能优化'
 categorySlug: 'performance'
 tags: ['Skeleton']

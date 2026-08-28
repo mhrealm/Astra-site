@@ -1,7 +1,7 @@
 ---
 title: 'jQuery 交互动效'
 description: '用 jQuery 实现随机边框、hover 放大、元素移动和打字机效果。'
-pubDate: '2026-08-25'
+pubDate: '2020-09-08'
 category: '交互组件'
 categorySlug: 'interaction'
 tags: ['jQuery']

@@ -1,7 +1,7 @@
 ---
 title: '如何用 Canvas + GSAP 实现滚动序列帧动画？'
 description: '在很多产品官网中，经常能看到一种非常丝滑的滚动动画：用户向下滚动时，画面里的产品像视频一样旋转、展开、变化，但它并不一定是一个真正的视频。'
-pubDate: '2026-08-10'
+pubDate: '2024-06-18'
 category: 'Canvas 实验'
 categorySlug: 'canvas'
 tags: ['Canvas']

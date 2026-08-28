@@ -1,7 +1,7 @@
 ---
 title: 'React 版图片懒加载实现'
 description: '前言 图片懒加载是一种优化网页性能的技术，它允许在用户滚动到图片位置之前延迟加载图片。通过懒加载，可以在用户需要查看图片时才加载图片，避免了不必要的图片加载，从而提高了网页的加载速度和用户体验。 方案一 实现思路 在说明思路之前，先了解几个'
-pubDate: '2026-08-21'
+pubDate: '2022-02-10'
 category: '性能优化'
 categorySlug: 'performance'
 tags: ['React', 'Lazy Load', 'IntersectionObserver']

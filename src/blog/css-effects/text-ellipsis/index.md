@@ -1,7 +1,7 @@
 ---
 title: '文本省略'
 description: '整理单行、多行和动态容器中的文本省略写法。'
-pubDate: '2026-08-25'
+pubDate: '2020-07-16'
 category: 'CSS 布局与效果'
 categorySlug: 'css-effects'
 tags: ['文本处理']

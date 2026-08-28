@@ -1,7 +1,7 @@
 ---
 title: 'Vue + Three.js 实现 3D 汽车交互展示'
 description: '上一篇基础版已经完成了模型加载、展台、灯光、环境反射和车漆切换。'
-pubDate: '2026-08-25'
+pubDate: '2026-04-16'
 category: '动画动效'
 categorySlug: 'animation'
 tags: ['Three.js', '动效']
