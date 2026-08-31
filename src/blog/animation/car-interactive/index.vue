@@ -110,21 +110,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js'
-
-interface PaintOption {
-  name: string
-  label: string
-  color: string
-}
-
-interface CarPaintOption extends PaintOption {
-  metalness: number
-  roughness: number
-  clearcoatRoughness: number
-  reflectivity: number
-  envMapIntensity: number
-  pearl: number
-}
+import { paintOptions, type PaintOption } from '../../../content-data/animation.ts'
 
 interface PartSummary {
   doors: number
@@ -158,53 +144,6 @@ const modelKicker = 'Animated Sports Car Configurator'
 
 const initialCameraPosition = new THREE.Vector3(2.15, 0.55, 4.85)
 const cockpitTargetPosition = new THREE.Vector3(-0.08, 0.76, 0.22)
-
-const paintOptions: CarPaintOption[] = [
-  {
-    name: 'corvette-red',
-    label: 'Corvette Red',
-    color: '#8f1418',
-    metalness: 0.16,
-    roughness: 0.22,
-    clearcoatRoughness: 0.03,
-    reflectivity: 0.68,
-    envMapIntensity: 1.36,
-    pearl: 0.04,
-  },
-  {
-    name: 'ceramic-white',
-    label: 'Ceramic White',
-    color: '#98a3ad',
-    metalness: 0.05,
-    roughness: 0.43,
-    clearcoatRoughness: 0.09,
-    reflectivity: 0.28,
-    envMapIntensity: 0.58,
-    pearl: 0.02,
-  },
-  {
-    name: 'blade-silver',
-    label: 'Blade Silver',
-    color: '#b5bec7',
-    metalness: 0.28,
-    roughness: 0.2,
-    clearcoatRoughness: 0.028,
-    reflectivity: 0.7,
-    envMapIntensity: 1.42,
-    pearl: 0.1,
-  },
-  {
-    name: 'night-black',
-    label: 'Night Black',
-    color: '#05070a',
-    metalness: 0.14,
-    roughness: 0.18,
-    clearcoatRoughness: 0.026,
-    reflectivity: 0.74,
-    envMapIntensity: 1.58,
-    pearl: 0.02,
-  },
-]
 
 const featureState = reactive({
   doors: false,
@@ -313,7 +252,7 @@ const clonePhysicalMaterial = (
 const getActivePaint = () =>
   paintOptions.find((paint) => paint.name === activePaint.value) || paintOptions[0]!
 
-const applyCarPaintToMaterial = (material: THREE.MeshPhysicalMaterial, paint: CarPaintOption) => {
+const applyCarPaintToMaterial = (material: THREE.MeshPhysicalMaterial, paint: PaintOption) => {
   // 真实车漆不是一整块金属，而是底色 + 透明清漆层。
   // metalness 保持偏低，主要靠 clearcoat、reflectivity 和环境反射做出漆面高光。
   material.color.set(paint.color)
@@ -873,7 +812,7 @@ const toggleLights = () => {
   updateLights()
 }
 
-const applyPaint = (paint: CarPaintOption) => {
+const applyPaint = (paint: PaintOption) => {
   activePaint.value = paint.name
 
   if (bodyMaterial) {
