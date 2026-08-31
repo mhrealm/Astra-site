@@ -67,12 +67,12 @@ demoSlug: 'classic-replica-earth-section'
 </template>
 
 <script setup>
-import { onMounted, ref, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import Globe from 'globe.gl'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import earthImg from '@/images/earth-night.jpg'
-import skyImg from '@/images/night-sky.png'
+import earthImg from './earth-night.jpg?url'
+import skyImg from './night-sky.png?url'
 
 gsap.registerPlugin(ScrollTrigger)
 const containerRef = ref(null)
@@ -80,6 +80,9 @@ const chartRef = ref(null)
 const textRef = ref(null)
 const highlightIndex = ref(-1)
 let world = null
+let highlightTimer = null
+let resizeObserver = null
+let introTween = null
 
 const initData = [
   { name: 'Antarctica', value: [0, -82.8628, 0], zIndex: 0 },
@@ -93,22 +96,38 @@ const initData = [
 ]
 
 onMounted(() => {
-  const width = window.innerWidth
-  const height = window.innerHeight
+  const chart = chartRef.value
+
+  if (!chart) {
+    return
+  }
+
+  const getChartSize = () => {
+    const { width, height } = chart.getBoundingClientRect()
+
+    return {
+      width: Math.max(1, Math.floor(width)),
+      height: Math.max(1, Math.floor(height)),
+    }
+  }
+
+  const getPointOfView = (width, height) => ({
+    lat: 36.818188,
+    lng: 12.227512,
+    altitude: width / height > 1.8 ? 3.2 : 3.6,
+  })
+
+  const { width, height } = getChartSize()
 
   // 初始化地球
-  world = Globe()(chartRef.value)
+  world = Globe()(chart)
     .width(width) // 设置地球画布的宽度
     .height(height)
     .globeImageUrl(earthImg) // 设置地球表面的贴图
     .backgroundImageUrl(skyImg) // 设置背景图
     .atmosphereColor('#ffb4ff') // 设置地球周围“大气层”的光晕颜色
     .atmosphereAltitude(0.06) // 设置大气层的厚度
-    .pointOfView({
-      lat: 36.818188, // 设置相机初始化时正对着的经纬度
-      lng: 12.227512,
-      altitude: 2.5, // 相机距离地表的高度
-    })
+    .pointOfView(getPointOfView(width, height))
     .labelsData(initData) // 注入数据源
     .labelLat((d) => d.value[1]) // 数据里的纬度在 value 数组的第 2 个位置
     .labelLng((d) => d.value[0])
@@ -127,50 +146,63 @@ onMounted(() => {
   controls.autoRotateSpeed = -1 // 设置旋转速度和方向 负值代表是逆时针
 
   // 自动高亮循环
-  const interval = setInterval(() => {
-    window.requestIdleCallback(() => {
+  highlightTimer = window.setInterval(() => {
+    const scheduleIdle =
+      window.requestIdleCallback ?? ((callback) => window.setTimeout(callback, 1))
+    scheduleIdle(() => {
       highlightIndex.value = (highlightIndex.value + 1) % initData.length
       world.labelsData([...initData])
     })
   }, 2000)
 
-  // GSAP 滚动动画逻辑
-  gsap.fromTo(
+  const scrollContainer = containerRef.value?.closest('.demo-stage')
+
+  // 文案进度绑定到演示区域自身的滚动条。
+  introTween = gsap.fromTo(
     textRef.value,
-    { y: 100, opacity: 0, zIndex: -1 },
+    { y: 64, opacity: 0 },
     {
       y: 0,
-      opacity: 0.8,
-      duration: 1,
-      zIndex: 1,
+      opacity: 0.84,
+      ease: 'none',
       scrollTrigger: {
         trigger: containerRef.value,
+        scroller: scrollContainer ?? undefined,
         start: 'top top',
-        end: '+=50%',
+        end: '+=45%',
         scrub: 1,
-        markers: false,
       },
     },
   )
 
-  // 监听窗口变化
-  const handleResize = () => {
-    world.width(window.innerWidth)
-    world.height(window.innerHeight)
-  }
-  window.addEventListener('resize', handleResize)
+  resizeObserver = new ResizeObserver(() => {
+    if (!world) {
+      return
+    }
 
-  // 清理函数
-  onBeforeUnmount(() => {
-    if (interval) clearInterval(interval)
-    window.removeEventListener('resize', handleResize)
-    if (world) world._destructor?.() // 销毁地球实例防止内存泄漏
+    const nextSize = getChartSize()
+    world.width(nextSize.width)
+    world.height(nextSize.height)
+    world.pointOfView(getPointOfView(nextSize.width, nextSize.height), 0)
   })
+  resizeObserver.observe(chart)
+})
+
+onBeforeUnmount(() => {
+  if (highlightTimer !== null) {
+    window.clearInterval(highlightTimer)
+  }
+
+  resizeObserver?.disconnect()
+  introTween?.kill()
+  world?._destructor?.()
 })
 </script>
 
 <style scoped>
 #chart__container {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -179,35 +211,51 @@ onMounted(() => {
 .sticky {
   position: sticky;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 100vh;
+  height: 50%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .text {
   position: absolute;
   top: 50%;
   left: 50%;
+  box-sizing: border-box;
+  width: min(960px, 100%);
+  padding: 0 24px;
   transform: translate(-50%, -50%);
   text-align: center;
-  width: 162rem;
+  text-shadow: 0 2px 16px rgb(0 0 0 / 72%);
+  pointer-events: none;
 }
 
 .title {
-  font-size: 6rem;
+  margin: 0;
+  font-size: clamp(30px, 4.5vw, 54px);
+  line-height: 1.1;
 }
 
 .desc {
-  font-size: 3rem;
-  margin-top: 3rem;
+  margin: 20px auto 0;
+  max-width: 820px;
+  font-size: clamp(14px, 1.7vw, 22px);
+  line-height: 1.6;
 }
 
 .floor-container {
-  width: 100%;
-  height: 200vh;
   position: relative;
+  width: 100%;
+  height: 200%;
+  min-height: 0;
   color: #fff;
   background-color: #000;
+}
+
+@media (max-width: 720px) {
+  .desc {
+    margin-top: 14px;
+  }
 }
 </style>
 ```
@@ -217,7 +265,7 @@ onMounted(() => {
 **需要用到的工具：**
 
 1. Globe.gl: 基于 Three.js 的封装，将复杂的 WebGL 地球渲染简化为数据驱动的API组合。
-2. GSAP & ScrollTrigger：写动效的神器，这里主要负责处理文案随页面滚动的平滑视觉过渡。
+2. GSAP 与 ScrollTrigger：把文案浮现进度绑定到演示区域自身的滚动条。
 
 **核心代码分析：**
 
@@ -232,43 +280,46 @@ onMounted(() => {
 2. 这里利用 setInterval 配合 requestIdleCallback，动态调整标签大小 (labelSize)，增加“呼吸感”。
 
 ```js
-const interval = setInterval(() => {
-  window.requestIdleCallback(() => {
+highlightTimer = window.setInterval(() => {
+  const scheduleIdle = window.requestIdleCallback ?? ((callback) => window.setTimeout(callback, 1))
+  scheduleIdle(() => {
     highlightIndex.value = (highlightIndex.value + 1) % initData.length
     world.labelsData([...initData])
   })
 }, 2000)
 ```
 
-3. 这里引入 gsap 动画滚动控制文字浮现，增加整体趣味。
+3. 这里使用 GSAP 让文案随着预览区域内部滚动平滑浮现。
 
 ```js
-gsap.fromTo(
+const scrollContainer = containerRef.value?.closest('.demo-stage')
+
+introTween = gsap.fromTo(
   textRef.value,
-  { y: 100, opacity: 0, zIndex: -1 },
+  { y: 64, opacity: 0 },
   {
     y: 0,
-    opacity: 0.8,
-    duration: 1,
-    zIndex: 1,
+    opacity: 0.84,
+    ease: 'none',
     scrollTrigger: {
       trigger: containerRef.value,
+      scroller: scrollContainer ?? undefined,
       start: 'top top',
-      end: '+=50%',
+      end: '+=45%',
       scrub: 1,
-      markers: false,
     },
   },
 )
 ```
 
-4. 销毁定时器（interval）、解绑全局事件（resize）、销毁地球实例（world），以上这些做法都是防止内存泄露。
+4. 销毁高亮定时器、ResizeObserver、GSAP 动画和地球实例，避免组件卸载后继续占用资源。
 
 ```js
 onBeforeUnmount(() => {
-  if (interval) clearInterval(interval)
-  window.removeEventListener('resize', handleResize)
-  if (world) world._destructor?.()
+  if (highlightTimer !== null) window.clearInterval(highlightTimer)
+  resizeObserver?.disconnect()
+  introTween?.kill()
+  world?._destructor?.()
 })
 ```
 
