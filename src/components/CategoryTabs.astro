@@ -37,7 +37,11 @@ const isButtonMode = mode === 'button'
           {typeof item.count === 'number' && <small>{item.count}</small>}
         </button>
       ) : (
-        <a href={item.href ?? '#'} class:list={['category-tab', { 'is-active': item.active }]}>
+        <a
+          href={item.href ?? '#'}
+          class:list={['category-tab', { 'is-active': item.active }]}
+          aria-current={item.active ? 'page' : undefined}
+        >
           <span>{item.label}</span>
           {typeof item.count === 'number' && <small>{item.count}</small>}
         </a>
@@ -50,15 +54,14 @@ const isButtonMode = mode === 'button'
   .category-tabs {
     align-items: center;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     border-radius: 6px;
-    box-shadow: var(--box-shadow);
     display: flex;
-    gap: 0.15rem;
+    gap: 0;
     margin: 0 0 1.25rem;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 0 0.75rem;
+    padding: 0 0.5rem;
     scrollbar-width: none;
     white-space: nowrap;
   }
@@ -77,12 +80,12 @@ const isButtonMode = mode === 'button'
     display: inline-flex;
     flex: 0 0 auto;
     font: inherit;
-    font-size: 0.92rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 400;
     gap: 0.35rem;
     line-height: 1;
-    min-height: 3rem;
-    padding: 0 0.85rem;
+    min-height: 4rem;
+    padding: 0 1.35rem;
     position: relative;
     text-decoration: none;
     transition: color 180ms ease;
@@ -90,56 +93,45 @@ const isButtonMode = mode === 'button'
 
   .category-tab::after {
     background: var(--accent);
-    border-radius: 999px 999px 0 0;
-    bottom: 0;
+    border-radius: 999px;
+    bottom: -1px;
     content: '';
-    height: 2px;
-    left: 0.85rem;
+    height: 3px;
+    left: 50%;
     opacity: 0;
     position: absolute;
-    right: 0.85rem;
-    transform: scaleX(0.4);
-    transition:
-      opacity 180ms ease,
-      transform 180ms ease;
+    transform: translateX(-50%);
+    width: 2rem;
   }
 
-  .category-tab:hover,
+  .category-tab:hover {
+    color: var(--text);
+  }
+
   .category-tab.is-active {
-    color: var(--accent);
+    color: var(--text);
+    font-weight: 500;
   }
 
   .category-tab.is-active::after {
     opacity: 1;
-    transform: scaleX(1);
   }
 
   small {
     color: var(--muted-soft);
-    font-size: 0.72rem;
-    font-weight: 700;
-    transition: color 180ms ease;
-  }
-
-  .category-tab:hover small,
-  .category-tab.is-active small {
-    color: var(--accent);
+    font-size: 0.9em;
+    font-weight: 400;
   }
 
   @media (max-width: 640px) {
     .category-tabs {
       margin-bottom: 1rem;
-      padding: 0 0.45rem;
+      padding: 0 0.25rem;
     }
 
     .category-tab {
-      min-height: 2.8rem;
-      padding: 0 0.7rem;
-    }
-
-    .category-tab::after {
-      left: 0.7rem;
-      right: 0.7rem;
+      min-height: 3.5rem;
+      padding: 0 1rem;
     }
   }
 </style>
