@@ -11,6 +11,11 @@ demoSlug: 'react-lazy-image'
 demoComponent: 'index.tsx'
 demoTitle: 'React 图片懒加载演示'
 demoDescription: '使用 IntersectionObserver 在 React 中实现图片进入视口后再加载。'
+demoVariants:
+  - slug: 'vue-lazy-image'
+    title: 'Vue 图片懒加载演示'
+    description: '使用 Vue 3 与 IntersectionObserver 实现相同的按需加载流程。'
+    component: 'index.vue'
 ---
 
 ## 前言

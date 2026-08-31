@@ -62,7 +62,7 @@ export default function ReactLazyImageDemo() {
     )
 
     document
-      .querySelectorAll<HTMLImageElement>('.react-lazy-image-demo img[data-requested="false"]')
+      .querySelectorAll<HTMLImageElement>('.lazy-image-demo img[data-requested="false"]')
       .forEach((image) => observerRef.current?.observe(image))
 
     return () => {
@@ -72,7 +72,7 @@ export default function ReactLazyImageDemo() {
   }, [requestImage])
 
   return (
-    <section className="react-lazy-image-demo">
+    <section className="lazy-image-demo">
       <header className="lazy-demo-header">
         <div>
           <p>React Demo</p>
