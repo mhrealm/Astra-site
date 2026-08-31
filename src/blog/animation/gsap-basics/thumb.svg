@@ -1,0 +1,106 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 720 480"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">GSAP ScrollTrigger 基础 缩略图</title>
+  <desc id="desc">根据文章标题 GSAP ScrollTrigger 基础 生成的博客缩略图。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff1f2" />
+      <stop offset="54%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#ffe4e6" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fb7185" />
+      <stop offset="100%" stop-color="#be123c" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#1d2129" flood-opacity="0.12" />
+    </filter>
+    <style>
+      .bg {
+        fill: url(#bg);
+      }
+      .orb {
+        fill: url(#accent);
+        opacity: 0.16;
+      }
+      .panel {
+        fill: rgba(255, 255, 255, 0.68);
+        stroke: rgba(255, 255, 255, 0.72);
+        filter: url(#shadow);
+      }
+      .tag {
+        fill: #1f2937;
+        font:
+          700 22px Inter,
+          'Microsoft YaHei',
+          sans-serif;
+        letter-spacing: 0;
+      }
+      .tag-bg {
+        fill: rgba(255, 255, 255, 0.72);
+        stroke: rgba(255, 255, 255, 0.9);
+      }
+      .title-line {
+        fill: #1d2129;
+        font:
+          800 40px Inter,
+          'Microsoft YaHei',
+          sans-serif;
+        letter-spacing: 0;
+      }
+      .desc-line {
+        fill: #4e5969;
+        font:
+          600 18px Inter,
+          'Microsoft YaHei',
+          sans-serif;
+        letter-spacing: 0;
+      }
+      .slug {
+        fill: #be123c;
+        font:
+          700 16px 'Cascadia Mono',
+          Consolas,
+          monospace;
+        opacity: 0.8;
+      }
+    </style>
+  </defs>
+  <rect class="bg" width="720" height="480" rx="36" />
+  <circle class="orb" cx="589" cy="84" r="146" />
+  <circle class="orb" cx="139" cy="432" r="174" />
+  <path
+    d="M0 366 C112 326 178 384 286 344 C390 306 492 246 720 286 L720 480 L0 480 Z"
+    fill="#fb7185"
+    opacity="0.08"
+  />
+  <rect class="panel" x="28" y="28" width="664" height="424" rx="30" />
+  <rect class="tag-bg" x="48" y="58" width="142" height="44" rx="22" />
+  <text class="tag" x="70" y="88">动画动效</text>
+
+  <g transform="translate(410 104)">
+    <path
+      d="M30 206 C94 58 150 286 252 70"
+      fill="none"
+      stroke="#fb7185"
+      stroke-width="13"
+      stroke-linecap="round"
+      opacity="0.86"
+    />
+    <path d="M48 66 H266" stroke="#ffe4e6" stroke-width="12" stroke-linecap="round" />
+    <path d="M48 118 H214" stroke="#ffe4e6" stroke-width="12" stroke-linecap="round" />
+    <path d="M48 170 H256" stroke="#ffe4e6" stroke-width="12" stroke-linecap="round" />
+    <circle cx="84" cy="178" r="28" fill="#be123c" />
+    <circle cx="192" cy="92" r="38" fill="#ffffff" opacity="0.78" />
+    <circle cx="252" cy="70" r="18" fill="#1f2937" />
+  </g>
+  <text class="title-line" x="48" y="168">GSAP ScrollTrigger</text>
+  <text class="title-line" x="48" y="222">基础</text>
+  <text class="desc-line" x="50" y="340">用 ScrollTrigger 绑定滚动进度，观</text>
+  <text class="desc-line" x="50" y="364">察基础动画触发方式。</text>
+  <text class="slug" x="50" y="414">animation / gsap-basics</text>
+</svg>

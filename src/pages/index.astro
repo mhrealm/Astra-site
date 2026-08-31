@@ -11,6 +11,7 @@ import FormattedDate from '../components/FormattedDate.astro'
 import Header from '../components/Header.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
 import { getBlogSlug } from '../data/blogSlugs'
+import { getPostThumbnail } from '../data/postThumbnails'
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -156,22 +157,25 @@ const projects = [
         </div>
         <div class="post-grid">
           {
-            posts.map((post) => (
-              <a class="post-card" href={`/blog/${getBlogSlug(post)}/`}>
-                {post.data.heroImage && (
-                  <Image width={720} height={405} src={post.data.heroImage} alt="" />
-                )}
-                <div class="card-body">
-                  <p class="post-date">
-                    <span>{post.data.category}</span>
-                    <span aria-hidden="true">/</span>
-                    <FormattedDate date={post.data.pubDate} />
-                  </p>
-                  <h3>{post.data.title}</h3>
-                  <p>{post.data.description}</p>
-                </div>
-              </a>
-            ))
+            posts.map((post) => {
+              const slug = getBlogSlug(post)
+              const thumbnail = getPostThumbnail(slug) ?? post.data.heroImage
+
+              return (
+                <a class="post-card" href={`/blog/${slug}/`}>
+                  {thumbnail && <Image width={720} height={405} src={thumbnail} alt="" />}
+                  <div class="card-body">
+                    <p class="post-date">
+                      <span>{post.data.category}</span>
+                      <span aria-hidden="true">/</span>
+                      <FormattedDate date={post.data.pubDate} />
+                    </p>
+                    <h3>{post.data.title}</h3>
+                    <p>{post.data.description}</p>
+                  </div>
+                </a>
+              )
+            })
           }
         </div>
         <div class="section-action">

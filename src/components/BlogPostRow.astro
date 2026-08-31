@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import PlaceholderImage from '../assets/blog-placeholder-3.jpg'
 import { getBlogSlug } from '../data/blogSlugs'
+import { getPostThumbnail } from '../data/postThumbnails'
 import DifficultyStars from './DifficultyStars.astro'
 import FormattedDate from './FormattedDate.astro'
 
@@ -13,7 +14,7 @@ interface Props {
 const { post } = Astro.props
 const tags = post.data.tags ?? []
 const slug = getBlogSlug(post)
-const thumbnail = post.data.heroImage ?? PlaceholderImage
+const thumbnail = getPostThumbnail(slug) ?? post.data.heroImage ?? PlaceholderImage
 ---
 
 <a class="post-row" href={`/blog/${slug}/`}>

@@ -1,0 +1,114 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 720 480"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">Vue + Three.js 实现 3D 汽车交互展示 缩略图</title>
+  <desc id="desc">根据文章标题 Vue + Three.js 实现 3D 汽车交互展示 生成的博客缩略图。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff1f2" />
+      <stop offset="54%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#ffe4e6" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fb7185" />
+      <stop offset="100%" stop-color="#be123c" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#1d2129" flood-opacity="0.12" />
+    </filter>
+    <style>
+      .bg {
+        fill: url(#bg);
+      }
+      .orb {
+        fill: url(#accent);
+        opacity: 0.16;
+      }
+      .panel {
+        fill: rgba(255, 255, 255, 0.68);
+        stroke: rgba(255, 255, 255, 0.72);
+        filter: url(#shadow);
+      }
+      .tag {
+        fill: #1f2937;
+        font:
+          700 22px Inter,
+          'Microsoft YaHei',
+          sans-serif;
+        letter-spacing: 0;
+      }
+      .tag-bg {
+        fill: rgba(255, 255, 255, 0.72);
+        stroke: rgba(255, 255, 255, 0.9);
+      }
+      .title-line {
+        fill: #1d2129;
+        font:
+          800 40px Inter,
+          'Microsoft YaHei',
+          sans-serif;
+        letter-spacing: 0;
+      }
+      .desc-line {
+        fill: #4e5969;
+        font:
+          600 18px Inter,
+          'Microsoft YaHei',
+          sans-serif;
+        letter-spacing: 0;
+      }
+      .slug {
+        fill: #be123c;
+        font:
+          700 16px 'Cascadia Mono',
+          Consolas,
+          monospace;
+        opacity: 0.8;
+      }
+    </style>
+  </defs>
+  <rect class="bg" width="720" height="480" rx="36" />
+  <circle class="orb" cx="609" cy="84" r="146" />
+  <circle class="orb" cx="119" cy="432" r="174" />
+  <path
+    d="M0 366 C112 326 178 384 286 344 C390 306 492 246 720 286 L720 480 L0 480 Z"
+    fill="#fb7185"
+    opacity="0.08"
+  />
+  <rect class="panel" x="28" y="28" width="664" height="424" rx="30" />
+  <rect class="tag-bg" x="48" y="58" width="142" height="44" rx="22" />
+  <text class="tag" x="70" y="88">动画动效</text>
+
+  <g transform="translate(424 224)">
+    <path
+      d="M28 94 C52 36 100 10 178 16 L244 22 C304 28 344 58 372 96 L418 104 C440 108 454 122 454 146 L454 164 L18 164 L18 142 C18 118 22 104 28 94 Z"
+      fill="#fb7185"
+      opacity="0.96"
+    />
+    <path
+      d="M114 44 L184 34 C238 34 276 52 304 88 L78 88 C88 66 98 52 114 44 Z"
+      fill="#ffffff"
+      opacity="0.7"
+    />
+    <circle cx="112" cy="166" r="42" fill="#1f2937" />
+    <circle cx="346" cy="166" r="42" fill="#1f2937" />
+    <circle cx="112" cy="166" r="18" fill="#ffe4e6" />
+    <circle cx="346" cy="166" r="18" fill="#ffe4e6" />
+    <path d="M18 130 L442 130" stroke="#ffffff" stroke-width="5" opacity="0.38" />
+    <path
+      d="M300 104 L412 104"
+      stroke="#ffffff"
+      stroke-width="8"
+      stroke-linecap="round"
+      opacity="0.46"
+    />
+  </g>
+  <text class="title-line" x="48" y="168">Vue + Three.js 实</text>
+  <text class="title-line" x="48" y="222">现 3D 汽车交互展示</text>
+  <text class="desc-line" x="50" y="340">上一篇基础版已经完成了模型加载、展</text>
+  <text class="desc-line" x="50" y="364">台、灯光、环境反射和车漆切换。</text>
+  <text class="slug" x="50" y="414">animation / car-interactive</text>
+</svg>
