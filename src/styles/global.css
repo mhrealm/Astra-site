@@ -133,7 +133,6 @@ pre {
   padding: 1.5em;
   border-radius: 8px;
   background: #0f172a;
-  border: 1px solid #1e293b;
   overflow-x: auto;
 }
 pre > code {
