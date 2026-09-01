@@ -80,7 +80,7 @@
   />
   <rect class="panel" x="28" y="28" width="664" height="424" rx="30" />
   <rect class="tag-bg" x="48" y="58" width="192" height="44" rx="22" />
-  <text class="tag" x="70" y="88">Vue 基础</text>
+  <text class="tag" x="70" y="88">Vue</text>
 
   <g transform="translate(420 116)">
     <path d="M38 26 L122 178 L206 26 H164 L122 104 L80 26 Z" fill="#42b883" opacity="0.94" />

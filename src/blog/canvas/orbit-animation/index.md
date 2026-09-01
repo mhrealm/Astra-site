@@ -2,8 +2,8 @@
 title: 'Canvas 轨道动画'
 description: '通过 Canvas 绘制围绕中心运动的轨道动画。'
 pubDate: '2023-02-14'
-category: 'Canvas 实验'
-categorySlug: 'canvas'
+category: 'Animation'
+categorySlug: 'animation'
 tags: ['Canvas']
 difficulty: 3
 source: 'vue-practice/src/views/canvas/orbit-animation/index.vue'

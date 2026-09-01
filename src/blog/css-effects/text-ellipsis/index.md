@@ -2,8 +2,8 @@
 title: '文本省略'
 description: '整理单行、多行和动态容器中的文本省略写法。'
 pubDate: '2020-07-16'
-category: 'CSS 布局与效果'
-categorySlug: 'css-effects'
+category: '交互组件'
+categorySlug: 'interaction'
 tags: ['文本处理']
 difficulty: 3
 source: 'vue-practice/src/views/css-effects/text-ellipsis/index.vue'

@@ -80,7 +80,7 @@
   />
   <rect class="panel" x="28" y="28" width="664" height="424" rx="30" />
   <rect class="tag-bg" x="48" y="58" width="367" height="44" rx="22" />
-  <text class="tag" x="70" y="88">JavaScript 实战</text>
+  <text class="tag" x="70" y="88">JavaScript</text>
 
   <g transform="translate(414 112)">
     <rect x="0" y="0" width="266" height="212" rx="24" fill="#ffffff" opacity="0.78" />

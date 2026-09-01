@@ -2,8 +2,8 @@
 title: '混合模式'
 description: '演示 CSS mix-blend-mode 的视觉叠加效果。'
 pubDate: '2020-12-22'
-category: 'CSS 布局与效果'
-categorySlug: 'css-effects'
+category: '交互组件'
+categorySlug: 'interaction'
 tags: ['混合模式']
 difficulty: 2
 source: 'vue-practice/src/views/css-effects/blend-mode/index.vue'

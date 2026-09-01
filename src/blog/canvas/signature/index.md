@@ -2,8 +2,8 @@
 title: 'Canvas 电子签名'
 description: '实现可书写、清空和保存的 Canvas 签名面板。'
 pubDate: '2022-05-21'
-category: 'Canvas 实验'
-categorySlug: 'canvas'
+category: 'Animation'
+categorySlug: 'animation'
 tags: ['Canvas']
 difficulty: 3
 source: 'vue-practice/src/views/canvas/signature/index.vue'

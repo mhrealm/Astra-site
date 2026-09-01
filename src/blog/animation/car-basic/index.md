@@ -2,7 +2,7 @@
 title: '知道掘金兄弟们都喜欢跑车，所以必须安排上'
 description: '用 Vue 3 + Three.js 做一个科尔维特 C8 3D 汽车展示，从 GLB 模型加载、灯光、车漆到渲染循环。'
 pubDate: '2025-09-12'
-category: '动画动效'
+category: 'Animation'
 categorySlug: 'animation'
 tags: ['Three.js', 'Vue', '动效']
 difficulty: 4

@@ -2,7 +2,7 @@
 title: '如何使用 GSAP 实现一个楼层切换动画？'
 description: '最近在拆一个楼层切换动画：页面滚动到某一段时，当前区域会被固定住，继续滚动时页面本身不再往下走，而是开始播放一段过渡动画。'
 pubDate: '2024-01-24'
-category: '动画动效'
+category: 'Animation'
 categorySlug: 'animation'
 tags: ['GSAP', '动效']
 difficulty: 4

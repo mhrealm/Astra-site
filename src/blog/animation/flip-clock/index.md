@@ -2,7 +2,7 @@
 title: '翻页时钟'
 description: '模拟数字时钟的翻页切换动效。'
 pubDate: '2022-11-07'
-category: '动画动效'
+category: 'Animation'
 categorySlug: 'animation'
 tags: ['时钟动效']
 difficulty: 3

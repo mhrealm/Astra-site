@@ -2,7 +2,7 @@
 title: '怎么实现强制刷新组件？'
 description: '对比 key 变化和 v-if 重挂载两种强制刷新组件的方式。'
 pubDate: '2024-11-08'
-category: 'Vue 基础'
+category: 'Vue'
 categorySlug: 'vue'
 tags: ['基础交互']
 difficulty: 2

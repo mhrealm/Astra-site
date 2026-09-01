@@ -2,7 +2,7 @@
 title: '别再只会 `find` 了：Map 在前端业务里的真实用法'
 description: '很多前端同学知道 Map ，但真正写业务时却很少用。 原因也很简单：接口返回的数据通常是数组，表单提交的数据通常是对象或数组，最后给后端的也是 JSON。大多数时候，数组和普通对象已经够用了。 但有一类问题，只要出现， Map 就会非常顺手'
 pubDate: '2025-06-06'
-category: 'JavaScript 实战'
+category: 'JavaScript'
 categorySlug: 'javascript'
 tags: ['Map']
 difficulty: 3

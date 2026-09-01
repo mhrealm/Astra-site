@@ -2,7 +2,7 @@
 title: 'Vue + Three.js 实现 3D 汽车交互展示'
 description: '在基础版 3D 汽车展示之上，继续增加车门、前备箱、后备箱、车轮、灯光和内饰视角交互。'
 pubDate: '2026-04-16'
-category: '动画动效'
+category: 'Animation'
 categorySlug: 'animation'
 tags: ['Three.js', '动效']
 difficulty: 5

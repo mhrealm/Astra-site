@@ -15,13 +15,11 @@ export interface CategorySummary {
 
 export const blogCategories = [
   { slug: 'performance', name: '性能优化' },
-  { slug: 'javascript', name: 'JavaScript 实战' },
+  { slug: 'javascript', name: 'JavaScript' },
   { slug: 'react', name: 'React 实战' },
-  { slug: 'vue', name: 'Vue 基础' },
+  { slug: 'vue', name: 'Vue' },
   { slug: 'interaction', name: '交互组件' },
-  { slug: 'animation', name: '动画动效' },
-  { slug: 'canvas', name: 'Canvas 实验' },
-  { slug: 'css-effects', name: 'CSS 布局与效果' },
+  { slug: 'animation', name: 'Animation' },
   { slug: 'classic-replica', name: '经典复刻' },
   { slug: 'uncategorized', name: '未分类' },
 ] satisfies CategoryDefinition[]

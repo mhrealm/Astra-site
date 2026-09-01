@@ -2,8 +2,8 @@
 title: 'Canvas 基础图形'
 description: '演示 Canvas 线条、矩形、圆形等基础绘制能力。'
 pubDate: '2020-04-11'
-category: 'Canvas 实验'
-categorySlug: 'canvas'
+category: 'Animation'
+categorySlug: 'animation'
 tags: ['Canvas']
 difficulty: 1
 source: 'vue-practice/src/views/canvas/basic-shapes/index.vue'

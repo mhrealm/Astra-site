@@ -80,7 +80,7 @@
   />
   <rect class="panel" x="28" y="28" width="664" height="424" rx="30" />
   <rect class="tag-bg" x="48" y="58" width="142" height="44" rx="22" />
-  <text class="tag" x="70" y="88">动画动效</text>
+  <text class="tag" x="70" y="88">Animation</text>
 
   <g transform="translate(410 104)">
     <path
