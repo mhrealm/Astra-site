@@ -29,6 +29,14 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
   <head>
     <BaseHead title={`${demo.title} | ${SITE_TITLE}`} description={demo.description} />
     <style>
+      :global(:root) {
+        --base: 1920;
+      }
+
+      :global(html) {
+        font-size: calc(10 / var(--base) * 100vw);
+      }
+
       .demo-main {
         display: flex;
         flex: 1;
@@ -59,7 +67,7 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
       .demo-header-inner {
         align-items: center;
         display: flex;
-        gap: 1rem;
+        gap: 16px;
         height: 100%;
         justify-content: space-between;
         margin: 0 auto;
@@ -67,19 +75,18 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
       }
 
       .demo-title h1 {
-        margin: 0;
-      }
-
-      .demo-title h1 {
         color: var(--text-bright);
-        font-size: 1.25rem;
+        font-size: 20px;
         line-height: 1.3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .demo-links {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.6rem;
+        gap: 10px;
         justify-content: flex-end;
       }
 
@@ -87,10 +94,10 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
         border: 1px solid var(--border);
         border-radius: 6px;
         color: var(--muted);
-        font-size: 0.86rem;
+        font-size: 14px;
         font-weight: 800;
         line-height: 1;
-        padding: 0.65rem 0.85rem;
+        padding: 10px 14px;
         text-decoration: none;
       }
 
@@ -117,19 +124,39 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
         overflow: hidden;
       }
 
+      @media (max-width: 1023px), (orientation: portrait) {
+        :global(:root) {
+          --base: 428;
+        }
+      }
+
       @media (max-width: 720px) {
-        .demo-header {
-          height: auto;
+        .demo-header-inner {
+          flex-direction: row;
+          gap: 10px;
+          width: calc(100% - 20px);
         }
 
-        .demo-header-inner {
-          align-items: flex-start;
-          flex-direction: column;
-          padding: 1rem 0;
+        .demo-title {
+          flex: 1 1 auto;
+        }
+
+        .demo-title h1 {
+          font-size: 16px;
+          line-height: 1.2;
         }
 
         .demo-links {
-          justify-content: flex-start;
+          flex: 0 0 auto;
+          flex-wrap: nowrap;
+          gap: 6px;
+        }
+
+        .demo-links a {
+          border-radius: 5px;
+          font-size: 12px;
+          padding: 8px 9px;
+          white-space: nowrap;
         }
       }
     </style>

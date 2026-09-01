@@ -259,178 +259,280 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style lang="less" scoped>
+<style scoped>
 .container {
   position: relative;
-  height: calc(100vh + var(--story-scroll-distance, 1440vh));
-  min-height: calc(640px + var(--story-scroll-distance, 1440vh));
+  height: calc(100vh - 60px + var(--story-scroll-distance, 1440vh));
   background-color: #191b1f;
+  color: #fff;
+}
 
-  video,
-  img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-  }
+.container video,
+.container img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
 
+.story-stage {
+  position: sticky;
+  top: 0;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(120deg, rgba(53, 183, 168, 0.14), transparent 30%),
+    linear-gradient(250deg, rgba(232, 109, 91, 0.16), transparent 34%), #101214;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.story-card {
+  --story-card-gap: 1.8rem;
+  --story-card-width: 90vw;
+
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: var(--story-card-gap);
+  width: var(--story-card-width);
+  will-change: transform, opacity;
+}
+
+.story-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 68rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0.8rem;
+  background: #191b1f;
+  box-shadow: 0 2.4rem 7rem rgba(0, 0, 0, 0.26);
+  transform-origin: center center;
+  will-change: transform, opacity;
+  overflow: hidden;
+}
+
+.story-img {
+  width: 100%;
+  height: 64%;
+  will-change: transform;
+}
+
+.story-copy {
+  margin: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  will-change: transform, opacity;
+}
+
+.story-copy h2 {
+  font-size: 3.8rem;
+  line-height: 1.12;
+}
+
+.story-copy p {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.story-copy span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1.9rem;
+  line-height: 1.5;
+}
+
+.story-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.story-section {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 69rem 54rem;
+  gap: 5rem;
+  align-items: center;
+  padding: 7rem 32rem;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.story-section .panel-visual {
+  height: min(66vh, 62rem);
+  overflow: hidden;
+  border-radius: 0.8rem;
+  background: #0b0d10;
+  box-shadow: 0 2.8rem 8rem rgba(0, 0, 0, 0.32);
+}
+
+.story-section .panel-content::before {
+  display: block;
+  width: 7rem;
+  height: 0.5rem;
+  border-radius: 0.5rem;
+  background: var(--panel-accent);
+  content: '';
+}
+
+.story-section .panel-content {
+  max-width: 54rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.6rem;
+}
+
+.panel-content .panel-kicker {
+  color: var(--panel-accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.panel-content h2 {
+  font-size: 6.4rem;
+  line-height: 1.08;
+}
+
+.panel-content p {
+  font-size: 2rem;
+  line-height: 1.6;
+}
+
+.panel-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem;
+  margin: 1.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.panel-stats li {
+  min-width: 0;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.panel-stats strong {
+  display: block;
+  font-size: 3.2rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.panel-stats span {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: rgba(248, 242, 232, 0.64);
+}
+
+@media (max-width: 1023px), (orientation: portrait) {
   .story-stage {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    min-height: 640px;
-    overflow: hidden;
-    isolation: isolate;
-    background:
-      linear-gradient(120deg, rgba(53, 183, 168, 0.14), transparent 30%),
-      linear-gradient(250deg, rgba(232, 109, 91, 0.16), transparent 34%), #101214;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
   }
 
   .story-card {
-    position: relative;
-    z-index: 4;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    align-items: center;
-    gap: 18px;
-    width: min(1120px, calc(100% - 56px));
-    will-change: transform, opacity;
+    --story-card-gap: 1.2rem;
+
+    display: flex;
+    padding: 0 5vw;
+    width: max-content;
   }
 
   .story-item {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 440px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 8px;
-    background: #191b1f;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.26);
-    color: #fff;
-    transform-origin: center center;
-    will-change: transform, opacity;
-    overflow: hidden;
+    flex: 0 0 var(--story-card-width);
+    height: 48rem;
+  }
 
-    .story-img {
-      width: 100%;
-      height: 64%;
-      margin: 0;
-      will-change: transform;
-    }
+  .story-img {
+    height: 58%;
+  }
 
-    .story-copy {
-      margin: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      will-change: transform, opacity;
+  .story-copy {
+    margin: 2rem;
+    gap: 1rem;
+  }
 
-      h2 {
-        margin: 0;
-      }
+  .story-copy h2 {
+    font-size: 2.9rem;
+  }
 
-      p {
-        font-weight: 700;
-        text-transform: uppercase;
-      }
+  .story-copy p {
+    font-size: 1.35rem;
+  }
 
-      span {
-        color: rgba(255, 255, 255, 0.72);
-      }
-    }
+  .story-copy span {
+    font-size: 1.55rem;
   }
 
   .story-panel {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    display: flex;
-    align-items: center;
+    align-items: stretch;
   }
 
   .story-section {
-    position: absolute;
-    display: grid;
-    grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
-    gap: 40px;
-    align-items: center;
-    padding: 60px max(36px, calc((100% - 1180px) / 2));
-    opacity: 0;
-    visibility: hidden;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, auto) auto;
+    gap: 2.2rem;
+    align-content: center;
+    padding: 3rem 2.4rem;
   }
 
   .story-section .panel-visual {
-    height: min(66vh, 620px);
-    min-height: 380px;
-    overflow: hidden;
-    border-radius: 8px;
-    background: #0b0d10;
-    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
-  }
-
-  .story-section .panel-content::before {
-    display: block;
-    width: 58px;
-    height: 4px;
-    border-radius: 4px;
-    background: var(--panel-accent);
-    content: '';
+    height: min(31rem, 42vh);
+    min-height: 20rem;
   }
 
   .story-section .panel-content {
-    max-width: 440px;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    max-width: none;
+    gap: 1.2rem;
+  }
 
-    .panel-kicker {
-      color: var(--panel-accent);
-      font-weight: 700;
-      text-transform: uppercase;
-    }
+  .panel-content .panel-kicker {
+    font-size: 1.25rem;
+  }
 
-    h2 {
-      margin: 0;
-      font-size: 44px;
-      line-height: 1.08;
-    }
+  .panel-content h2 {
+    font-size: 3.3rem;
+  }
 
-    .panel-stats {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin: 14px 0 0;
-      padding: 0;
-      list-style: none;
+  .panel-content p {
+    font-size: 1.55rem;
+    line-height: 1.55;
+  }
 
-      li {
-        min-width: 0;
-        padding: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.07);
-      }
+  .panel-stats {
+    gap: 1rem;
+    margin-top: 0.4rem;
+  }
 
-      strong {
-        display: block;
-        font-size: 24px;
-        line-height: 1.2;
-        letter-spacing: 0;
-      }
+  .panel-stats li {
+    padding: 1.2rem;
+  }
 
-      span {
-        display: block;
-        margin-top: 6px;
-        font-size: 13px;
-        line-height: 1.4;
-        color: rgba(248, 242, 232, 0.64);
-      }
-    }
+  .panel-stats strong {
+    font-size: 2.4rem;
+  }
+
+  .panel-stats span {
+    font-size: 1.25rem;
   }
 }
 </style>
