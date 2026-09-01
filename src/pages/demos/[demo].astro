@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content'
 import BaseHead from '../../components/BaseHead.astro'
 import DemoRenderer from '../../components/DemoRenderer.astro'
+import HeaderMenu from '../../components/HeaderMenu.astro'
 import { SITE_TITLE } from '../../consts'
 import { getDemosFromPosts, type DemoEntry } from '../../data/demos'
 
@@ -58,6 +59,8 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
       }
 
       .demo-header {
+        position: relative;
+        z-index: 20;
         background: var(--surface);
         border-bottom: 1px solid var(--border);
         flex: 0 0 auto;
@@ -81,29 +84,6 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-      }
-
-      .demo-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: flex-end;
-      }
-
-      .demo-links a {
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        color: var(--muted);
-        font-size: 14px;
-        font-weight: 800;
-        line-height: 1;
-        padding: 10px 14px;
-        text-decoration: none;
-      }
-
-      .demo-links a:hover {
-        border-color: var(--accent);
-        color: var(--accent);
       }
 
       .demo-stage {
@@ -133,8 +113,8 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
       @media (max-width: 720px) {
         .demo-header-inner {
           flex-direction: row;
-          gap: 10px;
-          width: calc(100% - 20px);
+          gap: 12px;
+          width: calc(100% - 24px);
         }
 
         .demo-title {
@@ -152,20 +132,6 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
         }
-
-        .demo-links {
-          flex: 0 0 auto;
-          flex-wrap: nowrap;
-          gap: 6px;
-        }
-
-        .demo-links a {
-          border-radius: 5px;
-          flex: 0 0 auto;
-          font-size: 12px;
-          padding: 8px 9px;
-          white-space: nowrap;
-        }
       }
     </style>
   </head>
@@ -176,10 +142,16 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
           <div class="demo-title">
             <h1>{demo.title}</h1>
           </div>
-          <nav class="demo-links" aria-label="演示导航">
+          <HeaderMenu
+            label="打开演示导航"
+            menuId="demo-menu-list"
+            ariaLabel="演示导航"
+            role="navigation"
+            variant="pill"
+          >
             {demo.articleSlug && <a href={`/blog/${demo.articleSlug}/`}>返回文章</a>}
             <a href={`/demos/${demo.slug}/source/`}>查看源码</a>
-          </nav>
+          </HeaderMenu>
         </div>
       </section>
       <section

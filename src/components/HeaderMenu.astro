@@ -1,0 +1,246 @@
+---
+import IconfontMenuIcon from './IconfontMenuIcon.astro'
+
+interface Props {
+  label: string
+  menuId: string
+  ariaLabel?: string
+  buttonColor?: string
+  class?: string
+  desktopGap?: string
+  itemColor?: string
+  marginLeft?: string
+  mobileJustifySelf?: string
+  panelBorder?: string
+  panelMinWidth?: string
+  panelZIndex?: string
+  role?: string
+  variant?: 'plain' | 'pill'
+}
+
+const {
+  label,
+  menuId,
+  ariaLabel,
+  buttonColor = 'var(--text-bright)',
+  class: className,
+  desktopGap = '10px',
+  itemColor = 'var(--text)',
+  marginLeft = '0',
+  mobileJustifySelf = 'auto',
+  panelBorder = 'var(--border)',
+  panelMinWidth = '128px',
+  panelZIndex = '30',
+  role,
+  variant = 'plain',
+} = Astro.props
+
+const menuStyle = [
+  `--header-menu-button-color: ${buttonColor}`,
+  `--header-menu-desktop-gap: ${desktopGap}`,
+  `--header-menu-item-color: ${itemColor}`,
+  `--header-menu-margin-left: ${marginLeft}`,
+  `--header-menu-mobile-justify-self: ${mobileJustifySelf}`,
+  `--header-menu-panel-border: ${panelBorder}`,
+  `--header-menu-panel-min-width: ${panelMinWidth}`,
+  `--header-menu-panel-z-index: ${panelZIndex}`,
+].join('; ')
+---
+
+<div
+  class:list={['header-menu', `header-menu--${variant}`, className]}
+  style={menuStyle}
+  role={role}
+  aria-label={ariaLabel}
+  data-header-menu
+>
+  <button
+    class="header-menu-button"
+    type="button"
+    aria-label={label}
+    aria-expanded="false"
+    aria-controls={menuId}
+    data-header-menu-button
+  >
+    <IconfontMenuIcon />
+  </button>
+  <div class="header-menu-list" id={menuId} data-header-menu-list>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .header-menu {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    min-width: 0;
+    margin-left: var(--header-menu-margin-left);
+  }
+
+  .header-menu-button {
+    display: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .header-menu-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--header-menu-desktop-gap);
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .header-menu .header-menu-list :global(a),
+  .header-menu .header-menu-list :global(button) {
+    font-weight: 400;
+  }
+
+  .header-menu--pill .header-menu-list :global(a) {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1;
+    padding: 10px 14px;
+    text-decoration: none;
+  }
+
+  .header-menu--pill .header-menu-list :global(a:hover) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .header-menu .header-menu-list :global(a.active),
+  .header-menu .header-menu-list :global([aria-current='page']) {
+    border-color: transparent;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  @media (max-width: 720px) {
+    .header-menu {
+      flex: 0 0 auto;
+      justify-self: var(--header-menu-mobile-justify-self);
+    }
+
+    .header-menu-button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--header-menu-button-color);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .header-menu-button:focus,
+    .header-menu-button:active,
+    .header-menu-button[aria-expanded='true'] {
+      background: transparent;
+    }
+
+    .header-menu-list {
+      position: absolute;
+      top: 44px;
+      right: 0;
+      z-index: var(--header-menu-panel-z-index);
+      display: none;
+      align-items: stretch;
+      flex-direction: column;
+      gap: 4px;
+      min-width: var(--header-menu-panel-min-width);
+      border: 1px solid var(--header-menu-panel-border);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 10px 24px rgba(29, 33, 41, 0.14);
+      padding: 6px;
+    }
+
+    .header-menu.is-open .header-menu-list {
+      display: flex;
+    }
+
+    .header-menu .header-menu-list :global(a),
+    .header-menu .header-menu-list :global(button) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      min-height: 36px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--header-menu-item-color);
+      font-size: 14px;
+      padding: 0 10px;
+      text-decoration: none;
+      transform: none;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .header-menu .header-menu-list :global(a:hover),
+    .header-menu .header-menu-list :global(a:focus),
+    .header-menu .header-menu-list :global(a:active),
+    .header-menu .header-menu-list :global(button:hover),
+    .header-menu .header-menu-list :global(button:focus),
+    .header-menu .header-menu-list :global(button:active) {
+      background: transparent;
+    }
+  }
+</style>
+
+<script>
+  const closeHeaderMenu = (menu: Element) => {
+    menu.classList.remove('is-open')
+    menu.querySelector('[data-header-menu-button]')?.setAttribute('aria-expanded', 'false')
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-header-menu]').forEach((menu) => {
+    if (menu.dataset.headerMenuBound === 'true') {
+      return
+    }
+
+    menu.dataset.headerMenuBound = 'true'
+    const button = menu.querySelector('[data-header-menu-button]')
+
+    button?.addEventListener('click', (event) => {
+      event.stopPropagation()
+      const isOpen = menu.classList.toggle('is-open')
+      button.setAttribute('aria-expanded', String(isOpen))
+
+      if (isOpen) {
+        document.querySelectorAll('[data-header-menu]').forEach((otherMenu) => {
+          if (otherMenu !== menu) {
+            closeHeaderMenu(otherMenu)
+          }
+        })
+      }
+    })
+  })
+
+  if (document.documentElement.dataset.headerMenuGlobalBound !== 'true') {
+    document.documentElement.dataset.headerMenuGlobalBound = 'true'
+
+    document.addEventListener('click', (event) => {
+      document.querySelectorAll('[data-header-menu]').forEach((menu) => {
+        if (!menu.contains(event.target as Node)) {
+          closeHeaderMenu(menu)
+        }
+      })
+    })
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        document.querySelectorAll('[data-header-menu]').forEach(closeHeaderMenu)
+      }
+    })
+  }
+</script>

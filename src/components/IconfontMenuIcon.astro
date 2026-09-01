@@ -1,0 +1,48 @@
+<span class="iconfont-menu-icon" aria-hidden="true">
+  <svg class="iconfont-menu-open" viewBox="0 0 1024 1024" focusable="false">
+    <path
+      d="M208 304h608M208 512h408M208 720h536"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="86"></path>
+  </svg>
+  <svg class="iconfont-menu-close" viewBox="0 0 1024 1024" focusable="false">
+    <path
+      d="M304 304 720 720M720 304 304 720"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="86"></path>
+  </svg>
+</span>
+
+<style>
+  .iconfont-menu-icon {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    color: currentColor;
+    line-height: 1;
+    place-items: center;
+  }
+
+  .iconfont-menu-icon svg {
+    display: block;
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+  }
+
+  .iconfont-menu-icon .iconfont-menu-close {
+    display: none;
+  }
+
+  :global(button[aria-expanded='true']) .iconfont-menu-icon .iconfont-menu-open {
+    display: none;
+  }
+
+  :global(button[aria-expanded='true']) .iconfont-menu-icon .iconfont-menu-close {
+    display: block;
+  }
+</style>

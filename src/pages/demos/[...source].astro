@@ -5,6 +5,7 @@ import { getCollection } from 'astro:content'
 import { format } from 'prettier'
 import { codeToHtml } from 'shiki'
 import BaseHead from '../../components/BaseHead.astro'
+import HeaderMenu from '../../components/HeaderMenu.astro'
 import { SITE_TITLE } from '../../consts'
 import { getDemosFromPosts, type DemoEntry } from '../../data/demos'
 
@@ -126,15 +127,18 @@ const files = await Promise.all(
       }
 
       .source-switcher {
+        position: relative;
+        z-index: 20;
         display: grid;
         align-items: center;
         grid-template-columns: minmax(0, 1fr) auto auto;
         gap: 0.55rem;
+        height: 60px;
         border-bottom: 1px solid rgba(15, 23, 42, 0.1);
         background:
           linear-gradient(180deg, #ffffff 0%, #f8fafc 100%),
           linear-gradient(90deg, rgba(30, 128, 255, 0.08), transparent 34%);
-        padding: 0.65rem 0.75rem;
+        padding: 0 0.75rem;
       }
 
       .file-tabs {
@@ -242,13 +246,6 @@ const files = await Promise.all(
 
       .file-tab.is-active .file-icon::after {
         background: #eaf3ff;
-      }
-
-      .source-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        justify-content: flex-end;
       }
 
       .copy-code-button,
@@ -400,17 +397,12 @@ const files = await Promise.all(
 
         .source-switcher {
           grid-template-columns: minmax(0, 1fr) auto;
+          gap: 12px;
+          padding: 0 12px;
         }
 
-        .source-actions {
-          grid-column: 1 / -1;
-          justify-self: stretch;
-          justify-content: flex-start;
-        }
-
-        .copy-code-button,
-        .source-action-link {
-          justify-content: center;
+        .source-count {
+          display: none;
         }
       }
     </style>
@@ -438,10 +430,18 @@ const files = await Promise.all(
           }
         </div>
         <span class="source-count" data-source-counter>1 / {files.length}</span>
-        <div class="source-actions">
+        <HeaderMenu
+          label="打开源码操作"
+          menuId="source-menu-list"
+          buttonColor="#475569"
+          desktopGap="0.5rem"
+          mobileJustifySelf="end"
+          panelBorder="rgba(15, 23, 42, 0.12)"
+          panelMinWidth="152px"
+        >
           <button class="copy-code-button" type="button" data-copy-button>
             <span class="copy-icon" aria-hidden="true"></span>
-            <span data-copy-label>复制当前文件</span>
+            <span data-copy-label>复制</span>
           </button>
           <a class="source-action-link primary" href={`/demos/${demo.slug}/`}>预览效果</a>
           {
@@ -451,7 +451,7 @@ const files = await Promise.all(
               </a>
             )
           }
-        </div>
+        </HeaderMenu>
       </div>
 
       <div class="source-code-viewport">

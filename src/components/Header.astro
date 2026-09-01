@@ -1,6 +1,7 @@
 ---
 import { SITE_TITLE } from '../consts'
 import HeaderLink from './HeaderLink.astro'
+import HeaderMenu from './HeaderMenu.astro'
 ---
 
 <header>
@@ -12,12 +13,19 @@ import HeaderLink from './HeaderLink.astro'
         <small>Web Frontend Engineer</small>
       </span>
     </a>
-    <div class="internal-links">
+    <HeaderMenu
+      label="打开站点导航"
+      menuId="site-menu-list"
+      desktopGap="0.25rem"
+      marginLeft="auto"
+      panelMinWidth="136px"
+      panelZIndex="60"
+    >
       <HeaderLink href="/">首页</HeaderLink>
       <HeaderLink href="/blog">博客</HeaderLink>
       <HeaderLink href="/#projects">项目</HeaderLink>
       <HeaderLink href="/about">关于</HeaderLink>
-    </div>
+    </HeaderMenu>
     <div class="social-links">
       <a class="icon-link" href="mailto:hello@example.com" aria-label="Email">
         <svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
@@ -96,23 +104,17 @@ import HeaderLink from './HeaderLink.astro'
     font-size: 0.76rem;
   }
   nav {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    height: 4.25rem;
+    height: 60px;
     margin: 0 auto;
     max-width: 1120px;
     min-width: 0;
     padding: 0 1rem;
     width: 100%;
-  }
-  .internal-links {
-    align-items: center;
-    display: flex;
-    gap: 0.25rem;
-    margin-left: auto;
-    min-width: 0;
   }
   .social-links,
   .social-links a {
@@ -147,31 +149,31 @@ import HeaderLink from './HeaderLink.astro'
   }
   @media (max-width: 720px) {
     nav {
-      gap: 0.8rem;
-      height: auto;
-      padding: 0.75rem 1rem;
+      gap: 12px;
+      height: 60px;
+      padding: 0 12px;
+    }
+    .brand {
+      min-width: 0;
+    }
+    .brand-mark {
+      width: 36px;
+    }
+    .brand-copy {
+      min-width: 0;
+    }
+    .brand-copy strong {
+      display: block;
+      overflow: hidden;
+      max-width: 180px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .brand-copy small {
       display: none;
     }
-    .internal-links {
-      flex-wrap: wrap;
-      gap: 0.15rem;
-      overflow: visible;
-      padding: 0.2rem 0;
-    }
     .social-links {
       display: none;
-    }
-  }
-  @media (max-width: 520px) {
-    nav {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-    .internal-links {
-      margin-left: 0;
-      width: 100%;
     }
   }
 </style>
