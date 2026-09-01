@@ -15,6 +15,17 @@ export default defineConfig({
   integrations: [mdx(), vue(), react(), sitemap()],
   vite: {
     optimizeDeps: {
+      include: [
+        'gsap',
+        'gsap/ScrollTrigger',
+        'globe.gl',
+        'jquery',
+        'three',
+        'three/examples/jsm/controls/OrbitControls.js',
+        'three/examples/jsm/environments/RoomEnvironment.js',
+        'three/examples/jsm/lights/RectAreaLightUniformsLib.js',
+        'three/examples/jsm/loaders/GLTFLoader.js',
+      ],
       rolldownOptions: {
         transform: {
           define: {
