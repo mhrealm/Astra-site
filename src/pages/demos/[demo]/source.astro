@@ -5,8 +5,6 @@ import { getCollection } from 'astro:content'
 import { format } from 'prettier'
 import { codeToHtml } from 'shiki'
 import BaseHead from '../../../components/BaseHead.astro'
-import Footer from '../../../components/Footer.astro'
-import Header from '../../../components/Header.astro'
 import { SITE_TITLE } from '../../../consts'
 import { getDemosFromPosts, type DemoEntry } from '../../../data/demos'
 
@@ -113,19 +111,8 @@ const files = await Promise.all(
 
       :global(body.source-page) {
         display: grid;
-        grid-template-rows: auto minmax(0, 1fr) auto;
+        grid-template-rows: minmax(0, 1fr);
         min-height: 100vh;
-      }
-
-      :global(body.source-page > header) {
-        position: relative;
-        top: auto;
-        z-index: 50;
-      }
-
-      :global(body.source-page > footer) {
-        position: relative;
-        z-index: 40;
       }
 
       .source-main {
@@ -450,7 +437,6 @@ const files = await Promise.all(
     </style>
   </head>
   <body class="source-page">
-    <Header />
     <main class="source-main">
       <section class="source-panel">
         <div class="source-viewer" data-source-viewer>
@@ -510,7 +496,6 @@ const files = await Promise.all(
         </div>
       </section>
     </main>
-    <Footer />
 
     <script>
       const writeToClipboard = async (text: string) => {

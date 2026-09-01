@@ -2,8 +2,6 @@
 import { getCollection } from 'astro:content'
 import BaseHead from '../../components/BaseHead.astro'
 import DemoRenderer from '../../components/DemoRenderer.astro'
-import Footer from '../../components/Footer.astro'
-import Header from '../../components/Header.astro'
 import { SITE_TITLE } from '../../consts'
 import { getDemosFromPosts, type DemoEntry } from '../../data/demos'
 
@@ -49,11 +47,6 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
         height: 100dvh;
         min-height: 0;
         overflow: hidden;
-      }
-
-      body > :global(header),
-      body > :global(footer) {
-        flex: 0 0 auto;
       }
 
       .demo-header {
@@ -136,7 +129,6 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
     </style>
   </head>
   <body>
-    <Header />
     <main class="demo-main">
       <section class="demo-header">
         <div class="demo-header-inner">
@@ -156,6 +148,5 @@ const shouldLockStageScroll = noStageScrollDemoSlugs.has(demo.slug)
         <DemoRenderer demo={demo} />
       </section>
     </main>
-    <Footer />
   </body>
 </html>
