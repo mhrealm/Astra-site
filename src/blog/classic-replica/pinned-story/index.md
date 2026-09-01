@@ -383,10 +383,13 @@ timeline
 最后，把整条 timeline 交给 ScrollTrigger 控制。
 
 ```js
+const scrollContainer = containerRef.value.closest('.demo-stage')
+
 const timeline = gsap.timeline({
   defaults: { ease: 'power2.inOut' },
   scrollTrigger: {
     trigger: containerRef.value,
+    scroller: scrollContainer ?? undefined,
     start: 'top top',
     end: 'bottom bottom',
     scrub: 1,
@@ -397,6 +400,7 @@ const timeline = gsap.timeline({
 
 scrub: 1 表示滚动进度和动画进度绑定，并带一点缓冲。
 invalidateOnRefresh: true 很重要，因为轨道移动距离是动态计算的，窗口尺寸变化后需要重新计算。
+这里额外指定了 `scroller`，是因为当前演示页的滚动条在 `.demo-stage` 上，而不是浏览器窗口上。
 
 #### 第九步：处理视频播放
 
@@ -489,11 +493,14 @@ const syncVideos = () => {
 最后，把 `syncVideos` 挂到 timeline 的 `onUpdate` 上：
 
 ```js
+const scrollContainer = containerRef.value.closest('.demo-stage')
+
 const timeline = gsap.timeline({
   defaults: { ease: 'power2.inOut' },
   onUpdate: syncVideos,
   scrollTrigger: {
     trigger: containerRef.value,
+    scroller: scrollContainer ?? undefined,
     start: 'top top',
     end: 'bottom bottom',
     scrub: 1,
@@ -526,6 +533,8 @@ onMounted(async () => {
     return
   }
 
+  const scrollContainer = containerRef.value.closest('.demo-stage')
+
   animationContext = gsap.context(() => {
     // 初始化状态
     gsap.set(cardTrackRef.value, { autoAlpha: 1, x: 0 })
@@ -542,6 +551,7 @@ onMounted(async () => {
       onUpdate: syncVideos,
       scrollTrigger: {
         trigger: containerRef.value,
+        scroller: scrollContainer ?? undefined,
         start: 'top top',
         end: 'bottom bottom',
         scrub: 1,

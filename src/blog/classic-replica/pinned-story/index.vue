@@ -198,6 +198,8 @@ onMounted(async () => {
     return
   }
 
+  const scrollContainer = containerRef.value.closest('.demo-stage')
+
   animationContext = gsap.context(() => {
     const videos = Array.from(containerRef.value.querySelectorAll('video'))
     const videoPanels = videos
@@ -235,6 +237,7 @@ onMounted(async () => {
       onUpdate: syncVideos,
       scrollTrigger: {
         trigger: containerRef.value,
+        scroller: scrollContainer ?? undefined,
         start: 'top top',
         end: 'bottom bottom',
         scrub: 1,
