@@ -56,13 +56,13 @@ function isObject(value) {
   return value !== null && typeof value === 'object'
 }
 
-function effect(fn) {
+function effect(fn, label = '未命名 effect') {
   // effectFn 是真正会被收集、被 trigger 重新执行的函数。
   // 外面包这一层，是为了在执行用户传进来的 fn 之前设置 activeEffect，
   // 这样 fn 内部读取 reactive 属性时，track() 才知道应该收集谁。
   const effectFn = () => {
     activeEffect = effectFn
-    console.log('effect:开始')
+    console.log(`[effect:开始] ${effectFn.label}`)
 
     try {
       // fn 执行期间，如果读取了 state.count，就会进入 Proxy get，
@@ -74,9 +74,11 @@ function effect(fn) {
       // 否则普通代码里的属性读取，比如 console.log(state.count)，
       // 也会被错误地收集为依赖。
       activeEffect = undefined
-      console.log('effect:结束')
+      console.log(`[effect:结束] ${effectFn.label}`)
     }
   }
+  effectFn.label = label
+
   // 注册 effect 时先执行一次。
   // 这一步很关键：只有先执行，才能触发 getter，才能完成第一次依赖收集。
   // 如果不执行，响应式系统并不知道这个 effect 依赖了哪些属性。
@@ -105,7 +107,7 @@ function track(target, key) {
     bucket.set(target, depsMap)
   }
 
-  console.log(7777, bucket, target, depsMap)
+  console.log(7777, bucket)
 
   // 再找到这个属性对应的依赖集合。
   // 如果这个属性从来没被 effect 读取过，就创建一个新的 Set。
@@ -120,7 +122,7 @@ function track(target, key) {
   // Set 可以天然去重，所以同一个 effect 多次读取 state.count，
   // 依赖集合里也只会保存一份。
   deps.add(activeEffect)
-  console.log(`[track] 收集：${String(key)} 依赖的 effect`)
+  console.log(`[track] 收集依赖：${activeEffect.label} 依赖 "${String(key)}"`)
 }
 
 function trigger(target, key) {
