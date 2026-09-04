@@ -17,6 +17,11 @@ effect(() => {
   // console.log('count', count)
 }, 'effectA')
 
+// effect(() => {
+//   console.log('destructureState.num', destructureState.num) // 收集当前 effect
+//   // console.log('count', count)
+// }, 'effectC')
+
 effect(() => {
   console.log('propertyState.name', propertyState.name)
 }, 'effectB')

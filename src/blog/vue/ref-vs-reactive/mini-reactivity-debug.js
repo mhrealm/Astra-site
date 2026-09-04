@@ -107,8 +107,6 @@ function track(target, key) {
     bucket.set(target, depsMap)
   }
 
-  console.log(7777, bucket)
-
   // 再找到这个属性对应的依赖集合。
   // 如果这个属性从来没被 effect 读取过，就创建一个新的 Set。
   let deps = depsMap.get(key)
@@ -118,10 +116,12 @@ function track(target, key) {
   }
 
   // 最后把当前 effect 放进依赖集合。
-  //
   // Set 可以天然去重，所以同一个 effect 多次读取 state.count，
   // 依赖集合里也只会保存一份。
   deps.add(activeEffect)
+
+  console.log(7777, target, key, depsMap, deps)
+
   console.log(`[track] 收集依赖：${activeEffect.label} 依赖 "${String(key)}"`)
 }
 
