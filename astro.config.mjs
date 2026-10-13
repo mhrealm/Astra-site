@@ -9,6 +9,10 @@ import { defineConfig, fontProviders } from 'astro/config'
 // https://astro.build/config
 export default defineConfig({
   site: 'https://example.com',
+  server: {
+    host: '127.0.0.1',
+    allowedHosts: ['dev.lostmary.com'],
+  },
   devToolbar: {
     enabled: false,
   },
