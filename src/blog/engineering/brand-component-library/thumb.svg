@@ -1,0 +1,58 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 720 480"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">品牌站组件库 缩略图</title>
+  <desc id="desc">根据文章标题 我是如何设计品牌站组件库的 生成的博客缩略图。</desc>
+  <defs>
+    <style>
+      .bg { fill: #faf9f7; }
+      .panel { fill: #ffffff; stroke: #e7e5e1; stroke-width: 2; }
+      .tag-bg { fill: #f1f4f8; stroke: #dfe4ea; stroke-width: 1.5; }
+      .tag {
+        fill: #3b5673;
+        font: 700 20px Inter, 'Microsoft YaHei', sans-serif;
+      }
+      .title-line {
+        fill: #15161a;
+        font: 800 38px Inter, 'Microsoft YaHei', sans-serif;
+      }
+      .desc-line {
+        fill: #6b7280;
+        font: 500 17px Inter, 'Microsoft YaHei', sans-serif;
+      }
+      .slug {
+        fill: #3b5673;
+        font: 600 14px 'Cascadia Mono', Consolas, monospace;
+        opacity: 0.72;
+      }
+      .bar { fill: #3b5673; }
+      .bar-soft { fill: #9aabc0; }
+      .node { fill: #f1f4f8; stroke: #c9d3df; stroke-width: 1.5; }
+      .node-key { fill: #3b5673; stroke: #3b5673; stroke-width: 1.5; }
+    </style>
+  </defs>
+  <rect class="bg" width="720" height="480" />
+  <rect class="panel" x="28" y="28" width="664" height="424" rx="14" />
+  <rect class="tag-bg" x="48" y="56" width="112" height="38" rx="19" />
+  <text class="tag" x="70" y="82">工程化</text>
+
+  <!-- 变量作用域示意：根类名下挂三条变量 -->
+  <g transform="translate(452 108)">
+    <rect class="node-key" x="0" y="0" width="212" height="44" rx="10" />
+    <text x="20" y="29" fill="#ffffff" style="font: 600 16px 'Cascadia Mono', Consolas, monospace;">.brand-pdp</text>
+    <path d="M24 44 V66 M106 44 V66 M188 44 V66" stroke="#c9d3df" stroke-width="1.5" />
+    <rect class="node" x="0" y="66" width="212" height="34" rx="8" />
+    <rect class="bar" x="14" y="80" width="120" height="6" rx="3" />
+    <rect class="node" x="0" y="108" width="212" height="34" rx="8" />
+    <rect class="bar-soft" x="14" y="122" width="156" height="6" rx="3" />
+    <rect class="node" x="0" y="150" width="212" height="34" rx="8" />
+    <rect class="bar-soft" x="14" y="164" width="98" height="6" rx="3" />
+  </g>
+
+  <text class="title-line" x="48" y="176">品牌站组件库</text>
+  <text class="desc-line" x="50" y="216">作用域 · 变量分层 · 模板 · 主题双端</text>
+  <text class="slug" x="50" y="414">engineering / brand-component-library</text>
+</svg>
