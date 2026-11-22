@@ -8,7 +8,7 @@ import { defineConfig, fontProviders } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'http://mhrealm.top',
   trailingSlash: 'never',
   server: {
     host: '127.0.0.1',
