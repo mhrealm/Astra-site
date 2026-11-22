@@ -12,7 +12,6 @@ interface DemoVariantConfig {
   title?: string
   description?: string
   component?: string
-  inline?: boolean
   sourceFiles?: string[]
 }
 
@@ -22,10 +21,8 @@ export interface DemoEntry {
   title: string
   description: string
   category: string
-  categorySlug: string
   componentPath: string
   framework: DemoFramework
-  inline: boolean
   sourceRoot: string
   sourceFiles: string[]
 }
@@ -181,10 +178,8 @@ const createDemo = (
     title: variant?.title ?? post.data.demoTitle ?? post.data.title,
     description: variant?.description ?? post.data.demoDescription ?? post.data.description,
     category: post.data.category,
-    categorySlug: post.data.categorySlug,
     componentPath: `../blog/${articleSlug}/${componentFile}`,
     framework: getDemoFramework(componentFile),
-    inline: variant?.inline ?? post.data.demoInline,
     sourceRoot: getSourceRoot(articleSlug),
     sourceFiles: getSourceFiles(
       articleSlug,
@@ -215,14 +210,6 @@ export function getDemosFromPosts(posts: BlogEntry[]) {
   }
 
   return demos
-}
-
-export function getDemoBySlug(demos: DemoEntry[], slug?: string) {
-  return demos.find((demo) => demo.slug === slug)
-}
-
-export function getDemoByArticleSlug(demos: DemoEntry[], articleSlug?: string) {
-  return demos.find((demo) => demo.articleSlug === articleSlug)
 }
 
 export function getDemoForPost(post: BlogEntry) {

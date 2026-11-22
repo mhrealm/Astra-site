@@ -17,15 +17,38 @@ const post = Astro.props
 const { Content, headings } = await render(post)
 const demo = getDemoForPost(post)
 const postSlug = getBlogSlug(post)
-const relatedPosts = (await getCollection('blog'))
-  .filter(
-    (candidate) =>
-      candidate.data.categorySlug === post.data.categorySlug && getBlogSlug(candidate) !== postSlug,
-  )
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 5)
+const allPosts = await getCollection('blog')
+const sortedPosts = [...allPosts].sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+)
+const currentIndex = sortedPosts.findIndex((candidate) => getBlogSlug(candidate) === postSlug)
+const toLink = (candidate: CollectionEntry<'blog'>) => ({
+  slug: getBlogSlug(candidate),
+  title: candidate.data.title,
+})
+// 列表按日期从新到旧：索引小的是更新的（上一篇），索引大的是更旧的（下一篇）
+const prevPost = currentIndex > 0 ? toLink(sortedPosts[currentIndex - 1]) : undefined
+const nextPost =
+  currentIndex >= 0 && currentIndex < sortedPosts.length - 1
+    ? toLink(sortedPosts[currentIndex + 1])
+    : undefined
+const others = sortedPosts.filter((candidate) => getBlogSlug(candidate) !== postSlug)
+const sameCategory = others.filter(
+  (candidate) => candidate.data.categorySlug === post.data.categorySlug,
+)
+const rest = others.filter((candidate) => candidate.data.categorySlug !== post.data.categorySlug)
+const relatedPosts = [...sameCategory, ...rest].slice(0, 5)
+const readingMinutes = Math.max(1, Math.round((post.body ?? '').length / 400))
 ---
 
-<BlogPost {...post.data} demo={demo} headings={headings} relatedPosts={relatedPosts}>
+<BlogPost
+  {...post.data}
+  demo={demo}
+  headings={headings}
+  relatedPosts={relatedPosts}
+  readingMinutes={readingMinutes}
+  prevPost={prevPost}
+  nextPost={nextPost}
+>
   <Content />
 </BlogPost>

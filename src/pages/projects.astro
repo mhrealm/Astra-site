@@ -1,0 +1,87 @@
+---
+import BaseHead from '../components/BaseHead.astro'
+import Sidebar from '../components/Sidebar.astro'
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead
+      title={`项目 | ${SITE_TITLE}`}
+      description={SITE_DESCRIPTION}
+    />
+    <style>
+      .projects-wrap {
+        margin: 0 auto;
+        width: min(1120px, 100%);
+      }
+      .projects-title {
+        font-family: var(--font-serif);
+        font-size: 2.2rem;
+        font-weight: 600;
+        line-height: 1.25;
+        margin: 0 0 0.5rem;
+      }
+      .projects-lead {
+        color: var(--muted-soft);
+        font-size: 0.95rem;
+        margin: 0 0 2.5rem;
+      }
+      .soon-box {
+        align-items: center;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--box-shadow);
+        color: var(--muted);
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        justify-content: center;
+        min-height: 16rem;
+        padding: 3rem 1.5rem;
+        text-align: center;
+      }
+      .soon-box::before {
+        background: var(--border-strong);
+        border-radius: 50%;
+        content: '';
+        height: 8px;
+        width: 8px;
+      }
+      .soon-title {
+        color: var(--text-bright);
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+      }
+      .soon-desc {
+        color: var(--muted-soft);
+        font-size: 0.88rem;
+        line-height: 1.7;
+        margin: 0;
+      }
+      @media (max-width: 640px) {
+        .projects-title {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <Sidebar />
+      <main class="site-main">
+        <div class="projects-wrap">
+          <h1 class="projects-title">项目</h1>
+          <p class="projects-lead">一些可交互的前端案例与实现 Demo。</p>
+          <div class="soon-box">
+            <p class="soon-title">敬请期待</p>
+            <p class="soon-desc">项目内容正在整理，稍后与你见面。</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

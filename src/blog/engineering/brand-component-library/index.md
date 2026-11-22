@@ -66,7 +66,8 @@ source: 'https://juejin.cn/post/7709425536502087720'
 第三层是**组合变量**，把同一种字体的字重、字号、行高、字体族聚合成一个 `font` 简写，再交给同名的排版类使用：
 
 ```css
---pdp-superheadline: var(--pdp-font-weight-superheadline) var(--pdp-font-size-superheadline)/var(--pdp-line-height-superheadline) var(--pdp-font-family);
+--pdp-superheadline: var(--pdp-font-weight-superheadline)
+  var(--pdp-font-size-superheadline)/var(--pdp-line-height-superheadline) var(--pdp-font-family);
 
 .brand-pdp .pdp-superheadline {
   font: var(--pdp-superheadline);
@@ -113,8 +114,8 @@ source: 'https://juejin.cn/post/7709425536502087720'
       <p class="pdp-body-l animation-item">正文</p>
     </div>
     <picture class="floor-image floor-image-light">
-      <source media="(max-width: 1023px), (orientation: portrait)" srcset="移动端图片">
-      <img src="PC 端图片" alt="产品名" loading="lazy">
+      <source media="(max-width: 1023px), (orientation: portrait)" srcset="移动端图片" />
+      <img src="PC 端图片" alt="产品名" loading="lazy" />
     </picture>
   </div>
 </div>
@@ -177,11 +178,11 @@ AI 读完模板后照着写，生成的代码风格自然就统一了，审查�
 
 组件库上线后，工作会分为三块：
 
-| 角色 | 负责什么 |
-| --- | --- |
-| 设计 | 维护 Figma 组件库和验收标准，新组件、新规格先在设计侧定稿 |
+| 角色       | 负责什么                                                                  |
+| ---------- | ------------------------------------------------------------------------- |
+| 设计       | 维护 Figma 组件库和验收标准，新组件、新规格先在设计侧定稿                 |
 | 组件库维护 | 维护公共样式、test 环境的模板和开发规范文档；新增变量和组件由这里统一合入 |
-| 详情页开发 | 基于模板产出具体产品的详情内容，只写产品特有的楼层样式，不改公共样式 |
+| 详情页开发 | 基于模板产出具体产品的详情内容，只写产品特有的楼层样式，不改公共样式      |
 
 边界只有一条：**公共的东西只有一个出口**。 详情页开发中发现缺变量或缺组件，先反馈给组件库维护补到公共层和模板里，而不是在自己的页面里临时加一份。
 

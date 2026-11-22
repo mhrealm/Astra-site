@@ -1,0 +1,106 @@
+---
+interface PostLink {
+  slug: string
+  title: string
+}
+
+interface Props {
+  prev?: PostLink
+  next?: PostLink
+}
+
+const { prev, next } = Astro.props
+const hasNav = Boolean(prev || next)
+---
+
+{
+  hasNav && (
+    <nav class="post-navigation" aria-label="文章导航">
+      {prev ? (
+        <a class="nav-card nav-prev" href={`/blog/${prev.slug}`}>
+          <span class="nav-label">← 上一篇</span>
+          <span class="nav-title">{prev.title}</span>
+        </a>
+      ) : (
+        <span class="nav-card nav-empty" aria-hidden="true" />
+      )}
+      {next ? (
+        <a class="nav-card nav-next" href={`/blog/${next.slug}`}>
+          <span class="nav-label">下一篇 →</span>
+          <span class="nav-title">{next.title}</span>
+        </a>
+      ) : (
+        <span class="nav-card nav-empty" aria-hidden="true" />
+      )}
+    </nav>
+  )
+}
+
+<style>
+  .post-navigation {
+    border-top: 1px solid var(--border);
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+  }
+
+  .nav-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    min-width: 0;
+    padding: 1rem 1.1rem;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  a.nav-card:hover {
+    background: var(--surface-raised);
+    border-color: var(--border-strong);
+  }
+
+  .nav-next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .nav-label {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .nav-title {
+    color: var(--text-bright);
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  .nav-empty {
+    border: none;
+    padding: 0;
+  }
+
+  @media (max-width: 640px) {
+    .post-navigation {
+      gap: 0.75rem;
+    }
+    .nav-card {
+      padding: 0.85rem 0.9rem;
+    }
+    .nav-title {
+      font-size: 0.95rem;
+    }
+  }
+</style>

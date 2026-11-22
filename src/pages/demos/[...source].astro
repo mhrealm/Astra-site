@@ -88,12 +88,16 @@ const files = await Promise.all(
       path: filePath,
       absolutePath,
       language,
-      html: normalizeHighlightedCode(
-        await codeToHtml(content, {
-          lang: language,
-          theme: 'github-light',
-        }),
-      ),
+        html: normalizeHighlightedCode(
+          await codeToHtml(content, {
+            lang: language,
+            themes: {
+              light: 'github-light',
+              dark: 'github-dark',
+            },
+            defaultColor: false,
+          }),
+        ),
     }
   }),
 )
@@ -111,38 +115,42 @@ const files = await Promise.all(
       }
 
       :global(body.source-page) {
-        background: #f8fafc;
+        background: var(--bg);
       }
 
       .source-viewer {
         display: flex;
         flex-direction: column;
         height: 100vh;
-        margin: 0 auto;
-        max-width: 1000px;
+        margin: 0;
         min-height: 0;
         overflow: hidden;
         width: 100%;
-        background-color: #f8fafc;
+        background-color: var(--bg);
       }
 
-      .source-switcher {
+      .source-header {
         position: relative;
         z-index: 20;
-        display: grid;
-        align-items: center;
-        grid-template-columns: minmax(0, 1fr) auto auto;
-        gap: 0.55rem;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        flex: 0 0 auto;
         height: 60px;
-        border-bottom: 1px solid rgba(15, 23, 42, 0.1);
-        background:
-          linear-gradient(180deg, #ffffff 0%, #f8fafc 100%),
-          linear-gradient(90deg, rgba(30, 128, 255, 0.08), transparent 34%);
-        padding: 0 0.75rem;
+      }
+
+      .source-header-inner {
+        align-items: center;
+        display: flex;
+        gap: 16px;
+        height: 100%;
+        justify-content: space-between;
+        margin: 0 auto;
+        width: min(1120px, calc(100% - 32px));
       }
 
       .file-tabs {
         display: flex;
+        flex: 1 1 auto;
         min-width: 0;
         gap: 0.45rem;
         overflow-x: auto;
@@ -160,32 +168,27 @@ const files = await Promise.all(
         flex: 0 0 auto;
         gap: 0.5rem;
         max-width: 280px;
-        border: 1px solid rgba(15, 23, 42, 0.12);
+        border: 0;
         border-radius: 6px;
-        background: #ffffff;
-        color: #475569;
+        background: transparent;
+        color: var(--muted);
         cursor: pointer;
         font: inherit;
         line-height: 1;
         padding: 0.5rem 0.68rem;
         transition:
-          border-color 180ms ease,
           color 180ms ease,
-          background-color 180ms ease,
-          box-shadow 180ms ease;
+          background-color 180ms ease;
       }
 
       .file-tab:hover {
-        border-color: rgba(30, 128, 255, 0.34);
-        background: #eff6ff;
-        color: #1e80ff;
+        background: var(--accent-soft);
+        color: var(--accent);
       }
 
       .file-tab.is-active {
-        border-color: rgba(30, 128, 255, 0.3);
-        background: rgba(30, 128, 255, 0.1);
-        box-shadow: 0 6px 16px rgba(30, 128, 255, 0.08);
-        color: #1e80ff;
+        background: rgba(var(--accent-rgb), 0.08);
+        color: var(--accent);
       }
 
       .file-tab strong {
@@ -196,15 +199,6 @@ const files = await Promise.all(
         font-size: 0.82rem;
         font-weight: 800;
         text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .source-count {
-        justify-self: end;
-        color: #64748b;
-        font-size: 0.74rem;
-        font-weight: 800;
-        text-transform: uppercase;
         white-space: nowrap;
       }
 
@@ -241,59 +235,53 @@ const files = await Promise.all(
         border-bottom: 1px solid currentColor;
         border-left: 1px solid currentColor;
         border-radius: 0 3px 0 2px;
-        background: #ffffff;
+        background: var(--bg);
       }
 
       .file-tab.is-active .file-icon::after {
-        background: #eaf3ff;
+        background: var(--accent-soft);
       }
 
       .copy-code-button,
       .source-action-link {
         align-items: center;
-        border: 1px solid rgba(15, 23, 42, 0.12);
-        border-radius: 6px;
-        background: #ffffff;
-        color: #475569;
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        color: var(--muted);
         cursor: pointer;
         display: inline-flex;
         gap: 0.4rem;
         font: inherit;
-        font-size: 0.76rem;
-        font-weight: 800;
+        font-size: 0.8rem;
+        font-weight: 500;
         line-height: 1;
-        min-height: 2rem;
-        padding: 0.38rem 0.58rem;
+        padding: 0.35rem 0.1rem;
         text-decoration: none;
-        transition:
-          border-color 180ms ease,
-          color 180ms ease,
-          background-color 180ms ease;
+        white-space: nowrap;
+        transition: color 160ms ease;
+      }
+
+      .copy-code-button {
+        font-size: 14px;
+        padding: 10px 14px;
       }
 
       .copy-code-button:hover,
       .source-action-link:hover {
-        border-color: rgba(30, 128, 255, 0.34);
-        background: #eff6ff;
-        color: #1e80ff;
+        color: var(--accent);
       }
 
       .copy-code-button.is-copied {
-        border-color: rgba(30, 128, 255, 0.3);
-        background: rgba(30, 128, 255, 0.1);
-        color: #1e80ff;
+        color: var(--accent);
       }
 
       .source-action-link.primary {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: #fff;
+        color: var(--text-bright);
       }
 
       .source-action-link.primary:hover {
-        background: var(--accent-strong);
-        border-color: var(--accent-strong);
-        color: #fff;
+        color: var(--accent);
       }
 
       .copy-icon {
@@ -321,18 +309,22 @@ const files = await Promise.all(
       .copy-icon::after {
         top: 0;
         right: 0.06rem;
-        background: #ffffff;
+        background: var(--bg-elevated);
       }
 
       .copy-code-button.is-copied .copy-icon::after {
-        background: #eaf3ff;
+        background: var(--accent-soft);
       }
 
       .source-code-viewport {
         flex: 1 1 auto;
         min-height: 0;
         overflow: auto;
-        background: #ffffff;
+        background: var(--bg-elevated);
+        border-radius: 8px;
+        margin: 16px auto 20px;
+        max-width: 960px;
+        width: calc(100% - 40px);
       }
 
       .source-code-panel,
@@ -345,16 +337,27 @@ const files = await Promise.all(
       }
 
       .source-code :global(pre.shiki) {
+        border: 0 !important;
         overflow: visible;
         margin: 0;
         min-height: 100%;
         max-height: none;
-        background: #ffffff !important;
-        color: #24292f;
+        background: var(--bg-elevated) !important;
+        color: var(--shiki-dark);
         font-size: 0.84rem;
         line-height: 1.42;
         padding: 0.72rem 0;
         white-space: normal;
+      }
+
+      :global(html[data-theme='dark']) .source-code :global(pre.shiki),
+      :global(html[data-theme='dark']) .source-code :global(pre.shiki span) {
+        color: var(--shiki-dark) !important;
+      }
+
+      :global(html[data-theme='light']) .source-code :global(pre.shiki),
+      :global(html[data-theme='light']) .source-code :global(pre.shiki span) {
+        color: var(--shiki-light) !important;
       }
 
       .source-code :global(code) {
@@ -373,7 +376,7 @@ const files = await Promise.all(
       }
 
       .source-code :global(.line:hover) {
-        background: rgba(15, 23, 42, 0.06);
+        background: var(--surface-raised);
       }
 
       .source-code :global(.line::before) {
@@ -383,8 +386,7 @@ const files = await Promise.all(
         margin-right: 0.95rem;
         padding-right: 0.8rem;
         width: 3.35rem;
-        border-right: 1px solid rgba(15, 23, 42, 0.12);
-        color: #94a3b8;
+        color: var(--muted-soft);
         text-align: right;
         user-select: none;
       }
@@ -395,70 +397,72 @@ const files = await Promise.all(
           width: 100vw;
         }
 
-        .source-switcher {
-          grid-template-columns: minmax(0, 1fr) auto;
+        .source-header-inner {
           gap: 12px;
-          padding: 0 12px;
+          width: calc(100% - 24px);
         }
 
-        .source-count {
-          display: none;
+        .source-code-viewport {
+          width: calc(100% - 24px);
         }
       }
     </style>
   </head>
   <body class="source-page">
     <main class="source-viewer" data-source-viewer>
-      <div class="source-switcher">
-        <div class="file-tabs" role="tablist" aria-label="源码文件">
-          {
-            files.map((file, index) => (
-              <button
-                class={`file-tab${index === 0 ? ' is-active' : ''}`}
-                type="button"
-                id={`source-tab-${index}`}
-                role="tab"
-                aria-selected={index === 0 ? 'true' : 'false'}
-                aria-controls={`source-panel-${index}`}
-                tabindex={index === 0 ? 0 : -1}
-                data-source-tab
-              >
-                <span class="file-icon" aria-hidden="true" />
-                <strong>{file.path}</strong>
-              </button>
-            ))
-          }
+      <section class="source-header">
+        <div class="source-header-inner">
+          <div class="file-tabs" role="tablist" aria-label="源码文件">
+            {
+              files.map((file, index) => (
+                <button
+                  class={`file-tab${index === 0 ? ' is-active' : ''}`}
+                  type="button"
+                  id={`source-tab-${index}`}
+                  role="tab"
+                  aria-selected={index === 0 ? 'true' : 'false'}
+                  aria-controls={`source-panel-${index}`}
+                  tabindex={index === 0 ? 0 : -1}
+                  data-source-tab
+                >
+                  <span class="file-icon" aria-hidden="true" />
+                  <strong>{file.path}</strong>
+                </button>
+              ))
+            }
+          </div>
+          <HeaderMenu
+            label="打开源码操作"
+            menuId="source-menu-list"
+            ariaLabel="源码操作"
+            buttonColor="var(--text-bright)"
+            desktopGap="10px"
+            mobileJustifySelf="end"
+            panelBorder="var(--border)"
+            panelMinWidth="128px"
+            variant="pill"
+          >
+            <button class="copy-code-button" type="button" data-copy-button>
+              <span class="copy-icon" aria-hidden="true"></span>
+              <span data-copy-label>复制</span>
+            </button>
+            <a class="source-action-link primary" href={`/demos/${demo.slug}`}>预览效果</a>
+            {
+              demo.articleSlug && (
+                <a class="source-action-link" href={`/blog/${demo.articleSlug}`}>
+                  返回文章
+                </a>
+              )
+            }
+          </HeaderMenu>
         </div>
-        <span class="source-count" data-source-counter>1 / {files.length}</span>
-        <HeaderMenu
-          label="打开源码操作"
-          menuId="source-menu-list"
-          buttonColor="#475569"
-          desktopGap="0.5rem"
-          mobileJustifySelf="end"
-          panelBorder="rgba(15, 23, 42, 0.12)"
-          panelMinWidth="152px"
-        >
-          <button class="copy-code-button" type="button" data-copy-button>
-            <span class="copy-icon" aria-hidden="true"></span>
-            <span data-copy-label>复制</span>
-          </button>
-          <a class="source-action-link primary" href={`/demos/${demo.slug}/`}>预览效果</a>
-          {
-            demo.articleSlug && (
-              <a class="source-action-link" href={`/blog/${demo.articleSlug}/`}>
-                返回文章
-              </a>
-            )
-          }
-        </HeaderMenu>
-      </div>
+      </section>
 
       <div class="source-code-viewport">
         {
           files.map((file, index) => (
             <section
-              class={`source-code-panel${index === 0 ? ' is-active' : ''}`}
+              class="source-code-panel"
               id={`source-panel-${index}`}
               role="tabpanel"
               aria-labelledby={`source-tab-${index}`}
@@ -470,7 +474,7 @@ const files = await Promise.all(
           ))
         }
       </div>
-    </main>
+      </main>
 
     <script>
       const writeToClipboard = async (text: string) => {
@@ -494,7 +498,6 @@ const files = await Promise.all(
       document.querySelectorAll<HTMLElement>('[data-source-viewer]').forEach((viewer) => {
         const tabs = [...viewer.querySelectorAll<HTMLButtonElement>('[data-source-tab]')]
         const panels = [...viewer.querySelectorAll<HTMLElement>('[data-source-panel]')]
-        const counter = viewer.querySelector<HTMLElement>('[data-source-counter]')
         const copyButton = viewer.querySelector<HTMLButtonElement>('[data-copy-button]')
         let activeIndex = 0
 
@@ -514,14 +517,8 @@ const files = await Promise.all(
           })
 
           panels.forEach((panel, panelIndex) => {
-            const isActive = panelIndex === nextIndex
-            panel.classList.toggle('is-active', isActive)
-            panel.hidden = !isActive
+            panel.hidden = panelIndex !== nextIndex
           })
-
-          if (counter) {
-            counter.textContent = `${nextIndex + 1} / ${tabs.length}`
-          }
 
           tabs[nextIndex]?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
 

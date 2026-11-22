@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { headings } = Astro.props
-const tocItems = headings.filter((heading) => heading.depth === 2)
+const tocItems = headings
 ---
 
 <aside class="blog-toc" aria-label="文章目录" data-blog-toc>
@@ -25,8 +25,8 @@ const tocItems = headings.filter((heading) => heading.depth === 2)
     <ol>
       {
         tocItems.map((heading) => (
-          <li>
-            <a href={`#${heading.slug}`} data-toc-link>
+          <li class={heading.depth >= 3 ? 'toc-sub' : undefined}>
+            <a href={`#${heading.slug}`} data-toc-link data-depth={heading.depth}>
               {heading.text}
             </a>
           </li>
@@ -114,6 +114,14 @@ const tocItems = headings.filter((heading) => heading.depth === 2)
         return
       }
 
+      // 滚到页面底部时强制高亮最后一项（末节通常无法滚到判定线上方）
+      const atBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
+      if (atBottom) {
+        setActive(pairs[pairs.length - 1].id)
+        return
+      }
+
       const anchorOffset = 112
       const activePair =
         [...pairs]
@@ -194,7 +202,6 @@ const tocItems = headings.filter((heading) => heading.depth === 2)
 <style>
   .blog-toc {
     background: var(--surface);
-    border: 1px solid var(--border-soft);
     border-radius: 6px;
     box-shadow: var(--box-shadow);
     display: flex;
@@ -217,13 +224,13 @@ const tocItems = headings.filter((heading) => heading.depth === 2)
     align-items: center;
     border-bottom: 1px solid var(--border);
     display: flex;
-    height: 64px;
+    height: 54px;
     justify-content: space-between;
   }
 
   .toc-title {
     color: var(--text);
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 800;
     line-height: 1.2;
     margin: 0;
@@ -270,8 +277,8 @@ const tocItems = headings.filter((heading) => heading.depth === 2)
     flex: 1;
     min-height: 0;
     overflow-y: auto;
-    padding: 18px 6px 0 0;
-    scrollbar-color: #cfd4dc transparent;
+    padding: 12px 6px 0 0;
+    scrollbar-color: var(--border-strong) transparent;
     scrollbar-width: thin;
   }
 
@@ -284,17 +291,17 @@ const tocItems = headings.filter((heading) => heading.depth === 2)
   }
 
   .toc-scroll::-webkit-scrollbar-thumb {
-    background: #d8dce3;
+    background: var(--border-strong);
     border-radius: 999px;
   }
 
   .toc-scroll::-webkit-scrollbar-thumb:hover {
-    background: #c6cbd4;
+    background: var(--border-strong);
   }
 
   ol {
     display: grid;
-    gap: 0.35rem;
+    gap: 0.16rem;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -304,19 +311,25 @@ const tocItems = headings.filter((heading) => heading.depth === 2)
     border-radius: 4px;
     color: var(--text);
     display: -webkit-box;
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-size: 0.86rem;
+    font-weight: 400;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-    line-height: 1.45;
-    min-height: 2.64rem;
+    line-height: 1.4;
+    min-height: 2.15rem;
     overflow: hidden;
     overflow-wrap: anywhere;
-    padding: 0.58rem 0.5rem 0.58rem 1rem;
-    position: relative;
+    padding: 0.38rem 0.45rem 0.38rem 0.85rem;
     text-decoration: none;
     text-overflow: ellipsis;
     transition: color 160ms ease;
+  }
+
+  /* 小标题（h3）：缩进一级、字号略小、字重更轻 */
+  li.toc-sub a {
+    font-size: 0.8rem;
+    font-weight: 400;
+    padding-left: 1.45rem;
   }
 
   a:hover {
@@ -324,7 +337,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2)
   }
 
   a.is-active {
-    color: var(--accent);
+    font-weight: 700;
   }
 
   @media (max-width: 1100px) {

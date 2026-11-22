@@ -98,7 +98,7 @@ const menuStyle = [
   }
 
   .header-menu--pill .header-menu-list :global(a) {
-    border: 1px solid var(--border);
+    border: 0;
     border-radius: 6px;
     color: var(--muted);
     font-size: 14px;
@@ -108,13 +108,11 @@ const menuStyle = [
   }
 
   .header-menu--pill .header-menu-list :global(a:hover) {
-    border-color: var(--accent);
     color: var(--accent);
   }
 
   .header-menu .header-menu-list :global(a.active),
   .header-menu .header-menu-list :global([aria-current='page']) {
-    border-color: transparent;
     color: var(--accent);
     font-weight: 700;
   }
@@ -159,7 +157,7 @@ const menuStyle = [
       border: 1px solid var(--header-menu-panel-border);
       border-radius: 8px;
       background: #fff;
-      box-shadow: 0 10px 24px rgba(29, 33, 41, 0.14);
+      box-shadow: 0 10px 24px rgba(var(--black), 0.14);
       padding: 6px;
     }
 

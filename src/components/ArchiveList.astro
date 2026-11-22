@@ -1,0 +1,67 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import BlogPostRow from './BlogPostRow.astro'
+
+interface Props {
+  posts: CollectionEntry<'blog'>[]
+}
+
+const { posts } = Astro.props
+
+// 按年份从新到旧分组
+const years = [...new Set(posts.map((post) => post.data.pubDate.getFullYear()))].sort((a, b) => b - a)
+const grouped = years.map((year) => ({
+  year,
+  posts: posts.filter((post) => post.data.pubDate.getFullYear() === year),
+}))
+---
+
+<div class="archive">
+  {
+    grouped.map(({ year, posts }) => (
+      <section class="archive-year">
+        <div class="year-head">
+          <h2 class="year-title">{year}</h2>
+          <span class="year-count">共 {posts.length} 篇</span>
+        </div>
+        <div class="archive-list">
+          {posts.map((post) => <BlogPostRow post={post} />)}
+        </div>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .archive-year {
+    margin-bottom: 3rem;
+  }
+  .year-head {
+    align-items: baseline;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
+  .year-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .year-count {
+    color: var(--muted-soft);
+    font-size: 0.85rem;
+  }
+  .archive-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 640px) {
+    .year-title {
+      font-size: 1.6rem;
+    }
+  }
+</style>

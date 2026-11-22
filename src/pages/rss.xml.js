@@ -14,7 +14,7 @@ export async function GET(context) {
       description: post.data.description,
       pubDate: post.data.pubDate,
       categories: [post.data.category, ...(post.data.tags ?? [])],
-      link: `/blog/${getBlogSlug(post)}/`,
+      link: `/blog/${getBlogSlug(post)}`,
     })),
   })
 }

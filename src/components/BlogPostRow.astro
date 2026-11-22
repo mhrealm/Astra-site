@@ -1,172 +1,108 @@
 ---
-import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
-import PlaceholderImage from '../assets/blog-placeholder-3.jpg'
 import { getBlogSlug } from '../data/blogSlugs'
-import { getPostThumbnail } from '../data/postThumbnails'
-import DifficultyStars from './DifficultyStars.astro'
-import FormattedDate from './FormattedDate.astro'
 
 interface Props {
   post: CollectionEntry<'blog'>
 }
 
 const { post } = Astro.props
-const tags = post.data.tags ?? []
 const slug = getBlogSlug(post)
-const thumbnail = getPostThumbnail(slug) ?? post.data.heroImage ?? PlaceholderImage
+const date = post.data.pubDate
+const dateLabel = `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`
+
+// 按正文字符数估算阅读时长（约 400 字/分钟，最少 1 分钟）
+const charCount = (post.body ?? '').length
+const minutes = Math.max(1, Math.round(charCount / 400))
 ---
 
-<a class="post-row" href={`/blog/${slug}/`}>
-  <div class="post-content">
-    <h3>{post.data.title}</h3>
-    <p>{post.data.description}</p>
-    <div class="meta-line">
-      <span class="meta-item"><FormattedDate date={post.data.pubDate} /></span>
-      {
-        post.data.difficulty && (
-          <span class="meta-item">
-            <DifficultyStars value={post.data.difficulty} />
-          </span>
-        )
-      }
-      {tags.map((tag) => <span class="meta-item tag">{tag}</span>)}
-    </div>
-  </div>
-  <div class="post-thumb" aria-hidden="true">
-    <Image src={thumbnail} width={132} height={88} alt="" loading="lazy" />
-  </div>
-</a>
+<div class="archive-item">
+  <time datetime={date.toISOString()}>{dateLabel}</time>
+  <a class="archive-title" href={`/blog/${slug}`}>{post.data.title}</a>
+  <span class="archive-minutes">约 {minutes} 分钟</span>
+  <a
+    class="archive-category"
+    href={`/blog/category/${post.data.categorySlug ?? 'uncategorized'}`}
+  >
+    {post.data.category}
+  </a>
+</div>
 
 <style>
-  .post-row {
-    background: var(--surface);
+  .archive-item {
+    align-items: center;
     border-bottom: 1px solid var(--border);
     color: var(--text);
     display: grid;
-    gap: 1.5rem;
-    grid-template-columns: minmax(0, 1fr) 132px;
-    min-height: 120px;
-    padding: 1rem 1.25rem;
-    text-decoration: none;
+    gap: 1rem;
+    grid-template-columns: 6.5rem minmax(0, 1fr) auto auto;
+    padding: 0.9rem 0;
+    position: relative;
     transition:
-      background-color 180ms ease,
-      color 180ms ease;
+      color 0.2s,
+      padding-left 0.25s ease;
   }
-  .post-row:first-child {
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+  .archive-item:hover {
+    color: var(--muted);
+    padding-left: 0.5rem;
   }
-  .post-row:last-child {
-    border-bottom: 0;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-  }
-  .post-row:hover {
-    background: var(--surface-raised);
-    color: var(--text);
-  }
-
-  .post-content {
-    align-self: center;
-    min-width: 0;
-  }
-
-  .meta-line {
-    align-items: center;
+  .archive-item time {
     color: var(--muted-soft);
-    display: flex;
-    flex-wrap: nowrap;
-    font-size: 0.82rem;
-    font-weight: 600;
-    gap: 0.55rem;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .archive-title {
+    color: inherit;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.4;
     min-width: 0;
     overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .meta-item {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    min-width: 0;
-  }
-
-  .meta-item:not(:last-child)::after {
-    color: #c2c8d1;
-    content: '|';
-    margin-left: 0.55rem;
-  }
-  h3 {
-    color: var(--text-bright);
-    font-size: 1rem;
-    line-height: 1.5;
-    margin: 0 0 0.42rem;
-    overflow: hidden;
+    text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  p {
+  .archive-title::after {
+    content: '';
+    inset: 0;
+    position: absolute;
+    z-index: 1;
+  }
+  .archive-category {
+    border: 0;
+    border-radius: 999px;
     color: var(--muted);
-    font-size: 0.88rem;
-    line-height: 1.55;
-    margin: 0 0 0.62rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.72rem;
+    padding: 0.15rem 0.5rem;
+    position: relative;
+    text-decoration: none;
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .archive-category:hover {
+    color: var(--accent);
+  }
+  .archive-minutes {
+    color: var(--muted-soft);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
 
-  .tag {
-    color: var(--muted);
-  }
-
-  .post-thumb {
-    align-self: center;
-    border-radius: 6px;
-    height: 85px;
-    overflow: hidden;
-  }
-
-  .post-thumb img {
-    display: block;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 240ms ease;
-    width: 100%;
-  }
-
-  .post-row:hover .post-thumb img {
-    transform: scale(1.04);
-  }
-
-  @media (max-width: 720px) {
-    .post-row {
-      gap: 1rem;
-      grid-template-columns: minmax(0, 1fr) 108px;
-      min-height: 104px;
-      padding: 0.9rem 1rem;
+  @media (max-width: 640px) {
+    .archive-item {
+      gap: 0.25rem;
+      grid-template-columns: 1fr;
+      padding: 1rem 0;
     }
-
-    .post-thumb {
-      height: 72px;
+    .archive-title {
+      white-space: normal;
     }
-
-    h3 {
-      margin-bottom: 0.32rem;
+    .archive-category {
+      width: fit-content;
     }
-
-    p {
-      font-size: 0.86rem;
-      margin-bottom: 0.45rem;
-    }
-  }
-
-  @media (max-width: 440px) {
-    .post-row {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .post-thumb {
+    .archive-minutes {
       display: none;
     }
   }

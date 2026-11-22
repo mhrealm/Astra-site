@@ -9,12 +9,22 @@ import { defineConfig, fontProviders } from 'astro/config'
 // https://astro.build/config
 export default defineConfig({
   site: 'https://example.com',
+  trailingSlash: 'never',
   server: {
     host: '127.0.0.1',
     allowedHosts: ['dev.lostmary.com'],
   },
   devToolbar: {
     enabled: false,
+  },
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+      defaultColor: false,
+    },
   },
   integrations: [mdx(), vue(), react(), sitemap()],
   vite: {

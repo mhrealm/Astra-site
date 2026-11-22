@@ -43,10 +43,10 @@ onMounted(async () => {
   display: grid;
   min-height: 180px;
   place-items: center;
-  border: 1px solid #e4e6eb;
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background: #f7f8fa;
-  color: #8a919f;
+  background: var(--surface-raised);
+  color: var(--muted-soft);
   font-size: 14px;
 }
 </style>

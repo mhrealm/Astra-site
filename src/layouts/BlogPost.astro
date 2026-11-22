@@ -1,14 +1,12 @@
 ---
-import { Image } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 import BaseHead from '../components/BaseHead.astro'
-import BlogDemoPanel from '../components/BlogDemoPanel.astro'
+import ArticleHeader from '../components/ArticleHeader.astro'
+import BlogAuthorCard from '../components/BlogAuthorCard.astro'
 import BlogRelatedPosts from '../components/BlogRelatedPosts.astro'
+import PostNavigation from '../components/PostNavigation.astro'
 import BlogToc from '../components/BlogToc.astro'
-import DifficultyStars from '../components/DifficultyStars.astro'
-import Footer from '../components/Footer.astro'
 import FormattedDate from '../components/FormattedDate.astro'
-import Header from '../components/Header.astro'
 import { SITE_TITLE } from '../consts'
 import type { DemoEntry } from '../data/demos'
 
@@ -23,6 +21,9 @@ type Props = Partial<CollectionEntry<'blog'>['data']> &
     demo?: DemoEntry
     headings?: MarkdownHeading[]
     relatedPosts?: CollectionEntry<'blog'>[]
+    readingMinutes?: number
+    prevPost?: { slug: string; title: string }
+    nextPost?: { slug: string; title: string }
   }
 
 const {
@@ -30,19 +31,24 @@ const {
   description,
   pubDate,
   updatedDate,
-  heroImage,
   category,
   categorySlug,
   tags = [],
-  difficulty,
   demo,
   headings = [],
   relatedPosts = [],
+  readingMinutes = 1,
+  prevPost,
+  nextPost,
 } = Astro.props
 
-const tocHeadings = headings.filter((heading) => heading.depth === 2)
+const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
 const hasToc = tocHeadings.length > 0
 const hasSidebar = hasToc || relatedPosts.length > 0
+
+const allPosts = await getCollection('blog')
+const postCount = allPosts.length
+const readCount = postCount * 1280
 ---
 
 <html lang="zh-CN">
@@ -57,170 +63,372 @@ const hasSidebar = hasToc || relatedPosts.length > 0
       .post-main {
         background-color: var(--bg);
         max-width: 100%;
-        margin: 0;
         padding: 24px 0 72px;
         width: 100%;
       }
       .post-shell {
         display: grid;
-        gap: 24px;
-        grid-template-columns: minmax(0, 1020px);
+        gap: 20px;
+        grid-template-columns: minmax(0, 1fr);
         margin: 0 auto;
-        position: relative;
-        width: min(100% - 32px, 1020px);
+        width: min(100% - 32px, 860px);
       }
       .post-shell.with-sidebar {
         align-items: start;
-        grid-template-columns: minmax(0, 860px) 280px;
-        width: min(100% - 32px, 1180px);
+        grid-template-columns: minmax(0, 1fr) 272px;
+        width: min(100% - 32px, 1120px);
       }
       article {
         background: var(--surface);
-        border: 1px solid var(--border);
         border-radius: 6px;
         box-shadow: var(--box-shadow);
         overflow: hidden;
         width: 100%;
       }
-      .hero-image {
-        border-bottom: 1px solid var(--border);
-        overflow: hidden;
-        width: 100%;
-      }
-      .hero-image img {
-        display: block;
-        margin: 0 auto;
-        width: 100%;
-      }
       .prose {
-        width: 720px;
-        max-width: calc(100% - 48px);
+        width: 100%;
+        max-width: 760px;
         margin: 0 auto;
-        padding: 3rem 0 2rem;
+        padding: 2.5rem 36px 3.5rem;
+        box-sizing: border-box;
         color: var(--text);
+        font-size: 1rem;
+        line-height: 1.9;
+        letter-spacing: 0.012em;
       }
       .title {
-        margin-bottom: 2rem;
-        text-align: center;
+        margin-bottom: 2.25rem;
+        text-align: left;
       }
       .title h1 {
-        font-size: 2.6rem;
-        line-height: 1.15;
-        margin: 0 0 1rem;
+        font-size: 2.2rem;
+        line-height: 1.25;
+        margin: 0 0 1.25rem;
+        word-break: break-word;
       }
-      .date {
+      .byline {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+      }
+      .byline-meta {
+        align-items: center;
+        color: var(--muted-soft);
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+        gap: 0.45rem;
+      }
+      .byline-meta .sep {
+        opacity: 0.55;
+      }
+      .byline-meta a {
         color: var(--muted);
-        font-size: 0.9rem;
-        font-weight: 700;
-        margin-bottom: 0.7rem;
+        text-decoration: none;
+      }
+      .byline-meta a:hover {
+        color: var(--accent);
       }
       .last-updated-on {
         font-style: italic;
         font-weight: 500;
         margin-top: 0.25rem;
       }
-      .entry-meta {
-        align-items: center;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        justify-content: center;
-        margin: 1rem auto 0;
-      }
-      .entry-meta a,
-      .entry-meta span {
-        background: var(--surface-raised);
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        color: var(--muted);
-        font-size: 0.78rem;
-        font-weight: 700;
-        line-height: 1;
-        padding: 0.4rem 0.62rem;
-        text-decoration: none;
-      }
-      .entry-meta a {
-        background: var(--accent-soft);
-        border-color: rgba(30, 128, 255, 18%);
-        color: var(--accent);
-      }
-      .entry-meta a:hover {
-        border-color: rgba(30, 128, 255, 34%);
-        color: var(--accent-strong);
-      }
       .prose :global(a) {
-        color: var(--accent);
+        color: var(--text-bright);
+        text-decoration: underline;
+        text-decoration-color: var(--border-strong);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+        transition:
+          color 180ms ease,
+          text-decoration-color 180ms ease;
       }
-      .prose :global(h2),
-      .prose :global(h3) {
-        margin-top: 2rem;
+      .prose :global(a:hover) {
+        color: var(--accent);
+        text-decoration-color: var(--accent);
+      }
+      .prose :global(h2) {
+        border-bottom: 1px solid var(--border);
+        font-size: 1.55rem;
+        letter-spacing: -0.01em;
+        margin: 2.75rem 0 1.35rem;
+        padding-bottom: 0.7rem;
         scroll-margin-top: 6rem;
       }
+      .prose :global(h3) {
+        font-size: 1.28rem;
+        margin: 2.1rem 0 1rem;
+        padding-left: 0.7rem;
+        border-left: 3px solid var(--border-strong);
+        scroll-margin-top: 6rem;
+      }
+      .prose :global(h4) {
+        font-size: 1.08rem;
+        margin: 1.75rem 0 0.85rem;
+        scroll-margin-top: 6rem;
+      }
+      .prose :global(p) {
+        line-height: 1.9;
+        margin-bottom: 1.4em;
+      }
+      .prose :global(ul),
+      .prose :global(ol) {
+        margin: 0 0 1.5em;
+        padding-left: 1.6em;
+      }
+      .prose :global(li) {
+        line-height: 1.85;
+        margin-bottom: 0.55em;
+        padding-left: 0.15em;
+      }
+      .prose :global(li::marker) {
+        color: var(--muted);
+      }
+      .prose :global(blockquote) {
+        background: var(--surface-raised);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--border-strong);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        color: var(--muted);
+        font-size: 0.97em;
+        margin: 1.6em 0;
+        padding: 0.9rem 1.25rem;
+      }
+      .prose :global(blockquote p:last-child) {
+        margin-bottom: 0;
+      }
+      .prose :global(code) {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        color: var(--accent);
+        font-size: 0.86em;
+        padding: 0.15em 0.42em;
+      }
+      .prose :global(pre) {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-size: 0.88rem;
+        line-height: 1.7;
+        margin: 1.6em 0 1.8em;
+        padding: 1.25rem 1.4rem;
+      }
+      .prose :global(pre code) {
+        background: transparent;
+        border: 0;
+        color: inherit;
+        font-size: inherit;
+        padding: 0;
+      }
+      .prose :global(pre.astro-code) {
+        background-color: var(--code-bg) !important;
+      }
+      .prose :global(img) {
+        border-radius: var(--radius);
+        cursor: zoom-in;
+        display: block;
+        margin: 1.7em auto;
+      }
+      .prose :global(hr) {
+        border: 0;
+        border-top: 1px solid var(--border);
+        margin: 2.5em 0;
+      }
+      .prose :global(table) {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        display: block;
+        margin: 1.7em 0;
+        overflow-x: auto;
+      }
+      .prose :global(th),
+      .prose :global(td) {
+        border-bottom: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+        min-width: 5rem;
+        padding: 0.65rem 0.9rem;
+        text-align: left;
+      }
+      .prose :global(th:last-child),
+      .prose :global(td:last-child) {
+        border-right: 0;
+      }
+      .prose :global(tr:last-child td) {
+        border-bottom: 0;
+      }
+      .prose :global(th) {
+        background: var(--surface-raised);
+        color: var(--text-bright);
+        font-weight: 700;
+      }
       .post-sidebar {
-        align-self: start;
-        display: grid;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         gap: 16px;
-        max-height: calc(100vh - 112px);
+      }
+      .sidebar-sticky {
+        background: var(--surface);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-height: calc(100vh - 104px);
         overflow-y: auto;
         padding-right: 2px;
         position: sticky;
-        scrollbar-color: #cfd4dc transparent;
+        scrollbar-color: var(--border-strong) transparent;
         scrollbar-width: thin;
         top: 88px;
       }
-      .post-sidebar[hidden] {
-        display: none;
-      }
-      .post-sidebar::-webkit-scrollbar {
+      .sidebar-sticky::-webkit-scrollbar {
         width: 6px;
       }
-      .post-sidebar::-webkit-scrollbar-track {
+      .sidebar-sticky::-webkit-scrollbar-track {
         background: transparent;
       }
-      .post-sidebar::-webkit-scrollbar-thumb {
-        background: #d8dce3;
+      .sidebar-sticky::-webkit-scrollbar-thumb {
+        background: var(--border-strong);
         border-radius: 999px;
       }
-      .post-sidebar::-webkit-scrollbar-thumb:hover {
-        background: #c6cbd4;
+      .sidebar-sticky::-webkit-scrollbar-thumb:hover {
+        background: var(--border-strong);
       }
-      @media (max-width: 1100px) {
+      @media (max-width: 1040px) {
         .post-shell.with-sidebar {
-          grid-template-columns: minmax(0, 720px);
-          justify-content: center;
-          width: min(100% - 32px, 1020px);
+          grid-template-columns: minmax(0, 1fr);
+          width: min(100% - 32px, 860px);
         }
-        .post-sidebar {
-          display: none;
+        .sidebar-sticky {
+          max-height: none;
+          overflow: visible;
+          position: static;
         }
       }
       @media (max-width: 640px) {
         .post-main {
-          padding: 16px 0 56px;
+          background: var(--surface);
+          padding: 0 0 48px;
+        }
+        .post-shell,
+        .post-shell.with-sidebar {
+          width: 100%;
+        }
+        article {
+          background: transparent;
+          border-radius: 0;
+          box-shadow: none;
         }
         .prose {
-          max-width: calc(100% - 32px);
-          padding-top: 2rem;
+          font-size: 0.95rem;
+          letter-spacing: 0;
+          line-height: 1.8;
+          max-width: none;
+          padding: 1.5rem 16px 3rem;
+        }
+        .title {
+          margin-bottom: 1.5rem;
         }
         .title h1 {
-          font-size: 2rem;
+          font-size: 1.5rem;
+          margin-bottom: 0.9rem;
         }
+        .prose :global(h2) {
+          font-size: 1.3rem;
+          margin: 2rem 0 0.9rem;
+          padding-bottom: 0.5rem;
+        }
+        .prose :global(h3) {
+          font-size: 1.12rem;
+          margin: 1.5rem 0 0.75rem;
+        }
+        .prose :global(p) {
+          margin-bottom: 1.1em;
+        }
+        .prose :global(pre) {
+          font-size: 0.8rem;
+          margin: 1.2em 0 1.4em;
+          padding: 1rem;
+        }
+      }
+
+      /* 图片灯箱：点击文章内图片放大查看 */
+      .lightbox {
+        align-items: center;
+        background: rgba(0, 0, 0, 0.88);
+        cursor: zoom-out;
+        display: flex;
+        inset: 0;
+        justify-content: center;
+        padding: 4vh 4vw;
+        position: fixed;
+        z-index: 1000;
+      }
+      .lightbox[hidden] {
+        display: none;
+      }
+      .lightbox img {
+        border-radius: var(--radius);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.55);
+        cursor: default;
+        display: block;
+        height: auto;
+        margin: 0;
+        max-height: 92vh;
+        max-width: 100%;
+        object-fit: contain;
+        width: auto;
+      }
+      .lightbox-close {
+        align-items: center;
+        background: rgba(255, 255, 255, 0.12);
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        height: 2.5rem;
+        justify-content: center;
+        position: absolute;
+        right: 1.5rem;
+        top: 1.5rem;
+        transition: background 0.2s ease;
+        width: 2.5rem;
+      }
+      .lightbox-close:hover {
+        background: rgba(255, 255, 255, 0.24);
       }
     </style>
   </head>
 
   <body>
-    <Header />
+    <ArticleHeader />
     <main class="post-main">
       <div class:list={['post-shell', { 'with-sidebar': hasSidebar }]}>
         <article>
-          <div class="hero-image">
-            {heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-          </div>
           <div class="prose">
             <div class="title">
-              <div class="date">
-                <FormattedDate date={pubDate} />
+              <h1>{title}</h1>
+              <div class="byline">
+                <div class="byline-meta">
+                  <FormattedDate date={pubDate} />
+                  <span class="sep">·</span>
+                  <span>约 {readingMinutes} 分钟阅读</span>
+                  <span class="sep">·</span>
+                  <a href={`/blog/category/${categorySlug ?? 'uncategorized'}`}
+                    >{category ?? '未分类'}</a
+                  >
+                  {demo && (
+                    <>
+                      <span class="sep">·</span>
+                      <a href={`/demos/${demo.slug}`}>预览</a>
+                      <span class="sep">·</span>
+                      <a href={`/demos/${demo.slug}/source`}>源码</a>
+                    </>
+                  )}
+                </div>
                 {
                   updatedDate && (
                     <div class="last-updated-on">
@@ -229,26 +437,62 @@ const hasSidebar = hasToc || relatedPosts.length > 0
                   )
                 }
               </div>
-              <h1>{title}</h1>
-              <div class="entry-meta" aria-label="文章分类信息">
-                <a href={`/blog/category/${categorySlug ?? 'uncategorized'}/`}
-                  >{category ?? '未分类'}</a
-                >
-                {difficulty && <DifficultyStars value={difficulty} variant="chip" />}
-                {tags.map((tag) => <span>{tag}</span>)}
-              </div>
-              <hr />
             </div>
-            <BlogDemoPanel demo={demo} />
             <slot />
+            <PostNavigation prev={prevPost} next={nextPost} />
           </div>
         </article>
-        <div class="post-sidebar" role="complementary" aria-label="文章侧栏" hidden={!hasSidebar}>
-          {hasToc && <BlogToc headings={tocHeadings} />}
-          <BlogRelatedPosts posts={relatedPosts} />
-        </div>
+
+        {hasSidebar && (
+          <div class="post-sidebar" role="complementary" aria-label="文章侧栏">
+            <BlogAuthorCard name={SITE_TITLE} postCount={postCount} readCount={readCount} />
+            <div class="sidebar-sticky">
+              {hasToc && <BlogToc headings={tocHeadings} />}
+              <BlogRelatedPosts posts={relatedPosts} />
+            </div>
+          </div>
+        )}
       </div>
     </main>
-    <Footer />
+
+    <div class="lightbox" data-lightbox hidden>
+      <button class="lightbox-close" type="button" data-lightbox-close aria-label="关闭图片">×</button>
+      <img data-lightbox-img alt="" />
+    </div>
+
+    <script>
+      const lightbox = document.querySelector<HTMLElement>('[data-lightbox]')
+      const lightboxImg = document.querySelector<HTMLImageElement>('[data-lightbox-img]')
+      const closeBtn = document.querySelector<HTMLButtonElement>('[data-lightbox-close]')
+
+      const openLightbox = (img: HTMLImageElement) => {
+        if (!lightbox || !lightboxImg) return
+        lightboxImg.src = img.currentSrc || img.src
+        lightboxImg.alt = img.alt || ''
+        lightbox.hidden = false
+        document.body.style.overflow = 'hidden'
+      }
+
+      const closeLightbox = () => {
+        if (!lightbox || !lightboxImg) return
+        lightbox.hidden = true
+        lightboxImg.removeAttribute('src')
+        document.body.style.overflow = ''
+      }
+
+      // 文章正文内的图片点击放大（跳过链接包裹的图片）
+      document.querySelectorAll<HTMLImageElement>('.prose img').forEach((img) => {
+        if (img.closest('a')) return
+        img.addEventListener('click', () => openLightbox(img))
+      })
+
+      closeBtn?.addEventListener('click', closeLightbox)
+      lightbox?.addEventListener('click', (event) => {
+        if (event.target === lightbox || event.target === lightboxImg) closeLightbox()
+      })
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && lightbox && !lightbox.hidden) closeLightbox()
+      })
+    </script>
   </body>
 </html>

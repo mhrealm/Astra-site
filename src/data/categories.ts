@@ -21,11 +21,11 @@ export const blogCategories = [
   { slug: 'interaction', name: '交互组件' },
   { slug: 'animation', name: 'Animation' },
   { slug: 'classic-replica', name: '经典复刻' },
+  { slug: 'engineering', name: '工程化' },
   { slug: 'uncategorized', name: '未分类' },
 ] satisfies CategoryDefinition[]
 
 const categoryRank = new Map(blogCategories.map((category, index) => [category.slug, index]))
-const categorySlugByName = new Map(blogCategories.map((category) => [category.name, category.slug]))
 
 export function getCategoryName(slug = 'uncategorized') {
   return blogCategories.find((category) => category.slug === slug)?.name ?? '未分类'
@@ -33,10 +33,6 @@ export function getCategoryName(slug = 'uncategorized') {
 
 export function getCategoryRank(slug = 'uncategorized') {
   return categoryRank.get(slug) ?? blogCategories.length
-}
-
-export function getCategorySlugByName(name = '未分类') {
-  return categorySlugByName.get(name) ?? 'uncategorized'
 }
 
 export function compareCategorySlug(aSlug = 'uncategorized', bSlug = 'uncategorized') {

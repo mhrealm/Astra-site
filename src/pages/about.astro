@@ -1,26 +1,90 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg'
-import Layout from '../layouts/BlogPost.astro'
+import BaseHead from '../components/BaseHead.astro'
+import Sidebar from '../components/Sidebar.astro'
+import { SITE_TITLE } from '../consts'
 ---
 
-<Layout
-  title="关于我"
-  description="一个偏工程实践的前端开发者主页。"
-  pubDate={new Date('August 08 2024')}
-  heroImage={AboutHeroImage}
->
-  <p>
-    这里是一段个人简介占位文案。你可以把它替换成自己的技术方向、工作经历、正在探索的主题，
-    以及希望访客第一眼记住的关键词。
-  </p>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead
+      title={`关于我 | ${SITE_TITLE}`}
+      description="一个偏工程实践的前端开发者主页。"
+    />
+    <style>
+      .about-wrap {
+        margin: 0 auto;
+        width: min(760px, 100%);
+      }
+      .about-title {
+        font-size: 2.2rem;
+        line-height: 1.25;
+        margin: 0 0 2rem;
+        word-break: break-word;
+      }
+      .about-body :global(p) {
+        color: var(--text);
+        line-height: 1.9;
+        margin-bottom: 1.4em;
+      }
+      .about-skills {
+        border-top: 1px solid var(--border);
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+      }
+      .about-skills h3 {
+        font-size: 1.05rem;
+        letter-spacing: -0.01em;
+        margin-bottom: 1rem;
+      }
+      .skill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .skill-pill {
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 0.8rem;
+        font-weight: 500;
+        line-height: 1;
+        padding: 0.5rem 0.85rem;
+      }
+      @media (max-width: 640px) {
+        .about-title {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <Sidebar />
+      <main class="site-main">
+        <div class="about-wrap">
+          <h1 class="about-title">关于我</h1>
+          <div class="about-body">
+            <p>专注现代前端工程、独立站与 AI 编程工作流。</p>
+            <p>
+              我专注于构建高性能、可维护的 Web 产品，长期关注现代前端工程、独立站体验、边缘计算与 AI
+              编程工作流。这里沉淀技术文章、项目案例与实践笔记，记录从想法到上线的完整过程。
+            </p>
+          </div>
 
-  <p>
-    当前版式已经改成白色主题：首屏强调身份与技能，正文用克制的卡片、边框和
-    高亮色承载文章、项目、平台矩阵等内容。
-  </p>
-
-  <p>
-    后续你可以继续补充真实头像、GitHub 地址、公众号二维码、项目链接和阅读数据，让这个页面
-    从设计稿状态变成真正能用于展示的个人站。
-  </p>
-</Layout>
+          <div class="about-skills">
+            <h3>技术栈</h3>
+            <div class="skill-list" aria-label="技术栈">
+              <span class="skill-pill">React</span>
+              <span class="skill-pill">Vue</span>
+              <span class="skill-pill">TypeScript</span>
+              <span class="skill-pill">Astro</span>
+              <span class="skill-pill">AI / LLM</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

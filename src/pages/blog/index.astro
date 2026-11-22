@@ -1,19 +1,13 @@
 ---
 import { getCollection } from 'astro:content'
 import BaseHead from '../../components/BaseHead.astro'
-import BlogCategoryNav from '../../components/BlogCategoryNav.astro'
-import BlogListingHero from '../../components/BlogListingHero.astro'
-import BlogPostRow from '../../components/BlogPostRow.astro'
-import Footer from '../../components/Footer.astro'
-import Header from '../../components/Header.astro'
+import Sidebar from '../../components/Sidebar.astro'
+import ArchiveList from '../../components/ArchiveList.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts'
-import { getCategorySummaries } from '../../data/categories'
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 )
-
-const categories = getCategorySummaries(posts)
 ---
 
 <!doctype html>
@@ -24,12 +18,8 @@ const categories = getCategorySummaries(posts)
       .site-main {
         width: min(1120px, calc(100% - 32px));
       }
-      .post-list {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        box-shadow: var(--box-shadow);
-        overflow: hidden;
+      .archive-section {
+        padding-top: 0;
       }
       @media (max-width: 640px) {
         .site-main {
@@ -39,16 +29,13 @@ const categories = getCategorySummaries(posts)
     </style>
   </head>
   <body>
-    <Header />
-    <main class="site-main">
-      <BlogListingHero />
-
-      <BlogCategoryNav categories={categories} total={posts.length} />
-
-      <div class="post-list">
-        {posts.map((post) => <BlogPostRow post={post} />)}
-      </div>
-    </main>
-    <Footer />
+    <div class="app-shell">
+      <Sidebar />
+      <main class="site-main">
+        <section class="archive-section">
+          <ArchiveList posts={posts} />
+        </section>
+      </main>
+    </div>
   </body>
 </html>
